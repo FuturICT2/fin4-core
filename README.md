@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/FuturICT2/fin4-core/tree/master.svg?style=svg&circle-token=fe8beee27987a1dd0a05f68f1fdef4ca17051a14)](https://circleci.com/gh/FuturICT2/fin4-core/tree/master)
+
 # fin4-core
 Finance 4.0 is a multi-dimensional incentive system to manage complex systems and promote a circular sharing economy to create a high quality of life for more people with less resources.
 
