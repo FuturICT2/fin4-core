@@ -23,9 +23,30 @@ render model =
         div
             [ navStyle ]
             [ div [ closeStyle, onClick ToggleMobileNav ] [ Icon.view "close" [ Icon.size36 ] ]
-            , div [ logoStyle ] [ text "Fin4" ]
+            , div [ logoStyle ] [ text "Menu" ]
             , Lists.ul [ ulStyle ]
-                []
+                [ Lists.li [ mobileNavLIStyle ]
+                    [ Lists.content []
+                        [ Lists.icon "account_box" [ navIconStyle ]
+                        , a
+                            [ navAStyle
+                            , href ""
+                            , navAStyle
+                            ]
+                            [ text "Account" ]
+                        ]
+                    ]
+                , Lists.li [ mobileNavLIStyle ]
+                    [ Lists.content []
+                        [ div
+                            [ navAStyle
+                            ]
+                            [ Lists.icon "vpn_key" [ navIconStyle ]
+                            , text "Logout"
+                            ]
+                        ]
+                    ]
+                ]
             , div [ bottomLinksStyle ]
                 []
             ]

@@ -1,7 +1,7 @@
-module Main.Context exposing (..)
+module Main.Context exposing (Context, DeviceSize(..), initContext, isUserId)
 
-import Main.Routing exposing (Route)
 import Main.Flags exposing (Flags)
+import Main.Routing exposing (Route)
 import Main.User exposing (User, noUserYet)
 
 
@@ -30,7 +30,12 @@ initContext flags route =
     { route = route
     , flags = flags
     , sessionDidLoad = False
-    , user = Nothing
+    , user =
+        Just
+            { id = 1
+            , email = "jouda@fin4.com"
+            , address = "0xc98e86927d9752586da1081c8dd9a41450232deb"
+            }
     , window =
         { width = 0
         , height = 0

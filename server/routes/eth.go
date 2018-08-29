@@ -66,6 +66,17 @@ func (env *Env) TokensList(c *gin.Context) {
 				Decimals:       8,
 			},
 			Token{
+				ID:             4,
+				Name:           "FinDevCoin",
+				Symbol:         "FDC",
+				TotalSupply:    "21000000",
+				Logo:           "https://en.bitcoin.it/w/images/en/2/29/BC_Logo_.png",
+				FavoritesCount: 34,
+				Volume24:       3434,
+				Change24:       1.3,
+				Decimals:       8,
+			},
+			Token{
 				ID:             2,
 				Name:           "TreeCoin",
 				Symbol:         "TCN",
@@ -123,6 +134,13 @@ func (env *Env) Portfolio(c *gin.Context) {
 			},
 			Position{
 				TokenID:    "2",
+				Name:       "FinDevCoin",
+				Symbol:     "FDC",
+				Balance:    "3443.4",
+				ValueInUSD: "23344",
+			},
+			Position{
+				TokenID:    "3",
 				Name:       "TreeCoint",
 				Symbol:     "TCN",
 				Balance:    "13.4",

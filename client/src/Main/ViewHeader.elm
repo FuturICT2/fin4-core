@@ -58,8 +58,8 @@ renderForDesktop model =
 authHeader : Model -> List (Html Msg)
 authHeader model =
     [ authRightSideNav model
-    , a [ thNavItemStyle, href <| homepagePath ] [ text "Balances" ]
-    , a [ thNavItemStyle, href <| homepagePath ] [ text "Actions" ]
+    , a [ thNavItemStyle, href tokensPath ] [ text "Tokens" ]
+    , a [ thNavItemStyle, href portfolioPath ] [ text "Balances" ]
     , a [ thNavItemStyle, href <| homepagePath ] [ text "New Token" ]
     ]
 
@@ -97,7 +97,28 @@ renderForMobile model =
         Just _ ->
             div [ bhStyle ]
                 [ div [ style [ ( "margin-right", "60px" ) ] ]
-                    []
+                    [ a
+                        [ href tokensPath
+                        , bhNavItemStyle
+                        , bhNavBorderedRightStyle
+                        , style [ ( "width", "34%" ) ]
+                        ]
+                        [ text "Tokens" ]
+                    , a
+                        [ href portfolioPath
+                        , bhNavItemStyle
+                        , bhNavBorderedRightStyle
+                        , style [ ( "width", "33%" ) ]
+                        ]
+                        [ text "Balances" ]
+                    , a
+                        [ href portfolioPath
+                        , bhNavItemStyle
+                        , bhNavBorderedRightStyle
+                        , style [ ( "width", "33%" ) ]
+                        ]
+                        [ text "New Token" ]
+                    ]
                 , div
                     [ style
                         [ ( "float", "right" )
@@ -159,7 +180,11 @@ notAuthRightSideNav model =
 authRightSideNav : Model -> Html Msg
 authRightSideNav model =
     div [ thNavStyle ]
-        []
+        [ a
+            [ thSubNavItemStyle
+            ]
+            [ text "Logout" ]
+        ]
 
 
 
