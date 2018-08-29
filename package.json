@@ -1,0 +1,38 @@
+{
+  "name": "fin4-core",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "./node_modules/.bin/webpack",
+    "client-dev-ssl": "./node_modules/.bin/webpack-dev-server --config ./webpack-client.config.js --port 8888 --hot",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "FutureICT",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-syntax-decorators": "^6.13.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-decorators": "^6.24.1",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-preset-env": "^1.6.0",
+    "babel-preset-es2015": "^6.24.1",
+    "css-loader": "^0.28.7",
+    "elm": "^0.18.0",
+    "elm-hot-loader": "^0.5.4",
+    "elm-live": "^2.7.4",
+    "elm-test": "^0.18.2",
+    "elm-webpack-loader": "^4.3.1",
+    "extract-text-webpack-plugin": "^3.0.0",
+    "file-loader": "^0.11.2",
+    "font-awesome": "^4.7.0",
+    "node-sass": "^4.5.3",
+    "sass-loader": "^6.0.6",
+    "style-loader": "^0.18.2",
+    "url-loader": "^0.5.9",
+    "webpack": "^3.10.0",
+    "webpack-dev-server": "^2.7.1"
+  }
+}

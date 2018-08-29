@@ -5,6 +5,9 @@ server-dev:
 	export BASE_URL=http://localhost:3000 ;
 	gin --port 3000 --appPort 8181 go run main.go
 
+client-dev:
+	npm run client-dev-ssl
+
 test:
 	go test -coverprofile=core.cover.out -coverpkg=./server/ ./server/...
 
