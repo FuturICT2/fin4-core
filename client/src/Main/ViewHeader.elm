@@ -117,7 +117,7 @@ renderForMobile model =
                         , bhNavBorderedRightStyle
                         , style [ ( "width", "33%" ) ]
                         ]
-                        [ text "New Token" ]
+                        [ text "New" ]
                     ]
                 , div
                     [ style

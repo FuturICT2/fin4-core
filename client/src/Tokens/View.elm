@@ -5,6 +5,7 @@ import Common.Error as Error
 import Common.Styles exposing (padding, textLeft, textRight, toMdlCss)
 import Html exposing (..)
 import Html.Attributes exposing (style)
+import List exposing (reverse, sortBy)
 import Main.Context exposing (Context)
 import Main.Msg exposing (Msg(..))
 import Material.Button as Button
@@ -18,6 +19,12 @@ import Material.Tabs as Tabs
 import Material.Typography as Typo
 import Model.Tokens exposing (Token, Tokens)
 import Tokens.Model exposing (Model)
+import Tokens.Msg
+
+
+white : Options.Property c m
+white =
+    Color.text Color.white
 
 
 render : Context -> Model -> Html Msg
@@ -32,24 +39,55 @@ render ctx model =
                     "0.00"
     in
     div [ style [ ( "padding-top", "15px" ) ] ]
-        [ Options.styled p [ Typo.headline ] [ text "Tokens" ]
-        , case model.error of
-            Just _ ->
-                Error.renderMaybeError model.error
+        [ Tabs.render Mdl
+            [ 0 ]
+            model.mdl
+            [ Tabs.ripple
+            , Tabs.activeTab model.selectedTab
+            ]
+            [ Tabs.label
+                [ Options.center ]
+                [ Options.span [ css "width" "4px" ] []
+                , text "trending"
+                ]
+            , Tabs.label
+                [ Options.center ]
+                [ Options.span [ css "width" "4px" ] []
+                , text "health"
+                ]
+            , Tabs.label
+                [ Options.center ]
+                [ Options.span [ css "width" "4px" ] []
+                , text "climate"
+                ]
+            ]
+            [ case model.selectedTab of
+                0 ->
+                    case model.error of
+                        Just _ ->
+                            Error.renderMaybeError model.error
 
-            Nothing ->
-                case model.tokens of
-                    Nothing ->
-                        div [] [ text "..." ]
+                        Nothing ->
+                            case model.tokens of
+                                Nothing ->
+                                    div [] [ text "..." ]
 
-                    Just tokens ->
-                        renderData ctx model tokens
+                                Just tokens ->
+                                    renderData ctx model tokens
+
+                _ ->
+                    div [] [ text "tab2" ]
+            ]
         ]
 
 
 renderData : Context -> Model -> Tokens -> Html Msg
 renderData ctx model tokens =
-    case List.length tokens.entries > 0 of
+    let
+        sorted =
+            reverse <| sortBy .change24 tokens.entries
+    in
+    case List.length sorted > 0 of
         False ->
             div []
                 [ Options.styled p
@@ -58,33 +96,45 @@ renderData ctx model tokens =
                 ]
 
         True ->
-            div []
-                [ div []
-                    [ text <|
-                        toString tokens.count
-                            ++ " listed tokens of value "
-                            ++ tokens.valueInUSD
-                            ++ " USD"
-                    ]
-                , Table.table []
-                    [ Table.thead []
-                        [ Table.tr []
-                            [ Table.th [ toMdlCss textLeft ] [ text "Token" ]
-                            , Table.th [ toMdlCss textRight ] [ text "Supply" ]
-                            , Table.th [ toMdlCss textRight ] [ text "24 Change" ]
-                            ]
-                        ]
-                    , Table.tbody [] <| List.map renderRow tokens.entries
+            div [] <| List.map (renderRow model) sorted
+
+
+renderRow : Model -> Token -> Html Msg
+renderRow model token =
+    Card.view
+        [ css "border" "1px solid #ddd"
+        , css "width" "100%"
+        , css "margin-top" "15px"
+        ]
+        [ Card.title []
+            [ Card.head []
+                [ Lists.content []
+                    [ Lists.avatarImage token.logo []
+                    , text <| " " ++ token.name
                     ]
                 ]
-
-
-renderRow : Token -> Html Msg
-renderRow token =
-    Table.tr []
-        [ Table.td [ toMdlCss textLeft ] [ text token.name ]
-        , Table.td [ toMdlCss textRight ] [ renderDecimal token.totalSupply, text token.symbol ]
-        , Table.td [ toMdlCss textRight ] [ renderChange token.change24 ]
+            ]
+        , Card.text [] [ text token.symbol ]
+        , Card.actions
+            [ Card.border, css "vertical-align" "center" ]
+            [ Button.render Mdl
+                [ 0 ]
+                model.mdl
+                [ Button.colored
+                ]
+                [ text "buy" ]
+            , Button.render Mdl
+                [ 0 ]
+                model.mdl
+                [ Button.colored
+                ]
+                [ text "sell" ]
+            , Button.render Mdl
+                [ 8, 1 ]
+                model.mdl
+                [ css "padding" "0", css "float" "right" ]
+                [ renderChange token.change24 ]
+            ]
         ]
 
 
@@ -99,13 +149,28 @@ renderChange value =
                 False ->
                     "red"
 
-        sign =
+        icon =
             case value > 0 of
                 True ->
-                    "+"
+                    Icon.i "arrow_drop_up"
 
                 False ->
-                    ""
+                    Icon.i "arrow_drop_down"
     in
-    span [ style [ ( "color", color ) ] ]
-        [ text <| sign ++ toString value ++ "%" ]
+    span [ change24Style color ]
+        [ icon, text <| toString (abs value) ++ "%" ]
+
+
+change24Style color =
+    style
+        [ ( "color", color )
+        , ( "float", "right" )
+        ]
+
+
+tokenStyle =
+    style
+        [ ( "border", "1px solid #ddd" )
+        , ( "margin-top", "15px" )
+        , ( "padding", "5px" )
+        ]

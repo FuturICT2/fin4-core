@@ -47,6 +47,11 @@ tokensPath =
     "#tokens"
 
 
+trendingPath : String
+trendingPath =
+    "#tokens"
+
+
 portfolioPath : String
 portfolioPath =
     "#portfolio"

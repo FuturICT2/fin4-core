@@ -38,6 +38,7 @@ type Token struct {
 	FavoritesCount int     `json:"FavoritesCount"`
 	Volume24       float32 `json:"Volume24"`
 	Change24       float32 `json:"Change24"`
+	MarketPrice    float32 `json:"MarketPrice"`
 }
 
 // TokensList handler to return json of existing tokens
@@ -64,6 +65,7 @@ func (env *Env) TokensList(c *gin.Context) {
 				Volume24:       10000,
 				Change24:       2.3,
 				Decimals:       8,
+				MarketPrice:    3.3,
 			},
 			Token{
 				ID:             4,
@@ -75,6 +77,7 @@ func (env *Env) TokensList(c *gin.Context) {
 				Volume24:       3434,
 				Change24:       1.3,
 				Decimals:       8,
+				MarketPrice:    34.3,
 			},
 			Token{
 				ID:             2,
@@ -86,6 +89,7 @@ func (env *Env) TokensList(c *gin.Context) {
 				Volume24:       1234,
 				Change24:       -1.3,
 				Decimals:       18,
+				MarketPrice:    .3,
 			},
 			Token{
 				ID:             3,
@@ -97,6 +101,31 @@ func (env *Env) TokensList(c *gin.Context) {
 				Volume24:       9234,
 				Change24:       10.5,
 				Decimals:       18,
+				MarketPrice:    13.334,
+			},
+			Token{
+				ID:             3,
+				Name:           "CyclingCoin",
+				Symbol:         "CCN",
+				TotalSupply:    "342100000",
+				Logo:           "https://en.bitcoin.it/w/images/en/2/29/BC_Logo_.png",
+				FavoritesCount: 534,
+				Volume24:       9234,
+				Change24:       10.5,
+				Decimals:       18,
+				MarketPrice:    96.3,
+			},
+			Token{
+				ID:             3,
+				Name:           "CyclingCoin",
+				Symbol:         "CCN",
+				TotalSupply:    "342100000",
+				Logo:           "https://en.bitcoin.it/w/images/en/2/29/BC_Logo_.png",
+				FavoritesCount: 534,
+				Volume24:       9234,
+				Change24:       10.5,
+				Decimals:       18,
+				MarketPrice:    3.3,
 			},
 		},
 	})

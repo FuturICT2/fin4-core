@@ -25,5 +25,8 @@ update ctx msg model =
                         }
                         ! []
 
+        SelectTab tab ->
+            { model | selectedTab = tab } ! []
+
         Mdl msg_ ->
             Material.update Mdl msg_ model

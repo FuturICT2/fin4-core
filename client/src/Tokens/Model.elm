@@ -8,6 +8,7 @@ type alias Model =
     { mdl : Material.Model
     , tokens : Maybe Tokens
     , error : Maybe String
+    , selectedTab : Int
     }
 
 
@@ -16,4 +17,5 @@ init =
     { mdl = Material.model
     , tokens = Nothing
     , error = Nothing
+    , selectedTab = 0
     }

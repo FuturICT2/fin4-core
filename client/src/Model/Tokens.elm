@@ -14,6 +14,7 @@ type alias Token =
     , favoritesCount : Int
     , volume24 : Float
     , change24 : Float
+    , marketPrice : Float
     }
 
 
@@ -58,3 +59,4 @@ tokenDecoder =
         |> JP.required "FavoritesCount" JD.int
         |> JP.required "Volume24" JD.float
         |> JP.required "Change24" JD.float
+        |> JP.required "MarketPrice" JD.float
