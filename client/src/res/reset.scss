@@ -1,0 +1,141 @@
+
+body {
+  background: #fafafa;
+  background: -webkit-gradient(linear, left top, left bottom, from(#fbfbfb), to(#fafafa));
+  background: -moz-linear-gradient(top, #fbfbfb, #fafafa);
+}
+
+
+html,
+body {
+  height: 100%;
+  margin: 0
+}
+
+table {
+  width: 100%;
+}
+
+html, body, div, span, a, button {
+  box-sizing: border-box;
+}
+.box {
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+}
+
+.box .row {
+
+}
+
+.box .row.header {
+  flex: 0 1 auto;
+  border-bottom: 1px solid #ddd;
+  padding: 5px;
+  /* The above is shorthand for:
+  flex-grow: 0,
+  flex-shrink: 1,
+  flex-basis: auto
+  */
+}
+
+.box .row.content {
+  flex: 1 1 auto;
+}
+
+.box .row.footer {
+  flex: 0 1 40px;
+}
+
+.chatbox {
+	padding: 10px;
+  @media (min-width: 840px) {
+    .chats {
+      width: 100%;
+      height: 300px;
+      padding: 5px;
+      overflow-y: auto;
+    }
+  }
+  @media (max-width: 840px) {
+    margin: 0;
+    width: 90% !important;
+    margin-top: 40px;
+    .chats {
+      height: 300px;
+      padding: 5px;
+      overflow-y: auto;
+    }
+  }
+
+}
+
+
+.markets-summary {
+  td {
+    padding: 3px 4px !important;
+  }
+}
+
+
+.mdl-textfield-sm {
+  font-size: 12px;
+  padding: 5px 0;
+  padding-top: 15px;
+  .mdl-textfield__input {
+    padding: 5px 0;
+    font-size: 12px;
+    line-height: 15px;
+  }
+  .mdl-textfield__label {
+    font-size: 12px;
+    top: 15px;
+    &:after {
+      bottom: 5px;
+      height: 1px;
+    }
+  }
+  .is-focused {
+    top: 0px;
+    color: red;
+  }
+}
+
+.mdl-button-sm {
+  height: 24px;
+  line-height: 24px;
+  font-size: 12px;
+}
+
+.mdl-tabs__tab-bar {
+	height: 28px;
+	.mdl-tabs__tab {
+		height: 28px;
+		line-height: 28px;
+    font-size: 12px;
+	}
+}
+
+.mdl-shadow--0dp,
+.mdl-shadow--2dp {
+  overflow: hidden;
+  background: #fcfcfa;
+}
+
+
+.clearfix {
+  overflow: auto;
+  zoom: 1;
+}
+
+.mdl-mini-footer {
+  background-color: #fafafa;
+}
+
+
+.is-mobile {
+	.mdl-data-table {
+		font-size: 12px;
+	}
+}
