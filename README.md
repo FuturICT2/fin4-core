@@ -6,13 +6,14 @@ Finance 4.0 is a multi-dimensional incentive system to manage complex systems an
 # Prerequisites
 - Golang 1.10 (https://golang.org/doc/install)
 - Ganache-cli (https://github.com/trufflesuite/ganache-cli)
+- gin (https://github.com/codegangsta/gin)
 - Elmlang
 
 # Install
 ```bash
 $ git clone https://github.com/FuturICT2/fin4-core.git
 $ cd fin4-core
-$ cp .env_example .env
+$ cp .env_sample .env
 $ go get
 $ npm install
 $ elm package install
