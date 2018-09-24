@@ -96,7 +96,7 @@ renderData ctx model tokens =
                 ]
 
         True ->
-            div [] <| List.map (renderRow model) sorted
+            div [] <| List.map (renderRow model) tokens.entries
 
 
 renderRow : Model -> Token -> Html Msg
