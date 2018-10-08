@@ -7,6 +7,7 @@ import Main.Msg exposing (Msg)
 import Main.NotFound
 import Main.Routing exposing (Route(..))
 import Portfolio.View
+import TokenCreator.View
 import Tokens.View
 
 
@@ -21,6 +22,9 @@ render model =
 
         PortfolioRoute ->
             Portfolio.View.render model.context model.portfolio
+
+        TokenCreatorRoute ->
+            TokenCreator.View.render model.context model.tokenCreator
 
         NotFoundRoute ->
             Main.NotFound.render model

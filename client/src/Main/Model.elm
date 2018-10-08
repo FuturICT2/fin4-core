@@ -5,6 +5,7 @@ import Main.Flags exposing (Flags)
 import Main.Routing exposing (Route(..))
 import Material
 import Portfolio.Model
+import TokenCreator.Model
 import Tokens.Model
 
 
@@ -15,6 +16,7 @@ type alias Model =
     , showMobileNav : Bool
     , tokens : Tokens.Model.Model
     , portfolio : Portfolio.Model.Model
+    , tokenCreator : TokenCreator.Model.Model
     }
 
 
@@ -26,4 +28,5 @@ initModel flags route =
     , showMobileNav = False
     , tokens = Tokens.Model.init
     , portfolio = Portfolio.Model.init
+    , tokenCreator = TokenCreator.Model.init
     }

@@ -2,6 +2,7 @@ module Main.Routing exposing
     ( Route(..)
     , homepagePath
     , matchers
+    , newTokenPath
     , parseLocation
     , portfolioPath
     , tokensPath
@@ -16,6 +17,7 @@ type Route
     | HomepageRoute
     | TokensRoute
     | PortfolioRoute
+    | TokenCreatorRoute
 
 
 matchers : Parser (Route -> a) a
@@ -24,6 +26,7 @@ matchers =
         [ map HomepageRoute top
         , map TokensRoute (s "tokens")
         , map PortfolioRoute (s "portfolio")
+        , map TokenCreatorRoute (s "new")
         ]
 
 
@@ -50,6 +53,11 @@ tokensPath =
 trendingPath : String
 trendingPath =
     "#tokens"
+
+
+newTokenPath : String
+newTokenPath =
+    "#new"
 
 
 portfolioPath : String

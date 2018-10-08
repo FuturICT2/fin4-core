@@ -27,6 +27,7 @@ import Main.Routing
     exposing
         ( Route(..)
         , homepagePath
+        , newTokenPath
         , portfolioPath
         , tokensPath
         )
@@ -96,44 +97,46 @@ renderForMobile model =
     case model.context.user of
         Just _ ->
             div [ bhStyle ]
-                [ div [ style [ ( "margin-right", "60px" ) ] ]
+                [ div []
                     [ a
                         [ href tokensPath
                         , bhNavItemStyle
                         , bhNavBorderedRightStyle
-                        , style [ ( "width", "34%" ) ]
+                        , style [ ( "width", "25%" ) ]
                         ]
-                        [ text "Tokens" ]
-                    , a
-                        [ href portfolioPath
-                        , bhNavItemStyle
-                        , bhNavBorderedRightStyle
-                        , style [ ( "width", "33%" ) ]
-                        ]
-                        [ text "Balances" ]
-                    , a
-                        [ href portfolioPath
-                        , bhNavItemStyle
-                        , bhNavBorderedRightStyle
-                        , style [ ( "width", "33%" ) ]
-                        ]
-                        [ text "New" ]
-                    ]
-                , div
-                    [ style
-                        [ ( "float", "right" )
-                        , ( "width", "60px" )
-                        ]
-                    ]
-                    [ a [ onClick ToggleMobileNav, bhNavItemStyle ]
-                        [ span
-                            [ style
-                                [ ( "position", "absolute" )
-                                , ( "top", "7px" )
-                                , ( "right", "18px" )
-                                ]
+                        [ Icon.view "timeline"
+                            [ Icon.size24
                             ]
-                            [ Icon.i "menu" ]
+                        ]
+                    , a
+                        [ href newTokenPath
+                        , bhNavItemStyle
+                        , bhNavBorderedRightStyle
+                        , style [ ( "width", "25%" ) ]
+                        ]
+                        [ Icon.view "add_circle_outline"
+                            [ Icon.size24
+                            ]
+                        ]
+                    , a
+                        [ href portfolioPath
+                        , bhNavItemStyle
+                        , bhNavBorderedRightStyle
+                        , style [ ( "width", "25%" ) ]
+                        ]
+                        [ Icon.view "person"
+                            [ Icon.size24
+                            ]
+                        ]
+                    , a
+                        [ href portfolioPath
+                        , bhNavItemStyle
+                        , bhNavBorderedRightStyle
+                        , style [ ( "width", "25%" ) ]
+                        ]
+                        [ Icon.view "settings"
+                            [ Icon.size24
+                            ]
                         ]
                     ]
                 ]
@@ -280,8 +283,8 @@ bhStyle =
         , ( "bottom", "0" )
         , ( "left", "0" )
         , ( "width", "100%" )
-        , ( "height", "50px" )
-        , ( "background", brandColor )
+        , ( "height", "40px" )
+        , ( "background", "white" )
         , ( "min-width", "320px" )
         , ( "opacity", "1" )
         , ( "z-index", "100" )
@@ -292,10 +295,10 @@ bhNavItemStyle : Attribute a
 bhNavItemStyle =
     style
         [ ( "display", "inline-block" )
-        , ( "color", textColor )
         , ( "text-align", "center" )
         , ( "line-height", "50px" )
         , ( "text-decoration", "none" )
+        , ( "color", "black" )
         , ( "overflow", "hidden" )
         , ( "cursor", "pointer" )
         ]
