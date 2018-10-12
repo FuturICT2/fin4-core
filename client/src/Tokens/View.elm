@@ -48,17 +48,17 @@ render ctx model =
             [ Tabs.label
                 [ Options.center ]
                 [ Options.span [ css "width" "4px" ] []
-                , text "trending"
+                , text "Tokens"
                 ]
             , Tabs.label
                 [ Options.center ]
                 [ Options.span [ css "width" "4px" ] []
-                , text "health"
+                , text "Actions"
                 ]
             , Tabs.label
                 [ Options.center ]
                 [ Options.span [ css "width" "4px" ] []
-                , text "climate"
+                , text "People"
                 ]
             ]
             [ case model.selectedTab of
@@ -111,28 +111,33 @@ renderRow model token =
                 [ Lists.content []
                     [ Lists.avatarImage token.logo []
                     , text <| " " ++ token.name
+                    , small [] [ text <| " (" ++ token.symbol ++ ")" ]
                     ]
                 ]
             ]
-        , Card.text [] [ text token.symbol ]
+        , Card.text
+            []
+            [ text "this is an awesome token that you can get if you plant a tree" ]
         , Card.actions
             [ Card.border, css "vertical-align" "center" ]
             [ Button.render Mdl
                 [ 0 ]
                 model.mdl
-                [ Button.colored
+                []
+                [ Icon.i "favorite_border"
+                , text <| " " ++ toString token.favoritesCount
                 ]
-                [ text "buy" ]
             , Button.render Mdl
-                [ 0 ]
+                [ 2 ]
                 model.mdl
-                [ Button.colored
+                []
+                [ Icon.i "gavel", text " 53 actions" ]
+            , Button.render Mdl
+                [ 3 ]
+                model.mdl
+                [ css "padding" "0"
+                , css "float" "right"
                 ]
-                [ text "sell" ]
-            , Button.render Mdl
-                [ 8, 1 ]
-                model.mdl
-                [ css "padding" "0", css "float" "right" ]
                 [ renderChange token.change24 ]
             ]
         ]

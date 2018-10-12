@@ -23,6 +23,7 @@ func (env *Env) StartRouter() *gin.Engine {
 		wapi.GET("/csrf", middleware.SetCsrfToken())
 		wapi.GET("/tokens", env.TokensList)
 		wapi.GET("/portfolio/positions", env.Portfolio)
+		wapi.POST("/create-token", env.CreateToken)
 	}
 
 	// Ethereum specific APIs

@@ -1,6 +1,7 @@
 module Main.Msg exposing (Msg(..))
 
 import Common.Json exposing (EmptyResponse)
+import CreateToken.Msg
 import Homepage.Homepage
 import Http
 import Main.User exposing (User)
@@ -20,3 +21,4 @@ type Msg
     | Homepage Homepage.Homepage.Msg
     | Tokens Tokens.Msg.Msg
     | Portfolio Portfolio.Msg.Msg
+    | CreateToken CreateToken.Msg.Msg

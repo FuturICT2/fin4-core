@@ -1,5 +1,6 @@
 module Main.ViewBody exposing (ifAuth, ifNotAuth, render)
 
+import CreateToken.View
 import Homepage.Homepage
 import Html exposing (..)
 import Main.Model exposing (Model)
@@ -7,7 +8,6 @@ import Main.Msg exposing (Msg)
 import Main.NotFound
 import Main.Routing exposing (Route(..))
 import Portfolio.View
-import TokenCreator.View
 import Tokens.View
 
 
@@ -23,8 +23,9 @@ render model =
         PortfolioRoute ->
             Portfolio.View.render model.context model.portfolio
 
-        TokenCreatorRoute ->
-            TokenCreator.View.render model.context model.tokenCreator
+        CreateTokenRoute ->
+            Html.map Main.Msg.CreateToken <|
+                CreateToken.View.render model.context model.createToken
 
         NotFoundRoute ->
             Main.NotFound.render model

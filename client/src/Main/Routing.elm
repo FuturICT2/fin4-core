@@ -17,7 +17,7 @@ type Route
     | HomepageRoute
     | TokensRoute
     | PortfolioRoute
-    | TokenCreatorRoute
+    | CreateTokenRoute
 
 
 matchers : Parser (Route -> a) a
@@ -26,7 +26,7 @@ matchers =
         [ map HomepageRoute top
         , map TokensRoute (s "tokens")
         , map PortfolioRoute (s "portfolio")
-        , map TokenCreatorRoute (s "new")
+        , map CreateTokenRoute (s "new")
         ]
 
 
