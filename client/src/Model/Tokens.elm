@@ -14,6 +14,7 @@ type alias Token =
     , purpose : String
     , blockchainAddress : String
     , txAddress : String
+    , favouriteCount : Int
     }
 
 
@@ -60,11 +61,12 @@ tokenDecoder =
         |> JP.required "Purpose" JD.string
         |> JP.required "BlockchainAddress" JD.string
         |> JP.required "TxAddress" JD.string
+        |> JP.required "FavouriteCount" JD.int
 
 
 
 -- |> JP.required "Decimals" JD.int
--- |> JP.required "FavoritesCount" JD.int
+-- |> JP.required "FavouriteCount" JD.int
 -- |> JP.required "Volume24" JD.float
 -- |> JP.required "Change24" JD.float
 -- |> JP.required "MarketPrice" JD.float

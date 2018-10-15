@@ -70,6 +70,22 @@ type UserStore interface {
 	)
 	FindTokens() ([]Token, error)
 	FindUsers() ([]User, error)
+	DoLike(userID ID, tokenID ID) error
+}
+
+//DoLike Registers a new user
+func (db *UserModel) DoLike(userID ID, tokenID ID) error {
+	_, err := db.Exec(
+		`INSERT INTO token_like SET
+			userId = ?,
+			tokenId = ?`,
+		userID,
+		tokenID,
+	)
+	if err != nil {
+		return ErrServerError
+	}
+	return nil
 }
 
 // FindUsers finds all users
@@ -102,6 +118,10 @@ func (db *UserModel) FindUsers() ([]User, error) {
 //Register Registers a new user
 func (db *UserModel) Register(name string) (*User, error) {
 	var err error
+	u, err := db.FindByName(name)
+	if err == nil {
+		return u, nil
+	}
 	user := NewUser()
 	user.Name = name
 	res, err := db.Exec(

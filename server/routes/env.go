@@ -4,6 +4,7 @@ import (
 	"math/big"
 	"math/rand"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/FuturICT2/fin4-core/server/auth"
@@ -67,4 +68,20 @@ func (env *Env) UserLogin(c *gin.Context) {
 	}
 	auth.Login(c, user)
 	c.JSON(http.StatusOK, user)
+}
+
+func (env *Env) DoLike(c *gin.Context) {
+	user := mustGetUser(c)
+	tokenID, err := strconv.Atoi(c.Params.ByName("tokenID"))
+	if err != nil {
+		c.String(http.StatusBadRequest, "Bad request")
+		return
+	}
+	tm := env.DB.NewUserModel()
+	err = tm.DoLike(user.ID, models.ID(tokenID))
+	if err != nil {
+		c.String(http.StatusBadRequest, err.Error())
+		return
+	}
+	c.JSON(http.StatusOK, struct{}{})
 }

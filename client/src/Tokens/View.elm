@@ -66,7 +66,7 @@ render ctx model =
                         Nothing ->
                             case model.tokens of
                                 Nothing ->
-                                    div [] [ text "..." ]
+                                    div [] [ text "E" ]
 
                                 Just tokens ->
                                     renderData ctx model tokens
@@ -108,6 +108,14 @@ renderData ctx model tokens =
     let
         sorted =
             reverse tokens.entries
+
+        userId =
+            case ctx.user of
+                Just user ->
+                    user.id
+
+                Nothing ->
+                    0
     in
     case List.length sorted > 0 of
         False ->
@@ -142,15 +150,14 @@ renderRow model token =
             [ text token.purpose ]
         , Card.actions
             [ Card.border, css "vertical-align" "center" ]
-            [ -- Button.render Mdl
-              --     [ 0 ]
-              --     model.mdl
-              --     []
-              --     [ Icon.i "favorite_border"
-              --     , text <| " " ++ toString token.favoritesCount
-              --     ]
-              -- ,
-              Button.render Mdl
+            [ Button.render Mdl
+                [ 0 ]
+                model.mdl
+                [ Options.onClick (DoLike token.id) ]
+                [ Icon.i "favorite_border"
+                , text <| " " ++ toString token.favouriteCount
+                ]
+            , Button.render Mdl
                 [ 2 ]
                 model.mdl
                 []

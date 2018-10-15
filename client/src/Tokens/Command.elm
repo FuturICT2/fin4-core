@@ -1,4 +1,4 @@
-module Tokens.Command exposing (commands, loadTokensCmd)
+module Tokens.Command exposing (commands, likeCmd, loadTokensCmd)
 
 import Common.Api exposing (get)
 import Common.Json exposing (decodeAt, deocdeIntWithDefault)
@@ -25,5 +25,13 @@ loadTokensCmd ctx page =
     get ctx
         OnLoadTokensResponse
         "/tokens"
+        []
+        tokensDecoder
+
+
+likeCmd ctx tokenId =
+    get ctx
+        OnDoLikeResponse
+        ("/like/" ++ toString tokenId)
         []
         tokensDecoder

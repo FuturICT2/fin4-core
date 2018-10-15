@@ -18,6 +18,7 @@ type Token struct {
 	Purpose           string
 	TxAddress         string
 	Logo              string
+	FavouriteCount    int
 }
 
 // FindTokens finds all tokens
@@ -46,12 +47,25 @@ func (db *UserModel) FindTokens() ([]Token, error) {
 		if err != nil {
 			return nil, err
 		}
+		c.FavouriteCount = db.CountLikes(c.ID)
 		result = append(result, c)
 	}
 	if err := rows.Err(); err != nil {
 		return nil, err
 	}
 	return result, nil
+}
+
+func (db *UserModel) CountLikes(tokenID ID) int {
+	var count int
+	db.QueryRow(
+		`SELECT
+			count(*)
+		FROM token_like
+		WHERE tokenId = ? `,
+		tokenID,
+	).Scan(&count)
+	return count
 }
 
 // FindToken finds Token by ID

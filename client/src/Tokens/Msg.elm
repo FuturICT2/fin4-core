@@ -9,5 +9,7 @@ import Model.Tokens exposing (Tokens)
 type Msg
     = Mdl (Material.Msg Msg)
     | OnLoadTokensResponse (Result Http.Error Tokens)
+    | OnDoLikeResponse (Result Http.Error Tokens)
     | SelectTab Int
+    | DoLike Int
     | TickerTimout

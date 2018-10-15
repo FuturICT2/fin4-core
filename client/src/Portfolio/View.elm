@@ -48,7 +48,7 @@ renderData ctx model portfolio =
             div []
                 [ Options.styled p
                     [ Typo.caption ]
-                    [ text "You have no open position yet, visit Funding to deposit some assits into your acocunt" ]
+                    [ text "No holding" ]
                 ]
 
         True ->

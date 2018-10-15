@@ -19,8 +19,9 @@ render model =
             Homepage.Homepage.render model.context
 
         TokensRoute ->
-            Html.map Main.Msg.Tokens <|
-                Tokens.View.render model.context model.tokens
+            ifAuth model <|
+                Html.map Main.Msg.Tokens <|
+                    Tokens.View.render model.context model.tokens
 
         PortfolioRoute ->
             ifAuth model <|

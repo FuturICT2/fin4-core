@@ -201,29 +201,30 @@ func (env *Env) Portfolio(c *gin.Context) {
 		Count:      2,
 		Limit:      10,
 		Page:       0,
-		ValueInUSD: "22454",
-		Positions: []Position{
-			Position{
-				TokenID:    "1",
-				Name:       "Fin4",
-				Symbol:     "FIN",
-				Balance:    "23.4",
-				ValueInUSD: "2344",
-			},
-			Position{
-				TokenID:    "2",
-				Name:       "FinDevCoin",
-				Symbol:     "FDC",
-				Balance:    "3443.4",
-				ValueInUSD: "23344",
-			},
-			Position{
-				TokenID:    "3",
-				Name:       "TreeCoint",
-				Symbol:     "TCN",
-				Balance:    "13.4",
-				ValueInUSD: "3",
-			},
-		},
+		ValueInUSD: "0",
+		Positions:  []Position{},
+		// Positions: []Position{
+		// 	Position{
+		// 		TokenID:    "1",
+		// 		Name:       "Fin4",
+		// 		Symbol:     "FIN",
+		// 		Balance:    "23.4",
+		// 		ValueInUSD: "2344",
+		// 	},
+		// 	Position{
+		// 		TokenID:    "2",
+		// 		Name:       "FinDevCoin",
+		// 		Symbol:     "FDC",
+		// 		Balance:    "3443.4",
+		// 		ValueInUSD: "23344",
+		// 	},
+		// 	Position{
+		// 		TokenID:    "3",
+		// 		Name:       "TreeCoint",
+		// 		Symbol:     "TCN",
+		// 		Balance:    "13.4",
+		// 		ValueInUSD: "3",
+		// 	},
+		// },
 	})
 }
