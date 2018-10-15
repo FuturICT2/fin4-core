@@ -36,142 +36,172 @@ import Material.Icon as Icon
 
 render : Model -> Html Msg
 render model =
-    if model.context.window.isMobile then
-        renderForMobile model
+    renderForMobile model
 
-    else
-        renderForDesktop model
+
+
+-- if model.context.window.isMobile then
+--     renderForMobile model
+--
+-- else
+--     renderForDesktop model
 
 
 renderForDesktop : Model -> Html Msg
 renderForDesktop model =
     div
         [ thStyle ]
-        (case model.context.user of
+        [ case model.context.user of
             Just _ ->
                 authHeader model
 
             _ ->
                 notAuthHeader model
-        )
+        ]
 
 
-authHeader : Model -> List (Html Msg)
+authHeader : Model -> Html Msg
 authHeader model =
-    [ authRightSideNav model
-    , a [ thNavItemStyle, href tokensPath ] [ text "Tokens" ]
-    , a [ thNavItemStyle, href portfolioPath ] [ text "Balances" ]
-    , a [ thNavItemStyle, href <| homepagePath ] [ text "New Token" ]
-    ]
+    div [ bhStyle ]
+        [ div []
+            [ a
+                [ href tokensPath
+                , bhNavItemStyle
+                , bhNavBorderedRightStyle
+                , style [ ( "width", "25%" ) ]
+                ]
+                [ Icon.view "timeline"
+                    [ Icon.size24
+                    ]
+                ]
+            , a
+                [ href newTokenPath
+                , bhNavItemStyle
+                , bhNavBorderedRightStyle
+                , style [ ( "width", "25%" ) ]
+                ]
+                [ Icon.view "add_circle_outline"
+                    [ Icon.size24
+                    ]
+                ]
+            , a
+                [ href portfolioPath
+                , bhNavItemStyle
+                , bhNavBorderedRightStyle
+                , style [ ( "width", "25%" ) ]
+                ]
+                [ Icon.view "person"
+                    [ Icon.size24
+                    ]
+                ]
+            , a
+                [ href portfolioPath
+                , bhNavItemStyle
+                , bhNavBorderedRightStyle
+                , style [ ( "width", "25%" ) ]
+                ]
+                [ Icon.view "settings"
+                    [ Icon.size24
+                    ]
+                ]
+            ]
+        ]
 
 
-notAuthHeader : Model -> List (Html Msg)
+notAuthHeader : Model -> Html Msg
 notAuthHeader model =
-    [ notAuthRightSideNav model
-    , a [ href homepagePath, thNavItemStyle ] [ text "Fin4" ]
-    , a
-        [ href tokensPath
-        , thNavItemStyle
+    div [ bhStyle ]
+        [ div []
+            [ a
+                [ href tokensPath
+                , bhNavItemStyle
+                , bhNavBorderedRightStyle
+                , style [ ( "width", "25%" ) ]
+                ]
+                [ Icon.view "timeline"
+                    [ Icon.size24
+                    ]
+                ]
+            , a
+                [ href newTokenPath
+                , bhNavItemStyle
+                , bhNavBorderedRightStyle
+                , style [ ( "width", "25%" ) ]
+                ]
+                [ Icon.view "add_circle_outline"
+                    [ Icon.size24
+                    ]
+                ]
+            , a
+                [ href portfolioPath
+                , bhNavItemStyle
+                , bhNavBorderedRightStyle
+                , style [ ( "width", "25%" ) ]
+                ]
+                [ Icon.view "person"
+                    [ Icon.size24
+                    ]
+                ]
+            , a
+                [ href portfolioPath
+                , bhNavItemStyle
+                , bhNavBorderedRightStyle
+                , style [ ( "width", "25%" ) ]
+                ]
+                [ Icon.view "settings"
+                    [ Icon.size24
+                    ]
+                ]
+            ]
         ]
-        [ text "Tokens" ]
-    , a
-        [ href portfolioPath
-        , thNavItemStyle
-        ]
-        [ text "Balances" ]
-    , a
-        [ href tokensPath
-        , thNavItemStyle
-        ]
-        [ text "Actions" ]
-    , a
-        [ href tokensPath
-        , thNavItemStyle
-        ]
-        [ text "New Token" ]
-    ]
 
 
 renderForMobile : Model -> Html Msg
 renderForMobile model =
-    case model.context.user of
-        Just _ ->
-            div [ bhStyle ]
-                [ div []
-                    [ a
-                        [ href tokensPath
-                        , bhNavItemStyle
-                        , bhNavBorderedRightStyle
-                        , style [ ( "width", "25%" ) ]
-                        ]
-                        [ Icon.view "timeline"
-                            [ Icon.size24
-                            ]
-                        ]
-                    , a
-                        [ href newTokenPath
-                        , bhNavItemStyle
-                        , bhNavBorderedRightStyle
-                        , style [ ( "width", "25%" ) ]
-                        ]
-                        [ Icon.view "add_circle_outline"
-                            [ Icon.size24
-                            ]
-                        ]
-                    , a
-                        [ href portfolioPath
-                        , bhNavItemStyle
-                        , bhNavBorderedRightStyle
-                        , style [ ( "width", "25%" ) ]
-                        ]
-                        [ Icon.view "person"
-                            [ Icon.size24
-                            ]
-                        ]
-                    , a
-                        [ href portfolioPath
-                        , bhNavItemStyle
-                        , bhNavBorderedRightStyle
-                        , style [ ( "width", "25%" ) ]
-                        ]
-                        [ Icon.view "settings"
-                            [ Icon.size24
-                            ]
-                        ]
+    div [ bhStyle ]
+        [ div []
+            [ a
+                [ href tokensPath
+                , bhNavItemStyle
+                , bhNavBorderedRightStyle
+                , style [ ( "width", "25%" ) ]
+                ]
+                [ Icon.view "timeline"
+                    [ Icon.size24
                     ]
                 ]
-
-        _ ->
-            div [ bhStyle ]
-                [ a
-                    [ href tokensPath
-                    , bhNavItemStyle
-                    , bhNavBorderedRightStyle
-                    , style [ ( "width", "25%" ) ]
-                    ]
-                    [ text "Tokens" ]
-                , a
-                    [ href portfolioPath
-                    , bhNavItemStyle
-                    , bhNavBorderedRightStyle
-                    , style [ ( "width", "25%" ) ]
-                    ]
-                    [ text "Balances" ]
-                , a
-                    [ href homepagePath
-                    , bhNavItemStyle
-                    , bhNavBorderedRightStyle
-                    , style [ ( "width", "25%" ) ]
-                    ]
-                    [ text "Actions" ]
-                , a
-                    [ href homepagePath
-                    , bhNavItemStyle
-                    , bhNavBorderedRightStyle
-                    , style [ ( "width", "25%" ) ]
-                    ]
-                    [ text "New Token" ]
+            , a
+                [ href newTokenPath
+                , bhNavItemStyle
+                , bhNavBorderedRightStyle
+                , style [ ( "width", "25%" ) ]
                 ]
+                [ Icon.view "add_circle_outline"
+                    [ Icon.size24
+                    ]
+                ]
+            , a
+                [ href portfolioPath
+                , bhNavItemStyle
+                , bhNavBorderedRightStyle
+                , style [ ( "width", "25%" ) ]
+                ]
+                [ Icon.view "person"
+                    [ Icon.size24
+                    ]
+                ]
+            , a
+                [ href portfolioPath
+                , bhNavItemStyle
+                , bhNavBorderedRightStyle
+                , style [ ( "width", "25%" ) ]
+                ]
+                [ Icon.view "settings"
+                    [ Icon.size24
+                    ]
+                ]
+            ]
+        ]
 
 
 notAuthRightSideNav : Model -> Html Msg
@@ -284,10 +314,11 @@ bhStyle =
         , ( "left", "0" )
         , ( "width", "100%" )
         , ( "height", "40px" )
-        , ( "background", "white" )
+        , ( "background", "#afd3fb" )
         , ( "min-width", "320px" )
         , ( "opacity", "1" )
         , ( "z-index", "100" )
+        , ( "padding-top", "3px" )
         ]
 
 

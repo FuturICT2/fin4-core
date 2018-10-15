@@ -6,6 +6,7 @@ import Json.Decode as JD
 import Json.Encode as JE
 import Main.Context exposing (Context)
 import Main.Routing exposing (Route(..))
+import Main.User exposing (usersDecoder)
 import Model.Tokens exposing (tokensDecoder)
 import Tokens.Msg exposing (Msg(..))
 

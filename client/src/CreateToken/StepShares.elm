@@ -1,6 +1,7 @@
 module CreateToken.StepShares exposing (render)
 
 import Common.Error exposing (renderHttpError)
+import Common.Spinner as Spinner
 import CreateToken.Msg exposing (Msg(..))
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -32,16 +33,23 @@ render ctx model =
         , div []
             [ text "Total supply Quantity"
             ]
-        , div [ style [ ( "15px", "0" ) ] ]
-            [ Textfield.render Mdl
-                [ 1 ]
-                model.mdl
-                [ css "width" "200px"
-                , Textfield.label "e.g 10000"
-                , Textfield.value model.shares
-                , Options.onInput SetShares
-                ]
-                []
-            ]
+        , case model.isCreatingToken of
+            True ->
+                div [ style [ ( "marging-top", "50px" ) ] ]
+                    [ Spinner.render "Creating your token, pleae wait a moment"
+                    ]
+
+            False ->
+                div [ style [ ( "15px", "0" ) ] ]
+                    [ Textfield.render Mdl
+                        [ 1 ]
+                        model.mdl
+                        [ css "width" "200px"
+                        , Textfield.label "e.g 10000"
+                        , Textfield.value model.shares
+                        , Options.onInput SetShares
+                        ]
+                        []
+                    ]
         , renderHttpError model.createTokenError
         ]

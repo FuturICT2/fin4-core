@@ -25,8 +25,9 @@ encodeCreateToken : Model -> JE.Value
 encodeCreateToken model =
     JE.object
         [ ( "name", JE.string model.name )
-        , ( "description", JE.string model.description )
-        , ( "shares", JE.string model.shares )
+        , ( "purpose", JE.string model.description )
+        , ( "totalSupply", JE.string model.shares )
+        , ( "symbol", JE.string model.symbol )
         , ( "category", JE.string model.activeCategory )
         , ( "hashtags", JE.list (List.map JE.string model.hashtags) )
         ]

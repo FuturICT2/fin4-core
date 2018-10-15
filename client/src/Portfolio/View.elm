@@ -24,14 +24,6 @@ render ctx model =
 
                 Nothing ->
                     "0.00"
-
-        address =
-            case ctx.user of
-                Just user ->
-                    user.address
-
-                Nothing ->
-                    ""
     in
     div [ style [ ( "padding-top", "15px" ) ] ]
         [ Options.styled p [ Typo.headline ] [ text "Portfolio" ]

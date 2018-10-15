@@ -7,6 +7,7 @@ import Main.Routing exposing (Route(..))
 import Material
 import Portfolio.Model
 import Tokens.Model
+import UserLogin.Model
 
 
 type alias Model =
@@ -17,6 +18,7 @@ type alias Model =
     , tokens : Tokens.Model.Model
     , portfolio : Portfolio.Model.Model
     , createToken : CreateToken.Model.Model
+    , userlogin : UserLogin.Model.Model
     }
 
 
@@ -29,4 +31,5 @@ initModel flags route =
     , tokens = Tokens.Model.init
     , portfolio = Portfolio.Model.init
     , createToken = CreateToken.Model.init
+    , userlogin = UserLogin.Model.init
     }

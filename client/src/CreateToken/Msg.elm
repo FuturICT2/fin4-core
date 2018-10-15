@@ -14,6 +14,7 @@ type Msg
     | SetName String
     | SetDescription String
     | SetNewHashtag String
+    | SetSymbol String
     | AddHashtag
     | RemoveHashtag Int
     | SetShares String

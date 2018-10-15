@@ -56,27 +56,20 @@ render ctx model =
                     ]
                 ]
             ]
-        , case model.isCreatingToken of
-            True ->
-                div [ style [ ( "marging-top", "50px" ) ] ]
-                    [ Spinner.render "Creating your token, pleae wait a moment"
-                    ]
+        , div [ style [ ( "margin", "15px" ) ] ]
+            [ case model.step of
+                0 ->
+                    StepName.render ctx model
 
-            False ->
-                div [ style [ ( "padding", "15px" ) ] ]
-                    [ case model.step of
-                        0 ->
-                            StepName.render ctx model
+                1 ->
+                    StepShares.render ctx model
 
-                        1 ->
-                            StepShares.render ctx model
+                2 ->
+                    StepSuccess.render ctx model
 
-                        2 ->
-                            StepSuccess.render ctx model
-
-                        _ ->
-                            div [] [ text "" ]
-                    ]
+                _ ->
+                    div [] [ text "" ]
+            ]
         , renderActionButton model.step
         ]
 
@@ -94,10 +87,13 @@ renderActionButton step =
                 ]
 
         2 ->
-            button
+            a
                 [ btnStyle
+                , style [ ( "text-decoraction", "none" ), ( "padding", "5px" ) ]
+                , href tokensPath
                 ]
-                [ text "Done" ]
+                [ text "Done"
+                ]
 
         _ ->
             button

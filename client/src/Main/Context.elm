@@ -30,12 +30,7 @@ initContext flags route =
     { route = route
     , flags = flags
     , sessionDidLoad = False
-    , user =
-        Just
-            { id = 1
-            , email = "jouda@fin4.com"
-            , address = "0xc98e86927d9752586da1081c8dd9a41450232deb"
-            }
+    , user = Nothing
     , window =
         { width = 0
         , height = 0

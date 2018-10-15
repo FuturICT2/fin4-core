@@ -9,6 +9,7 @@ import Material
 import Navigation exposing (Location)
 import Portfolio.Msg
 import Tokens.Msg
+import UserLogin.Msg
 import Window
 
 
@@ -22,3 +23,4 @@ type Msg
     | Tokens Tokens.Msg.Msg
     | Portfolio Portfolio.Msg.Msg
     | CreateToken CreateToken.Msg.Msg
+    | UserLogin UserLogin.Msg.Msg

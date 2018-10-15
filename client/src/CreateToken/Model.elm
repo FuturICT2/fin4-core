@@ -14,6 +14,7 @@ type alias Model =
     { mdl : Material.Model
     , step : Int
     , name : String
+    , symbol : String
     , description : String
     , hashtags : List String
     , newHashtag : String
@@ -29,6 +30,7 @@ init =
     { mdl = Material.model
     , step = 0
     , name = ""
+    , symbol = ""
     , description = ""
     , shares = ""
     , newHashtag = ""

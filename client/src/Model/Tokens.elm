@@ -2,6 +2,7 @@ module Model.Tokens exposing (Token, Tokens, init, tokenDecoder, tokensDecoder)
 
 import Json.Decode as JD
 import Json.Decode.Pipeline as JP
+import Main.User exposing (User, userDecoder)
 
 
 type alias Token =
@@ -10,11 +11,9 @@ type alias Token =
     , symbol : String
     , totalSupply : String
     , logo : String
-    , decimals : Int
-    , favoritesCount : Int
-    , volume24 : Float
-    , change24 : Float
-    , marketPrice : Float
+    , purpose : String
+    , blockchainAddress : String
+    , txAddress : String
     }
 
 
@@ -24,6 +23,7 @@ type alias Tokens =
     , count : Int
     , page : Int
     , limit : Int
+    , people : List User
     }
 
 
@@ -34,6 +34,7 @@ init =
     , count = 0
     , page = 0
     , limit = 0
+    , people = []
     }
 
 
@@ -45,18 +46,25 @@ tokensDecoder =
         |> JP.required "Count" JD.int
         |> JP.required "Limit" JD.int
         |> JP.required "Page" JD.int
+        |> JP.required "People" (JD.list userDecoder)
 
 
 tokenDecoder : JD.Decoder Token
 tokenDecoder =
     JP.decode Token
-        |> JP.required "Id" JD.int
+        |> JP.required "ID" JD.int
         |> JP.required "Name" JD.string
         |> JP.required "Symbol" JD.string
         |> JP.required "TotalSupply" JD.string
         |> JP.required "Logo" JD.string
-        |> JP.required "Decimals" JD.int
-        |> JP.required "FavoritesCount" JD.int
-        |> JP.required "Volume24" JD.float
-        |> JP.required "Change24" JD.float
-        |> JP.required "MarketPrice" JD.float
+        |> JP.required "Purpose" JD.string
+        |> JP.required "BlockchainAddress" JD.string
+        |> JP.required "TxAddress" JD.string
+
+
+
+-- |> JP.required "Decimals" JD.int
+-- |> JP.required "FavoritesCount" JD.int
+-- |> JP.required "Volume24" JD.float
+-- |> JP.required "Change24" JD.float
+-- |> JP.required "MarketPrice" JD.float

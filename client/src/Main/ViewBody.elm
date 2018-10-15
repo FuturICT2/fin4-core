@@ -1,4 +1,4 @@
-module Main.ViewBody exposing (ifAuth, ifNotAuth, render)
+module Main.ViewBody exposing (render)
 
 import CreateToken.View
 import Homepage.Homepage
@@ -9,6 +9,7 @@ import Main.NotFound
 import Main.Routing exposing (Route(..))
 import Portfolio.View
 import Tokens.View
+import UserLogin.ViewLogin
 
 
 render : Model -> Html Msg
@@ -18,17 +19,28 @@ render model =
             Homepage.Homepage.render model.context
 
         TokensRoute ->
-            Tokens.View.render model.context model.tokens
+            Html.map Main.Msg.Tokens <|
+                Tokens.View.render model.context model.tokens
 
         PortfolioRoute ->
-            Portfolio.View.render model.context model.portfolio
+            ifAuth model <|
+                Portfolio.View.render model.context model.portfolio
 
         CreateTokenRoute ->
-            Html.map Main.Msg.CreateToken <|
-                CreateToken.View.render model.context model.createToken
+            ifAuth model <|
+                Html.map Main.Msg.CreateToken <|
+                    CreateToken.View.render model.context model.createToken
+
+        UserLoginRoute ->
+            ifNotAuth model <| renderLogin model
 
         NotFoundRoute ->
             Main.NotFound.render model
+
+
+renderLogin : Model -> Html Msg
+renderLogin model =
+    Html.map Main.Msg.UserLogin <| UserLogin.ViewLogin.render model.userlogin
 
 
 ifAuth : Model -> Html Msg -> Html Msg
@@ -38,7 +50,7 @@ ifAuth model view =
             view
 
         Nothing ->
-            view
+            renderLogin model
 
 
 ifNotAuth : Model -> Html Msg -> Html Msg

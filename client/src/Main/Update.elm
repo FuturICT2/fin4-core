@@ -10,6 +10,7 @@ import Main.Routing
     exposing
         ( Route(..)
         , parseLocation
+        , tokensPath
         )
 import Material
 import Navigation exposing (newUrl)
@@ -19,6 +20,7 @@ import Portfolio.Update
 import Tokens.Command
 import Tokens.Model
 import Tokens.Update
+import UserLogin.Update
 
 
 mountRoute : Model -> ( Model, Cmd Msg )
@@ -87,6 +89,36 @@ update msg model =
                     CreateToken.Update.update model.context msg_ model.createToken
             in
             { model | createToken = childModel } ! [ Cmd.map CreateToken cmd ]
+
+        UserLogin msg_ ->
+            let
+                ( userlogin, userloginCmd ) =
+                    UserLogin.Update.update model.context msg_ model.userlogin
+
+                context =
+                    model.context
+
+                user =
+                    case userlogin.user of
+                        Just _ ->
+                            userlogin.user
+
+                        _ ->
+                            context.user
+
+                cmd =
+                    case userlogin.user of
+                        Just _ ->
+                            if userlogin.isNewUser then
+                                [ newUrl "#welcome" ]
+
+                            else
+                                [ newUrl tokensPath ]
+
+                        _ ->
+                            [ Cmd.map UserLogin userloginCmd ]
+            in
+            { model | userlogin = userlogin, context = { context | user = user } } ! cmd
 
         OnWindowResize size ->
             let

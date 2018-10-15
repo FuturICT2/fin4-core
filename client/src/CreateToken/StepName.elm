@@ -26,12 +26,9 @@ render ctx model =
             , css "margin" "15px auto"
             ]
             []
-        , div [ margin "15px" "0" ] [ text "Choose Category" ]
-        , div [ style [ ( "margin-bottom", "15px" ) ] ] <|
-            List.map (renderCategory model.activeCategory) categories
         , div [ margin "30px" "0" ]
             [ Textfield.render Mdl
-                [ 1 ]
+                [ 2 ]
                 model.mdl
                 [ Textfield.label "Name (max.35 Characters)"
                 , Textfield.floatingLabel
@@ -41,10 +38,23 @@ render ctx model =
                 ]
                 []
             ]
+        , div
+            []
+            [ Textfield.render Mdl
+                [ 3 ]
+                model.mdl
+                [ Textfield.label "Symbol (3 or 4 characters)"
+                , Textfield.floatingLabel
+                , Textfield.text_
+                , Options.onInput SetSymbol
+                , Textfield.value model.symbol
+                ]
+                []
+            ]
         , div []
             [ Textfield.render
                 Mdl
-                [ 2 ]
+                [ 4 ]
                 model.mdl
                 [ Textfield.label "Description (max.285 Characters)"
                 , Textfield.floatingLabel
@@ -82,7 +92,7 @@ renderCategory active value =
 renderHashtags ctx model =
     div []
         [ Textfield.render Mdl
-            [ 3 ]
+            [ 5 ]
             model.mdl
             [ Textfield.label "Add a hashtag"
             , Textfield.floatingLabel

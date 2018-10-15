@@ -1,10 +1,12 @@
 module Main.Routing exposing
     ( Route(..)
     , homepagePath
+    , loginPath
     , matchers
     , newTokenPath
     , parseLocation
     , portfolioPath
+    , signupPath
     , tokensPath
     )
 
@@ -18,6 +20,7 @@ type Route
     | TokensRoute
     | PortfolioRoute
     | CreateTokenRoute
+    | UserLoginRoute
 
 
 matchers : Parser (Route -> a) a
@@ -27,6 +30,7 @@ matchers =
         , map TokensRoute (s "tokens")
         , map PortfolioRoute (s "portfolio")
         , map CreateTokenRoute (s "new")
+        , map UserLoginRoute (s "login")
         ]
 
 
@@ -63,3 +67,13 @@ newTokenPath =
 portfolioPath : String
 portfolioPath =
     "#portfolio"
+
+
+loginPath : String
+loginPath =
+    "#login"
+
+
+signupPath : String
+signupPath =
+    "#signup"

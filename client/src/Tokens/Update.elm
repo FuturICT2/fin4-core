@@ -21,12 +21,15 @@ update ctx msg model =
                     Debug.log (toString error)
                         { model
                             | tokens = Nothing
-                            , error = Just "Error loading tokens, please try\n                        again!"
+                            , error = Just "Error loading tokens, please try again!"
                         }
                         ! []
 
         SelectTab tab ->
             { model | selectedTab = tab } ! []
+
+        TickerTimout ->
+            model ! [ loadTokensCmd ctx 1 ]
 
         Mdl msg_ ->
             Material.update Mdl msg_ model

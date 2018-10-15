@@ -65,6 +65,9 @@ update ctx msg model =
         SetName value ->
             { model | name = value } ! []
 
+        SetSymbol value ->
+            { model | symbol = value } ! []
+
         SetDescription value ->
             { model | description = value } ! []
 
