@@ -18,6 +18,7 @@ import Material.Table as Table
 import Material.Tabs as Tabs
 import Material.Typography as Typo
 import Model.Tokens exposing (Token, Tokens)
+import Random
 import Tokens.Model exposing (Model)
 import Tokens.Msg exposing (Msg(..))
 
@@ -131,6 +132,10 @@ renderData ctx model tokens =
 
 renderRow : Model -> Token -> Html Msg
 renderRow model token =
+    -- let
+    --     gen =
+    --         Random.float 0 4
+    -- in
     Card.view
         [ css "border" "1px solid #ddd"
         , css "width" "100%"
@@ -161,7 +166,7 @@ renderRow model token =
                 [ 2 ]
                 model.mdl
                 []
-                [ Icon.i "gavel", text " 53 actions" ]
+                [ Icon.i "gavel", text " actions" ]
 
             -- , Button.render Mdl
             --     [ 3 ]
@@ -169,7 +174,7 @@ renderRow model token =
             --     [ css "padding" "0"
             --     , css "float" "right"
             --     ]
-            --     [ renderChange token.change24 ]
+            --     [ renderChange <| Random.step gen ]
             ]
         ]
 
