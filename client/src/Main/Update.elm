@@ -1,5 +1,7 @@
 module Main.Update exposing (mountRoute, update)
 
+import CreateToken.Model
+import CreateToken.Update
 import Debug
 import Main.Context exposing (DeviceSize(..))
 import Main.Model exposing (Model)
@@ -8,6 +10,7 @@ import Main.Routing
     exposing
         ( Route(..)
         , parseLocation
+        , tokensPath
         )
 import Material
 import Navigation exposing (newUrl)
@@ -17,6 +20,7 @@ import Portfolio.Update
 import Tokens.Command
 import Tokens.Model
 import Tokens.Update
+import UserLogin.Update
 
 
 mountRoute : Model -> ( Model, Cmd Msg )
@@ -41,7 +45,14 @@ update msg model =
                     model.context
             in
             mountRoute
-                { model | context = { context | route = parseLocation location }, showMobileNav = False }
+                { model
+                    | context =
+                        { context
+                            | route = parseLocation location
+                        }
+                    , showMobileNav = False
+                    , createToken = CreateToken.Model.init
+                }
 
         OnCheckSessionResponse resp ->
             let
@@ -71,6 +82,43 @@ update msg model =
                     Portfolio.Update.update model.context msg_ model.portfolio
             in
             { model | portfolio = childModel } ! [ Cmd.map Portfolio cmd ]
+
+        CreateToken msg_ ->
+            let
+                ( childModel, cmd ) =
+                    CreateToken.Update.update model.context msg_ model.createToken
+            in
+            { model | createToken = childModel } ! [ Cmd.map CreateToken cmd ]
+
+        UserLogin msg_ ->
+            let
+                ( userlogin, userloginCmd ) =
+                    UserLogin.Update.update model.context msg_ model.userlogin
+
+                context =
+                    model.context
+
+                user =
+                    case userlogin.user of
+                        Just _ ->
+                            userlogin.user
+
+                        _ ->
+                            context.user
+
+                cmd =
+                    case userlogin.user of
+                        Just _ ->
+                            if userlogin.isNewUser then
+                                [ newUrl "#welcome" ]
+
+                            else
+                                [ newUrl tokensPath ]
+
+                        _ ->
+                            [ Cmd.map UserLogin userloginCmd ]
+            in
+            { model | userlogin = userlogin, context = { context | user = user } } ! cmd
 
         OnWindowResize size ->
             let

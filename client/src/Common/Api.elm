@@ -66,17 +66,12 @@ csrfCmd ctx =
 -}
 postWithCsrf ctx msg uri jsonBody decoder =
     Task.attempt msg
-        (Http.toTask (csrfCmd ctx)
-            |> Task.andThen
-                (\{ token } ->
-                    Http.toTask
-                        (HttpBuilder.post (ctx.flags.apiBase ++ uri)
-                            |> withJsonBody jsonBody
-                            |> withExpect (Http.expectJson decoder)
-                            |> withHeader "X-Csrf-Token" token
-                            |> toRequest
-                        )
-                )
+        (Http.toTask
+            (HttpBuilder.post (ctx.flags.apiBase ++ uri)
+                |> withJsonBody jsonBody
+                |> withExpect (Http.expectJson decoder)
+                |> toRequest
+            )
         )
 
 

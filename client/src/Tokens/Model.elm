@@ -1,5 +1,6 @@
 module Tokens.Model exposing (Model, init)
 
+import Main.User exposing (User, Users)
 import Material
 import Model.Tokens exposing (Tokens)
 

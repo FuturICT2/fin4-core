@@ -24,23 +24,9 @@ render ctx model =
 
                 Nothing ->
                     "0.00"
-
-        address =
-            case ctx.user of
-                Just user ->
-                    user.address
-
-                Nothing ->
-                    ""
     in
     div [ style [ ( "padding-top", "15px" ) ] ]
-        [ Options.styled p [ Typo.headline ] [ text "Balances" ]
-        , div [ style [ ( "padding-bottom", "15px" ) ] ]
-            [ text <| "your address: " ++ address
-            ]
-        , div []
-            [ text <| "Total value: " ++ portfolioValue ++ " USD"
-            ]
+        [ Options.styled p [ Typo.headline ] [ text "Portfolio" ]
         , case model.error of
             Just _ ->
                 Error.renderMaybeError model.error
@@ -62,7 +48,7 @@ renderData ctx model portfolio =
             div []
                 [ Options.styled p
                     [ Typo.caption ]
-                    [ text "You have no open position yet, visit Funding to deposit some assits into your acocunt" ]
+                    [ text "No holding" ]
                 ]
 
         True ->
@@ -72,7 +58,6 @@ renderData ctx model portfolio =
                         [ Table.tr []
                             [ Table.th [ toMdlCss textLeft ] [ text "Token" ]
                             , Table.th [ toMdlCss textRight ] [ text "Balance" ]
-                            , Table.th [ toMdlCss textRight ] [ text "Value/USD" ]
                             ]
                         ]
                     , Table.tbody [] <| List.map renderRow portfolio.positions
@@ -85,5 +70,4 @@ renderRow position =
     Table.tr []
         [ Table.td [ toMdlCss textLeft ] [ text position.name ]
         , Table.td [ toMdlCss textRight ] [ renderDecimal position.balance ]
-        , Table.td [ toMdlCss textRight ] [ text position.valueInUSD ]
         ]

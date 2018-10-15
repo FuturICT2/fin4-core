@@ -18,11 +18,19 @@ func (env *Env) StartRouter() *gin.Engine {
 	}
 	// website specific api
 	wapi := r.Group("/wapi")
+	wapi.Use(middleware.Session())
+	wapi.Use(middleware.SessionSetUser(env.DB))
 	wapi.Use(middleware.CheckCsrfToken())
 	{
+		mustAuth := middleware.SessionMustAuth()
 		wapi.GET("/csrf", middleware.SetCsrfToken())
+		wapi.GET("/session", mustAuth, env.SessionGet)
+		wapi.POST("/login", env.UserLogin)
 		wapi.GET("/tokens", env.TokensList)
+		wapi.GET("/people", env.PeopleList)
 		wapi.GET("/portfolio/positions", env.Portfolio)
+		wapi.POST("/create-token", env.CreateToken)
+		wapi.GET("/like/:tokenID", env.DoLike)
 	}
 
 	// Ethereum specific APIs

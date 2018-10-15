@@ -9,16 +9,28 @@ import Main.ViewBody as ViewBody
 import Main.ViewFooter as ViewFooter
 import Main.ViewHeader as ViewHeader
 import Main.ViewMobileNav as ViewMobileNav
+import Material.Card as Card
+import Material.Options exposing (css)
 
 
 view : Model -> Html Msg
 view model =
     case model.context.sessionDidLoad of
         False ->
-            Spinner.render "..."
+            div [ style [ ( "text-align", "center" ) ] ]
+                [ Card.view
+                    [ css "width" "95px"
+                    , css "height" "95px"
+                    , css "background" "url('https://trello-attachments.s3.amazonaws.com/5b39f1d06f761ae7c1c7d22c/5b9f76d5afa89e794357c6d9/6b63377efe7ee3d2e6d1b2af22ca51b7/coin1.png') center / cover"
+                    , css "margin" "15px auto"
+                    ]
+                    []
+                , Spinner.render "One moment..."
+                ]
 
         True ->
-            div [ containerStyle model.context.window.isMobile ]
+            div
+                [ containerStyle model.context.window.isMobile ]
                 [ ViewHeader.render model
                 , ViewMobileNav.render model
                 , div [ bodyStyle ] [ ViewBody.render model ]
@@ -28,15 +40,18 @@ view model =
 
 containerStyle : Bool -> Attribute a
 containerStyle isMobile =
-    style <|
-        if isMobile then
-            [ ( "padding-bottom", "100px" ) ]
+    style <| [ ( "padding-bottom", "100px" ) ]
 
-        else
-            [ ( "padding-top", "40px" )
-            , ( "min-width", "950px" )
-            , ( "background", "#fcfcfc" )
-            ]
+
+
+-- if isMobile then
+--     [ ( "padding-bottom", "100px" ) ]
+--
+-- else
+--     [ ( "padding-top", "40px" )
+--     , ( "min-width", "950px" )
+--     , ( "background", "#fcfcfc" )
+--     ]
 
 
 bodyStyle : Attribute a

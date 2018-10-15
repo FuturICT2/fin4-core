@@ -7,7 +7,7 @@ import Html exposing (..)
 import Html.Attributes exposing (style)
 import List exposing (reverse, sortBy)
 import Main.Context exposing (Context)
-import Main.Msg exposing (Msg(..))
+import Main.User exposing (User)
 import Material.Button as Button
 import Material.Card as Card
 import Material.Color as Color
@@ -18,8 +18,9 @@ import Material.Table as Table
 import Material.Tabs as Tabs
 import Material.Typography as Typo
 import Model.Tokens exposing (Token, Tokens)
+import Random
 import Tokens.Model exposing (Model)
-import Tokens.Msg
+import Tokens.Msg exposing (Msg(..))
 
 
 white : Options.Property c m
@@ -44,21 +45,17 @@ render ctx model =
             model.mdl
             [ Tabs.ripple
             , Tabs.activeTab model.selectedTab
+            , Tabs.onSelectTab SelectTab
             ]
             [ Tabs.label
                 [ Options.center ]
                 [ Options.span [ css "width" "4px" ] []
-                , text "trending"
+                , text "Tokens"
                 ]
             , Tabs.label
                 [ Options.center ]
                 [ Options.span [ css "width" "4px" ] []
-                , text "health"
-                ]
-            , Tabs.label
-                [ Options.center ]
-                [ Options.span [ css "width" "4px" ] []
-                , text "climate"
+                , text "People"
                 ]
             ]
             [ case model.selectedTab of
@@ -70,13 +67,39 @@ render ctx model =
                         Nothing ->
                             case model.tokens of
                                 Nothing ->
-                                    div [] [ text "..." ]
+                                    div [] [ text "E" ]
 
                                 Just tokens ->
                                     renderData ctx model tokens
 
                 _ ->
-                    div [] [ text "tab2" ]
+                    case model.error of
+                        Just _ ->
+                            Error.renderMaybeError model.error
+
+                        Nothing ->
+                            case model.tokens of
+                                Nothing ->
+                                    div [] [ text "..." ]
+
+                                Just tokens ->
+                                    div [] <| List.map (renderUser model) <| reverse tokens.people
+            ]
+        ]
+
+
+renderUser : Model -> User -> Html Msg
+renderUser model user =
+    Card.view
+        [ css "border" "1px solid #ddd"
+        , css "width" "100%"
+        , css "margin-top" "15px"
+        ]
+        [ Card.title []
+            [ Card.head []
+                [ Lists.content []
+                    [ text user.name ]
+                ]
             ]
         ]
 
@@ -85,7 +108,15 @@ renderData : Context -> Model -> Tokens -> Html Msg
 renderData ctx model tokens =
     let
         sorted =
-            reverse <| sortBy .change24 tokens.entries
+            reverse tokens.entries
+
+        userId =
+            case ctx.user of
+                Just user ->
+                    user.id
+
+                Nothing ->
+                    0
     in
     case List.length sorted > 0 of
         False ->
@@ -101,6 +132,10 @@ renderData ctx model tokens =
 
 renderRow : Model -> Token -> Html Msg
 renderRow model token =
+    -- let
+    --     gen =
+    --         Random.float 0 4
+    -- in
     Card.view
         [ css "border" "1px solid #ddd"
         , css "width" "100%"
@@ -111,29 +146,35 @@ renderRow model token =
                 [ Lists.content []
                     [ Lists.avatarImage token.logo []
                     , text <| " " ++ token.name
+                    , small [] [ text <| " (" ++ token.symbol ++ ")" ]
                     ]
                 ]
             ]
-        , Card.text [] [ text token.symbol ]
+        , Card.text
+            []
+            [ text token.purpose ]
         , Card.actions
             [ Card.border, css "vertical-align" "center" ]
             [ Button.render Mdl
                 [ 0 ]
                 model.mdl
-                [ Button.colored
+                [ Options.onClick (DoLike token.id) ]
+                [ Icon.i "favorite_border"
+                , text <| " " ++ toString token.favouriteCount
                 ]
-                [ text "buy" ]
             , Button.render Mdl
-                [ 0 ]
+                [ 2 ]
                 model.mdl
-                [ Button.colored
-                ]
-                [ text "sell" ]
-            , Button.render Mdl
-                [ 8, 1 ]
-                model.mdl
-                [ css "padding" "0", css "float" "right" ]
-                [ renderChange token.change24 ]
+                []
+                [ Icon.i "gavel", text " actions" ]
+
+            -- , Button.render Mdl
+            --     [ 3 ]
+            --     model.mdl
+            --     [ css "padding" "0"
+            --     , css "float" "right"
+            --     ]
+            --     [ renderChange <| Random.step gen ]
             ]
         ]
 

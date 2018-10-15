@@ -4,6 +4,7 @@ import (
 	"os"
 
 	"github.com/FuturICT2/fin4-core/server/ethereum"
+	"github.com/FuturICT2/fin4-core/server/models"
 	"github.com/FuturICT2/fin4-core/server/routes"
 	"github.com/FuturICT2/fin4-core/server/util"
 	"github.com/sirupsen/logrus"
@@ -17,9 +18,12 @@ func initLogger() {
 
 func main() {
 	initLogger()
+	dsn := util.MustGetenv("DATA_SOURCE_NAME")
+	db := models.MustConnect(dsn)
+
 	ethereum := ethereum.MustNewEthereum()
 	routesEnv := routes.Env{
-		// We can add general types like database connection to the ENV when needed
+		DB:       db,
 		Ethereum: ethereum,
 	}
 	routesEnv.StartRouter().Run(":" + getPort())

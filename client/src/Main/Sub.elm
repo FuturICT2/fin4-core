@@ -3,6 +3,7 @@ module Main.Sub exposing (subscriptions)
 import Main.Model exposing (Model)
 import Main.Msg exposing (Msg(..))
 import Main.Routing exposing (Route(..))
+import Tokens.Sub
 import WebSocket
 import Window exposing (..)
 
@@ -11,7 +12,15 @@ subscriptions : Model -> Sub Msg
 subscriptions model =
     let
         sub =
-            Sub.none
+            case model.context.route of
+                TokensRoute ->
+                    Sub.batch
+                        [ Sub.map Tokens <|
+                            Tokens.Sub.subscriptions model.context
+                        ]
+
+                _ ->
+                    Sub.none
     in
     Sub.batch
         [ Window.resizes (\size -> OnWindowResize size)
