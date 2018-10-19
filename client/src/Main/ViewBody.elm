@@ -16,7 +16,9 @@ render : Model -> Html Msg
 render model =
     case model.context.route of
         HomepageRoute ->
-            Homepage.Homepage.render model.context
+            ifAuth model <|
+                Html.map Main.Msg.Tokens <|
+                    Tokens.View.render model.context model.tokens
 
         TokensRoute ->
             ifAuth model <|

@@ -73,6 +73,7 @@ authHeader model =
                 [ Icon.view "timeline"
                     [ Icon.size24
                     ]
+                , text "tokens"
                 ]
             , a
                 [ href newTokenPath
@@ -121,6 +122,7 @@ notAuthHeader model =
                 [ Icon.view "timeline"
                     [ Icon.size24
                     ]
+                , text "tokens"
                 ]
             , a
                 [ href newTokenPath
@@ -164,41 +166,17 @@ renderForMobile model =
                 [ href tokensPath
                 , bhNavItemStyle
                 , bhNavBorderedRightStyle
-                , style [ ( "width", "25%" ) ]
+                , style [ ( "width", "50%" ) ]
                 ]
-                [ Icon.view "timeline"
-                    [ Icon.size24
-                    ]
+                [ text "tokens"
                 ]
             , a
                 [ href newTokenPath
                 , bhNavItemStyle
                 , bhNavBorderedRightStyle
-                , style [ ( "width", "25%" ) ]
+                , style [ ( "width", "50%" ) ]
                 ]
-                [ Icon.view "add_circle_outline"
-                    [ Icon.size24
-                    ]
-                ]
-            , a
-                [ href portfolioPath
-                , bhNavItemStyle
-                , bhNavBorderedRightStyle
-                , style [ ( "width", "25%" ) ]
-                ]
-                [ Icon.view "person"
-                    [ Icon.size24
-                    ]
-                ]
-            , a
-                [ href portfolioPath
-                , bhNavItemStyle
-                , bhNavBorderedRightStyle
-                , style [ ( "width", "25%" ) ]
-                ]
-                [ Icon.view "settings"
-                    [ Icon.size24
-                    ]
+                [ text "new token"
                 ]
             ]
         ]
@@ -318,7 +296,6 @@ bhStyle =
         , ( "min-width", "320px" )
         , ( "opacity", "1" )
         , ( "z-index", "100" )
-        , ( "padding-top", "3px" )
         ]
 
 
