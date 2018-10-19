@@ -15,7 +15,7 @@ import Model.Tokens exposing (tokenDecoder)
 createTokenCmd : Context -> Model -> Cmd Msg
 createTokenCmd ctx model =
     postWithCsrf ctx
-        OnCreateTokenSuccess
+        OnCreateTokenResponse
         "/create-token"
         (encodeCreateToken model)
         tokenDecoder
@@ -28,6 +28,4 @@ encodeCreateToken model =
         , ( "purpose", JE.string model.description )
         , ( "totalSupply", JE.string model.shares )
         , ( "symbol", JE.string model.symbol )
-        , ( "category", JE.string model.activeCategory )
-        , ( "hashtags", JE.list (List.map JE.string model.hashtags) )
         ]

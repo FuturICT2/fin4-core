@@ -26,7 +26,7 @@ render ctx model =
                     "0.00"
     in
     div [ style [ ( "padding-top", "15px" ) ] ]
-        [ Options.styled p [ Typo.headline ] [ text "Portfolio" ]
+        [ Options.styled p [ Typo.headline ] [ text "Actions" ]
         , case model.error of
             Just _ ->
                 Error.renderMaybeError model.error

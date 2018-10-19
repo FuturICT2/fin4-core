@@ -37,7 +37,7 @@ func MustConnect(dataSourceName string) *DB {
 	if err != nil {
 		logrus.WithFields(
 			logrus.Fields{"e": err.Error()},
-		).Error("db:MustConnect:e2")
+		).Error("db:MustConnect:e1")
 		log.Fatal(err.Error())
 	}
 	// Open doesn't open a connection. Validate DSN data:
@@ -45,13 +45,13 @@ func MustConnect(dataSourceName string) *DB {
 	if err != nil {
 		logrus.WithFields(
 			logrus.Fields{"e": err.Error()},
-		).Error("db:MustConnect:e3")
+		).Error("db:MustConnect:e2")
 		log.Fatal(err.Error())
 	}
 	if err := migrateDB(db); err != nil {
 		logrus.WithFields(
-			logrus.Fields{"e": err.Error()},
-		).Error("db:MustConnect:e4")
+			logrus.Fields{"error": err.Error()},
+		).Error("db:MustConnect:e3")
 		log.Fatal("migrateDB: ", err)
 	}
 	return &DB{db}

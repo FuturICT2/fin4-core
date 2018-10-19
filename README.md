@@ -3,10 +3,18 @@
 # fin4-core
 Finance 4.0 is a multi-dimensional incentive system to manage complex systems and promote a circular sharing economy to create a high quality of life for more people with less resources.
 
-# Prerequisites
+# Dependencies
 - Golang 1.10 (https://golang.org/doc/install)
 - Ganache-cli (https://github.com/trufflesuite/ganache-cli)
 - Elmlang
+- MySql server
+
+### setting up database:
+```SQL
+CREATE DATABASE fin4 default charset utf8;
+```
+copy `fin4-core/.env_sample` to `fin4-core/.env`  
+modify DATA_SOURCE_NAME by adding USERNAME, PASSWORD and DB_NAME
 
 # Install
 ```bash

@@ -19,7 +19,7 @@ update ctx msg model =
             }
                 ! [ createTokenCmd ctx model ]
 
-        OnCreateTokenSuccess res ->
+        OnCreateTokenResponse res ->
             case res of
                 Ok token ->
                     { model
@@ -30,11 +30,11 @@ update ctx msg model =
                         ! []
 
                 Err error ->
-                    { model
-                        | isCreatingToken = False
-                        , createTokenError = Just error
-                        , step = model.step + 1
-                    }
+                    Debug.log (toString error)
+                        { model
+                            | isCreatingToken = False
+                            , createTokenError = Just error
+                        }
                         ! []
 
         StepBack ->
@@ -52,16 +52,6 @@ update ctx msg model =
         StepForward ->
             { model | step = model.step + 1 } ! []
 
-        AddHashtag ->
-            { model
-                | hashtags = model.newHashtag :: model.hashtags
-                , newHashtag = ""
-            }
-                ! []
-
-        RemoveHashtag index ->
-            { model | hashtags = List.Extra.removeAt index model.hashtags } ! []
-
         SetName value ->
             { model | name = value } ! []
 
@@ -70,12 +60,6 @@ update ctx msg model =
 
         SetDescription value ->
             { model | description = value } ! []
-
-        SetNewHashtag value ->
-            { model | newHashtag = value } ! []
-
-        SetActiveCategory value ->
-            { model | activeCategory = value } ! []
 
         SetShares value ->
             { model | shares = value } ! []
