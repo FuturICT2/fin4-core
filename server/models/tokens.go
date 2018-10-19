@@ -28,12 +28,15 @@ func (db *UserModel) FindTokens() ([]Token, error) {
 		fmt.Sprintf(`SELECT %s FROM token`, getTokenCols()),
 	)
 	if err != nil {
+		logrus.WithFields(logrus.Fields{
+			"error": err.Error(),
+		}).Error("models:FindTokens:e1")
 		return nil, err
 	}
 	defer rows.Close()
 	for rows.Next() {
 		var c Token
-		err := rows.Scan(
+		rows.Scan(
 			&c.ID,
 			&c.CreatorID,
 			&c.Name,
@@ -44,18 +47,19 @@ func (db *UserModel) FindTokens() ([]Token, error) {
 			&c.TxAddress,
 			&c.Logo,
 		)
-		if err != nil {
-			return nil, err
-		}
 		c.FavouriteCount = db.CountLikes(c.ID)
 		result = append(result, c)
 	}
 	if err := rows.Err(); err != nil {
+		logrus.WithFields(logrus.Fields{
+			"error": err.Error(),
+		}).Error("models:FindTokens:e2")
 		return nil, err
 	}
 	return result, nil
 }
 
+// CountLikes returnes number of likes for the passed token
 func (db *UserModel) CountLikes(tokenID ID) int {
 	var count int
 	db.QueryRow(
@@ -69,9 +73,9 @@ func (db *UserModel) CountLikes(tokenID ID) int {
 }
 
 // FindToken finds Token by ID
-func (db *UserModel) FindToken(id ID) (*Token, error) {
+func (db *UserModel) FindToken(id ID) *Token {
 	var c Token
-	err := db.QueryRow(
+	db.QueryRow(
 		fmt.Sprintf(`SELECT %s FROM token WHERE id = ?`, getTokenCols()),
 		id,
 	).Scan(
@@ -85,11 +89,11 @@ func (db *UserModel) FindToken(id ID) (*Token, error) {
 		&c.TxAddress,
 		&c.Logo,
 	)
-	return &c, err
+	return &c
 }
 
 // FindTokenBySymbol find token by symbol
-func (db *UserModel) FindTokenBySymbol(symbol string) (*Token, error) {
+func (db *UserModel) FindTokenBySymbol(symbol string) *Token {
 	var c Token
 	err := db.QueryRow(
 		fmt.Sprintf(`SELECT %s FROM token WHERE symbol = ?`, getTokenCols()),
@@ -105,11 +109,14 @@ func (db *UserModel) FindTokenBySymbol(symbol string) (*Token, error) {
 		&c.TxAddress,
 		&c.Logo,
 	)
-	return &c, err
+	if err != nil {
+		return nil
+	}
+	return &c
 }
 
 // FindTokenByName find token by name
-func (db *UserModel) FindTokenByName(name string) (*Token, error) {
+func (db *UserModel) FindTokenByName(name string) *Token {
 	var c Token
 	err := db.QueryRow(
 		fmt.Sprintf(`SELECT %s FROM token WHERE name = ?`, getTokenCols()),
@@ -125,7 +132,10 @@ func (db *UserModel) FindTokenByName(name string) (*Token, error) {
 		&c.TxAddress,
 		&c.Logo,
 	)
-	return &c, err
+	if err != nil {
+		return nil
+	}
+	return &c
 }
 
 // InsertToken insert token
@@ -141,12 +151,12 @@ func (db *UserModel) InsertToken(
 ) (*Token, error) {
 
 	{ // check if token name and symbol dont exist already
-		_, err := db.FindTokenByName(name)
-		if err == nil {
+		token := db.FindTokenByName(name)
+		if token != nil {
 			return nil, errors.New("Token with this name already exists")
 		}
-		_, err = db.FindTokenBySymbol(symbol)
-		if err == nil {
+		token = db.FindTokenBySymbol(symbol)
+		if token != nil {
 			return nil, errors.New("Token with this symbol already exists")
 		}
 	}

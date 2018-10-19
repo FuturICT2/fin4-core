@@ -16,10 +16,7 @@ type alias Model =
     , name : String
     , symbol : String
     , description : String
-    , hashtags : List String
-    , newHashtag : String
     , shares : String
-    , activeCategory : String
     , isCreatingToken : Bool
     , createTokenError : Maybe Http.Error
     }
@@ -33,9 +30,6 @@ init =
     , symbol = ""
     , description = ""
     , shares = ""
-    , newHashtag = ""
-    , hashtags = []
-    , activeCategory = ""
     , isCreatingToken = False
     , createTokenError = Nothing
     }

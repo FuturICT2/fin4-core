@@ -29,28 +29,44 @@ func (env *Env) CreateToken(c *gin.Context) {
 	}
 	time.Sleep(1000 * time.Millisecond)
 	body := struct {
-		Name        string   `json:"name"`
-		Symbol      string   `json:"symbol"`
-		Purpose     string   `json:"purpose"`
-		TotalSupply string   `json:"totalSupply"`
-		Hashtags    []string `json:"hashtags"`
+		Name        string `json:"name"`
+		Symbol      string `json:"symbol"`
+		Purpose     string `json:"purpose"`
+		TotalSupply string `json:"totalSupply"`
 	}{}
 	c.BindJSON(&body)
 	totalSupply := new(big.Int)
-	totalSupply, ok := totalSupply.SetString(body.TotalSupply, 10)
-	if !ok {
-		c.JSON(http.StatusFailedDependency, models.ErrServerError)
+	{ // verify data formats
+		if len(body.Name) < 3 || len(body.Name) > 35 {
+			c.String(http.StatusBadRequest, "Name length should be between than 3 and 35 characters")
+			return
+		}
+		if len(body.Purpose) < 3 || len(body.Purpose) > 255 {
+			c.String(http.StatusBadRequest, "Purpose length should be between than 3 and 255 characters")
+			return
+		}
+		if body.Symbol != "" && (len(body.Symbol) > 4 || len(body.Symbol) < 3) {
+			c.String(http.StatusBadRequest, "Symbol length should be 3 or 4 characters")
+			return
+		}
+		_, ok := totalSupply.SetString(body.TotalSupply, 10)
+		if !ok || totalSupply.Int64() < 0 {
+			c.JSON(http.StatusBadRequest, "TotalSupply must be a positive valid int")
+			return
+		}
 	}
 	address, tx, err := env.Ethereum.DeployNewToken(totalSupply, body.Name, 0, body.Symbol)
 	if err != nil {
-		c.JSON(http.StatusFailedDependency, models.ErrServerError)
+		c.JSON(http.StatusBadRequest, err.Error())
+		return
 	}
 	rand := rand.Intn(len(logos))
-	a, x := env.DB.NewUserModel().InsertToken(
+	a, err := env.DB.NewUserModel().InsertToken(
 		models.ID(1), body.Name, body.Symbol, body.Purpose,
 		body.TotalSupply, address.Hash().Hex(), tx.Hash().Hex(), logos[rand])
-	if x != nil {
-		c.JSON(http.StatusFailedDependency, models.ErrServerError)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, err.Error())
+		return
 	}
 	c.JSON(http.StatusOK, a)
 }
@@ -70,6 +86,7 @@ func (env *Env) UserLogin(c *gin.Context) {
 	c.JSON(http.StatusOK, user)
 }
 
+// DoLike like from logged in user to the passed token
 func (env *Env) DoLike(c *gin.Context) {
 	user := mustGetUser(c)
 	tokenID, err := strconv.Atoi(c.Params.ByName("tokenID"))

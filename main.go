@@ -18,9 +18,7 @@ func initLogger() {
 
 func main() {
 	initLogger()
-	dsn := util.MustGetenv("DATA_SOURCE_NAME")
-	db := models.MustConnect(dsn)
-
+	db := models.MustConnect(util.MustGetenv("DATA_SOURCE_NAME"))
 	ethereum := ethereum.MustNewEthereum()
 	routesEnv := routes.Env{
 		DB:       db,

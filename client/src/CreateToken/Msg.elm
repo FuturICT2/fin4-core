@@ -10,12 +10,8 @@ type Msg
     | StepBack
     | StepForward
     | PostToken
-    | OnCreateTokenSuccess (Result Http.Error Token)
+    | OnCreateTokenResponse (Result Http.Error Token)
     | SetName String
     | SetDescription String
-    | SetNewHashtag String
     | SetSymbol String
-    | AddHashtag
-    | RemoveHashtag Int
     | SetShares String
-    | SetActiveCategory String

@@ -62,12 +62,6 @@ type UserStore interface {
 	) (*Token, error)
 	FindByName(string) (*User, error)
 	IsNameRegistered(string) bool
-	FindUserBalances(userID ID) ([]Balance, error)
-	FindUserBalance(userID ID, assetID ID) (
-		availableBalance decimaldt.Decimal,
-		reserved decimaldt.Decimal,
-		err error,
-	)
 	FindTokens() ([]Token, error)
 	FindUsers() ([]User, error)
 	DoLike(userID ID, tokenID ID) error
@@ -170,111 +164,6 @@ func (db *UserModel) IsNameRegistered(name string) bool {
 		name,
 	).Scan(&count)
 	return err == nil && count > 0
-}
-
-// FindUserBalances finds all balances belonging to given user
-func (db *UserModel) FindUserBalances(id ID) ([]Balance, error) {
-	result := []Balance{}
-	rows, err := db.Query(`SELECT
-			b.assetId,
-			b.balance,
-			b.reserved,
-			c.name,
-			c.symbol,
-			c.isDepositEnabled,
-			c.isWithdrawalEnabled,
-			c.networkFee,
-			a.address
-		FROM user_balance b
-		LEFT JOIN
-			trade_asset c ON c.id = b.assetId
-		LEFT JOIN
-			crypto_user_deposit_address a ON a.userId = b.userId AND a.assetId = b.assetId
-		WHERE b.userId=?`,
-		id,
-	)
-	if err != nil {
-		logrus.WithFields(
-			logrus.Fields{"e": err.Error(), "userID": id},
-		).Error("user:FindUserBalances:1")
-		return result, ErrServerError
-	}
-	defer rows.Close()
-	for rows.Next() {
-		entry := Balance{UserID: id}
-		err = rows.Scan(
-			&entry.AssetID,
-			&entry.Balance,
-			&entry.Reserved,
-			&entry.AssetName,
-			&entry.AssetSymbol,
-			&entry.IsDepositEnabled,
-			&entry.IsWithdrawalEnabled,
-			&entry.NetworkFee,
-			&entry.DepositAddress,
-		)
-		if err != nil {
-			logrus.WithFields(
-				logrus.Fields{"e": err.Error(), "userID": id},
-			).Error("user:FindUserBalances:2")
-			return result, ErrServerError
-		}
-		result = append(result, entry)
-	}
-	if err = rows.Err(); err != nil {
-		logrus.WithFields(
-			logrus.Fields{"e": err.Error(), "userID": id},
-		).Error("user:FindUserBalances:3")
-		return result, ErrServerError
-	}
-	return result, nil
-}
-
-// FindUserBalance finds user's balance of given currecncy
-func (db *UserModel) FindUserBalance(
-	userID ID,
-	currecncyID ID,
-) (
-	decimaldt.Decimal,
-	decimaldt.Decimal,
-	error,
-) {
-	var balance decimaldt.Decimal
-	var reservedBalace decimaldt.Decimal
-	err := db.QueryRow(
-		`SELECT balance
-			FROM user_balance
-			WHERE userId = ? AND assetId = ?`,
-		userID,
-		currecncyID,
-	).Scan(&balance)
-	if err == sql.ErrNoRows {
-		if db.createBalance(userID, currecncyID) {
-			return decimaldt.NewFromFloat(0.0), decimaldt.NewFromFloat(0.0), nil
-		}
-	} else if err != nil {
-		logrus.WithFields(
-			logrus.Fields{
-				"e":           err.Error(),
-				"userID":      userID,
-				"currecncyID": currecncyID,
-			},
-		).Error("user:FindUserBalance:1")
-		return decimaldt.NewFromFloat(0.0), decimaldt.NewFromFloat(0.0), ErrServerError
-	}
-	return balance, reservedBalace, err
-}
-
-func (db *UserModel) createBalance(userID ID, assetID ID) bool {
-	res, err := db.Exec(`INSERT INTO user_balance SET
-			userId = ?, assetId = ?, balance = 0, reserved = 0 `,
-		userID, assetID,
-	)
-	if err != nil {
-		return false
-	}
-	_, err = res.LastInsertId()
-	return err == nil
 }
 
 func getUserCols() string {

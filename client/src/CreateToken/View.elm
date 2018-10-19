@@ -1,10 +1,8 @@
 module CreateToken.View exposing (render)
 
-import Common.Spinner as Spinner
 import CreateToken.Model exposing (Model)
 import CreateToken.Msg exposing (Msg(..))
 import CreateToken.StepName as StepName
-import CreateToken.StepShares as StepShares
 import CreateToken.StepSuccess as StepSuccess
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -12,6 +10,7 @@ import Html.Events exposing (onClick)
 import Main.Context exposing (Context)
 import Main.Routing exposing (tokensPath)
 import Material
+import Material.Button as Button
 import Material.Chip as Chip
 import Material.Icon as Icon
 import Material.Options as Options
@@ -30,31 +29,9 @@ render ctx model =
                     "visible"
     in
     div
-        [ modalStyle, mainStyle ]
+        [ mainStyle ]
         [ div [ titleStyle ]
-            [ span
-                [ style
-                    [ ( "float", "left" )
-                    , ( "visibility", visibility )
-                    ]
-                ]
-                [ Icon.view "chevron_left"
-                    [ Icon.size24
-                    , Options.onClick StepBack
-                    ]
-                ]
-            , text "Tokenization"
-            , a
-                [ style
-                    [ ( "float", "right" )
-                    , ( "color", "black" )
-                    ]
-                , href tokensPath
-                ]
-                [ Icon.view "close"
-                    [ Icon.size24
-                    ]
-                ]
+            [ text "Tokenization"
             ]
         , div [ style [ ( "margin", "15px" ) ] ]
             [ case model.step of
@@ -62,45 +39,32 @@ render ctx model =
                     StepName.render ctx model
 
                 1 ->
-                    StepShares.render ctx model
-
-                2 ->
                     StepSuccess.render ctx model
 
                 _ ->
                     div [] [ text "" ]
             ]
-        , renderActionButton model.step
+        , renderActionButton model
         ]
 
 
-renderActionButton step =
-    case step of
-        1 ->
-            div []
-                [ div [ totalCost ] [ text "total cost: 0.002 ETH" ]
-                , button
-                    [ btnStyle
-                    , onClick PostToken
+renderActionButton model =
+    case model.step of
+        0 ->
+            div [ style [ ( "text-align", "center" ) ] ]
+                [ div [ totalCost ] [ text "network fee: 0.002 ETH" ]
+                , Button.render Mdl
+                    [ 23 ]
+                    model.mdl
+                    [ Button.ripple
+                    , Button.raised
+                    , Options.onClick PostToken
                     ]
-                    [ text "CONFIRM" ]
-                ]
-
-        2 ->
-            a
-                [ btnStyle
-                , style [ ( "text-decoraction", "none" ), ( "padding", "5px" ) ]
-                , href tokensPath
-                ]
-                [ text "Done"
+                    [ text "Create Token" ]
                 ]
 
         _ ->
-            button
-                [ btnStyle
-                , onClick StepForward
-                ]
-                [ text "NEXT" ]
+            div [] []
 
 
 mainStyle =
@@ -123,8 +87,6 @@ btnStyle =
         , ( "text-align", "center" )
         , ( "color", "black" )
         , ( "width", "100%" )
-        , ( "position", "fixed" )
-        , ( "bottom", "0" )
         , ( "font-size", "20px" )
         , ( "color", "black" )
         ]
@@ -135,13 +97,9 @@ totalCost =
     style
         [ ( "height", "50px" )
         , ( "padding", "15px" )
-        , ( "background-color", "black" )
         , ( "border", "none" )
         , ( "text-align", "center" )
         , ( "width", "100%" )
-        , ( "position", "fixed" )
-        , ( "bottom", "50px" )
-        , ( "color", "white" )
         ]
 
 
