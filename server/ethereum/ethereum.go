@@ -5,13 +5,13 @@ import (
 	"math/big"
 	"strings"
 
+	"github.com/FuturICT2/fin4-core/server/util"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind/backends"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core"
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/ethclient"
-	"github.com/kjda/exchange/server/util"
 	"github.com/lytics/logrus"
 )
 
