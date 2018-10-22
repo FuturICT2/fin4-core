@@ -1,14 +1,14 @@
 [![CircleCI](https://circleci.com/gh/FuturICT2/fin4-core/tree/master.svg?style=svg&circle-token=fe8beee27987a1dd0a05f68f1fdef4ca17051a14)](https://circleci.com/gh/FuturICT2/fin4-core/tree/master)
 
-# fin4-core
+# Finance 4.0
 Finance 4.0 is a multi-dimensional incentive system to manage complex systems and promote a circular sharing economy to create a high quality of life for more people with less resources.
 
 Social links: [Twitter](https://twitter.com/FuturICT) 
 
-# Architecture
+# Fin4-core | this repository
+This repo contains both backen and front-end code for the demonstrator of Finance 4.0. The backend is written in Golang adn the front-end is written in Elm lang.
 
-![Fin4 design](https://trello-attachments.s3.amazonaws.com/5b39f1d06f761ae7c1c7d22c/5bbc78645d1e1525d90dc4a5/deb2cf842c06c431c990f687ad620618/Screen_Shot_2018-10-22_at_10.23.44_AM.png)
+# Contibuting
+We are looking for collaboration from the Open Source community. The project needs enhancements regarding code quality, documentation, and testing. To contribute to the project please take a deeper look at our issues and in [here](CONTRIBUTIONS.md) for more details on the architecture and how to run development environment.
 
 
-# Contibutions
-To contribute to the project please take a deeper look in [here](CONTRIBUTIONS.md).
