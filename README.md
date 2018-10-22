@@ -5,6 +5,10 @@ Finance 4.0 is a multi-dimensional incentive system to manage complex systems an
 
 Social links: [Twitter](https://twitter.com/FuturICT) | [slack](https://slack.com)
 
+# Architecture
+
+![Fin4 design](https://trello-attachments.s3.amazonaws.com/5b39f1d06f761ae7c1c7d22c/5bbc78645d1e1525d90dc4a5/deb2cf842c06c431c990f687ad620618/Screen_Shot_2018-10-22_at_10.23.44_AM.png)
+
 
 # Dependencies
 - Golang 1.10 (https://golang.org/doc/install)
