@@ -11,6 +11,7 @@
   "author": "FutureICT",
   "license": "UNLICENSED",
   "dependencies": {
+    "@babel/preset-env": "^7.1.0",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-plugin-syntax-decorators": "^6.13.0",
