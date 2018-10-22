@@ -11,4 +11,4 @@ Social links: [Twitter](https://twitter.com/FuturICT) | [slack](https://slack.co
 
 
 # Contibutions
-To contribute to the project please take a deeper look on how to setup the project locally [here](CONTRIBUTIONS.md).
+To contribute to the project please take a deeper look in [here](CONTRIBUTIONS.md).
