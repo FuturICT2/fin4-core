@@ -3,6 +3,9 @@
 # fin4-core
 Finance 4.0 is a multi-dimensional incentive system to manage complex systems and promote a circular sharing economy to create a high quality of life for more people with less resources.
 
+Social links: [Twitter](https://twitter.com/FuturICT) | [slack](https://slack.com)
+
+
 # Dependencies
 - Golang 1.10 (https://golang.org/doc/install)
 - Ganache-cli (https://github.com/trufflesuite/ganache-cli)
