@@ -4,6 +4,7 @@
 Finance 4.0 is a multi-dimensional incentive system to manage complex systems and promote a circular sharing economy to create a high quality of life for more people with less resources.
 
 Social links: [Twitter](https://twitter.com/FuturICT) 
+Concept paper: [Finance4.0](https://futurict2.eu/finance-4-0-concept-wp3-interim-report-m12-february-2018/)
 
 # Fin4-core | this repository
 This repo contains a backend server and a web front-end implementation of the demonstrator of Finance 4.0. The backend is written in Golang and the front-end is written in Elm lang.
