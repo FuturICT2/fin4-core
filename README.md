@@ -4,8 +4,11 @@
 Finance 4.0 is a multi-dimensional incentive system to manage complex systems and promote a circular sharing economy to create a high quality of life for more people with less resources. Users can obtain cryptographic tokens for actions that are deemed sustainable and good for the community. Also, the entire system is govoerned democratically through tokens.
 
 Video on smart coordination: [YouTube](https://www.youtube.com/watch?v=DSmF2donfBQ)
+
 Follow the project: [Twitter](https://twitter.com/FuturICT) 
-Read about the concepts: [Finance4.0](https://futurict2.eu/finance-4-0-concept-wp3-interim-report-m12-february-2018/)
+
+Read about the idea: [Finance4.0](https://futurict2.eu/finance-4-0-concept-wp3-interim-report-m12-february-2018/)
+
 Slack: todo
 
 # Fin4-core | this repository
