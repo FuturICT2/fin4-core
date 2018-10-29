@@ -1,5 +1,8 @@
 module Main.Update exposing (mountRoute, update)
 
+import Actions.Command
+import Actions.Model
+import Actions.Update
 import CreateToken.Model
 import CreateToken.Update
 import Debug
@@ -32,6 +35,9 @@ mountRoute model =
 
         PortfolioRoute ->
             model ! [ Cmd.map Portfolio <| Portfolio.Command.commands model.context ]
+
+        ActionsRoute ->
+            model ! [ Cmd.map Actions <| Actions.Command.commands model.context ]
 
         _ ->
             model ! []
@@ -83,6 +89,13 @@ update msg model =
                     Portfolio.Update.update model.context msg_ model.portfolio
             in
             { model | portfolio = childModel } ! [ Cmd.map Portfolio cmd ]
+
+        Actions msg_ ->
+            let
+                ( childModel, cmd ) =
+                    Actions.Update.update model.context msg_ model.actions
+            in
+            { model | actions = childModel } ! [ Cmd.map Actions cmd ]
 
         CreateToken msg_ ->
             let

@@ -1,4 +1,4 @@
-module Portfolio.View exposing (render, renderData, renderRow)
+module Portfolio.View exposing (render)
 
 import Common.Decimal exposing (renderDecimal)
 import Common.Error as Error
@@ -34,7 +34,7 @@ render ctx model =
                 Nothing ->
                     ""
     in
-    div [ style [ ( "padding-top", "15px" ) ] ]
+    div []
         [ Options.styled p [ Typo.headline ] [ text "Profile" ]
         , text <| "Welcome, " ++ userName ++ "! ("
         , a [ onClick Main.Msg.UserLogout ] [ text "logout" ]
@@ -60,26 +60,9 @@ renderData ctx model portfolio =
             div []
                 [ Options.styled p
                     [ Typo.caption ]
-                    [ text "No holding" ]
+                    [ text "" ]
                 ]
 
         True ->
             div []
-                [ Table.table []
-                    [ Table.thead []
-                        [ Table.tr []
-                            [ Table.th [ toMdlCss textLeft ] [ text "Token" ]
-                            , Table.th [ toMdlCss textRight ] [ text "Balance" ]
-                            ]
-                        ]
-                    , Table.tbody [] <| List.map renderRow portfolio.positions
-                    ]
-                ]
-
-
-renderRow : Position -> Html Msg
-renderRow position =
-    Table.tr []
-        [ Table.td [ toMdlCss textLeft ] [ text position.name ]
-        , Table.td [ toMdlCss textRight ] [ renderDecimal position.balance ]
-        ]
+                []

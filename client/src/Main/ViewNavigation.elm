@@ -8,6 +8,7 @@ import Main.Msg exposing (Msg(..))
 import Main.Routing
     exposing
         ( Route(..)
+        , actionsPath
         , homepagePath
         , newTokenPath
         , portfolioPath
@@ -30,9 +31,9 @@ render model =
                 [ Icon.i "all_inbox"
                 ]
             , a
-                [ href tokensPath
+                [ href actionsPath
                 , bhNavItemStyle
-                , activeRouteStyle (model.context.route == TokensRoute)
+                , activeRouteStyle (model.context.route == ActionsRoute)
                 , bhNavBorderedRightStyle
                 , style [ ( "width", "25%" ) ]
                 ]

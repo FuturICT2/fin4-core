@@ -15,6 +15,7 @@ import Material.Chip as Chip
 import Material.Icon as Icon
 import Material.Options as Options
 import Material.Textfield as Textfield
+import Material.Typography as Typo
 
 
 render : Context -> Model -> Html Msg
@@ -30,9 +31,7 @@ render ctx model =
     in
     div
         [ mainStyle ]
-        [ div [ titleStyle ]
-            [ text "Tokenization"
-            ]
+        [ Options.styled p [ Typo.headline ] [ text "New Token" ]
         , div [ style [ ( "margin", "15px" ) ] ]
             [ case model.step of
                 0 ->

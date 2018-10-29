@@ -102,3 +102,9 @@ func (env *Env) DoLike(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, struct{}{})
 }
+
+// UserLogout logout route
+func (env *Env) UserLogout(c *gin.Context) {
+	auth.Logout(c)
+	c.JSON(http.StatusOK, gin.H{})
+}

@@ -164,19 +164,6 @@ renderRow model token =
                 [ Icon.i "favorite_border"
                 , text <| " " ++ toString token.favouriteCount
                 ]
-            , Button.render Mdl
-                [ 2 ]
-                model.mdl
-                []
-                [ Icon.i "gavel", text " actions" ]
-
-            -- , Button.render Mdl
-            --     [ 3 ]
-            --     model.mdl
-            --     [ css "padding" "0"
-            --     , css "float" "right"
-            --     ]
-            --     [ renderChange <| Random.step gen ]
             ]
         ]
 

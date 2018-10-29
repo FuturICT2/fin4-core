@@ -1,5 +1,6 @@
 module Main.ViewBody exposing (render)
 
+import Actions.View
 import CreateToken.View
 import Homepage.Homepage
 import Html exposing (..)
@@ -28,6 +29,10 @@ render model =
         PortfolioRoute ->
             ifAuth model <|
                 Portfolio.View.render model.context model.portfolio
+
+        ActionsRoute ->
+            ifAuth model <|
+                Actions.View.render model.context model.actions
 
         CreateTokenRoute ->
             ifAuth model <|

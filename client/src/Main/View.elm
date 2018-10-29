@@ -45,7 +45,7 @@ renderBeforeSessionLoaded =
 renderAfterSessionLoaded : Model -> Html Msg
 renderAfterSessionLoaded model =
     div
-        [ containerStyle model.context.window.isMobile ]
+        [ containerStyle model.context.window.isMobile, style [ ( "padding-top", "15px" ) ] ]
         [ case isLoggedIn model.context of
             True ->
                 ViewNavigation.render model
@@ -58,7 +58,7 @@ renderAfterSessionLoaded model =
 
 containerStyle : Bool -> Attribute a
 containerStyle isMobile =
-    style <| [ ( "padding-bottom", "100px" ) ]
+    style <| [ ( "padding-bottom", "50px" ) ]
 
 
 bodyStyle : Attribute a
