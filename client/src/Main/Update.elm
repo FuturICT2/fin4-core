@@ -3,12 +3,14 @@ module Main.Update exposing (mountRoute, update)
 import CreateToken.Model
 import CreateToken.Update
 import Debug
+import Main.Command exposing (logoutCmd)
 import Main.Context exposing (DeviceSize(..))
 import Main.Model exposing (Model)
 import Main.Msg exposing (Msg(..))
 import Main.Routing
     exposing
         ( Route(..)
+        , loginPath
         , parseLocation
         , tokensPath
         )
@@ -18,7 +20,6 @@ import Portfolio.Command
 import Portfolio.Model
 import Portfolio.Update
 import Tokens.Command
-import Tokens.Model
 import Tokens.Update
 import UserLogin.Update
 
@@ -119,6 +120,33 @@ update msg model =
                             [ Cmd.map UserLogin userloginCmd ]
             in
             { model | userlogin = userlogin, context = { context | user = user } } ! cmd
+
+        UserLogout ->
+            let
+                context =
+                    model.context
+            in
+            { model | context = { context | user = Nothing } } ! [ logoutCmd context model ]
+
+        OnLogoutResponse resp ->
+            case resp of
+                Ok _ ->
+                    let
+                        context =
+                            model.context
+
+                        cmd =
+                            case context.user of
+                                Just _ ->
+                                    []
+
+                                _ ->
+                                    [ newUrl loginPath ]
+                    in
+                    { model | context = { context | user = Nothing } } ! cmd
+
+                Err _ ->
+                    model ! []
 
         OnWindowResize size ->
             let

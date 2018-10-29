@@ -5,6 +5,7 @@ import Common.Error as Error
 import Common.Styles exposing (padding, textLeft, textRight, toMdlCss)
 import Html exposing (..)
 import Html.Attributes exposing (style)
+import Html.Events exposing (onClick)
 import Main.Context exposing (Context)
 import Main.Msg exposing (Msg(..))
 import Material.Options as Options
@@ -24,9 +25,20 @@ render ctx model =
 
                 Nothing ->
                     "0.00"
+
+        userName =
+            case ctx.user of
+                Just user ->
+                    user.name
+
+                Nothing ->
+                    ""
     in
     div [ style [ ( "padding-top", "15px" ) ] ]
-        [ Options.styled p [ Typo.headline ] [ text "Actions" ]
+        [ Options.styled p [ Typo.headline ] [ text "Profile" ]
+        , text <| "Welcome, " ++ userName ++ "! ("
+        , a [ onClick Main.Msg.UserLogout ] [ text "logout" ]
+        , text ")"
         , case model.error of
             Just _ ->
                 Error.renderMaybeError model.error

@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "./node_modules/.bin/webpack",
+    "build": "./node_modules/.bin/webpack --config ./webpack-client.config.js",
     "client-dev-ssl": "./node_modules/.bin/webpack-dev-server --config ./webpack-client.config.js --port 8888 --hot",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -36,5 +36,8 @@
     "url-loader": "^0.5.9",
     "webpack": "^3.10.0",
     "webpack-dev-server": "^2.7.1"
+  },
+  "devDependencies": {
+    "copy-webpack-plugin": "^4.5.4"
   }
 }

@@ -24,3 +24,5 @@ type Msg
     | Portfolio Portfolio.Msg.Msg
     | CreateToken CreateToken.Msg.Msg
     | UserLogin UserLogin.Msg.Msg
+    | UserLogout
+    | OnLogoutResponse (Result Http.Error EmptyResponse)

@@ -9,7 +9,7 @@ import Main.NotFound
 import Main.Routing exposing (Route(..))
 import Portfolio.View
 import Tokens.View
-import UserLogin.ViewLogin
+import UserLogin.View
 
 
 render : Model -> Html Msg
@@ -43,7 +43,7 @@ render model =
 
 renderLogin : Model -> Html Msg
 renderLogin model =
-    Html.map Main.Msg.UserLogin <| UserLogin.ViewLogin.render model.userlogin
+    Html.map Main.Msg.UserLogin <| UserLogin.View.render model.userlogin
 
 
 ifAuth : Model -> Html Msg -> Html Msg

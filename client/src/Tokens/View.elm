@@ -49,13 +49,15 @@ render ctx model =
             ]
             [ Tabs.label
                 [ Options.center ]
-                [ Options.span [ css "width" "4px" ] []
-                , text "Tokens"
+                [ Icon.view "trending_up" [ Icon.size18, css "color" "red" ]
+                , Options.span [ css "width" "4px" ] []
+                , text "Trending"
                 ]
             , Tabs.label
                 [ Options.center ]
-                [ Options.span [ css "width" "4px" ] []
-                , text "People"
+                [ Icon.view "favorite_border" [ Icon.size18, css "color" "red" ]
+                , Options.span [ css "width" "4px" ] []
+                , text "Following"
                 ]
             ]
             [ case model.selectedTab of
