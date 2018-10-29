@@ -26,6 +26,7 @@ func (env *Env) StartRouter() *gin.Engine {
 		wapi.GET("/csrf", middleware.SetCsrfToken())
 		wapi.GET("/session", mustAuth, env.SessionGet)
 		wapi.POST("/login", env.UserLogin)
+		wapi.POST("/logout", env.UserLogout)
 		wapi.GET("/tokens", env.TokensList)
 		wapi.GET("/people", env.PeopleList)
 		wapi.GET("/portfolio/positions", env.Portfolio)

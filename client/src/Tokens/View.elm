@@ -49,13 +49,15 @@ render ctx model =
             ]
             [ Tabs.label
                 [ Options.center ]
-                [ Options.span [ css "width" "4px" ] []
-                , text "Tokens"
+                [ Icon.view "trending_up" [ Icon.size18, css "color" "red" ]
+                , Options.span [ css "width" "4px" ] []
+                , text "Trending"
                 ]
             , Tabs.label
                 [ Options.center ]
-                [ Options.span [ css "width" "4px" ] []
-                , text "People"
+                [ Icon.view "favorite_border" [ Icon.size18, css "color" "red" ]
+                , Options.span [ css "width" "4px" ] []
+                , text "Following"
                 ]
             ]
             [ case model.selectedTab of
@@ -162,19 +164,6 @@ renderRow model token =
                 [ Icon.i "favorite_border"
                 , text <| " " ++ toString token.favouriteCount
                 ]
-            , Button.render Mdl
-                [ 2 ]
-                model.mdl
-                []
-                [ Icon.i "gavel", text " actions" ]
-
-            -- , Button.render Mdl
-            --     [ 3 ]
-            --     model.mdl
-            --     [ css "padding" "0"
-            --     , css "float" "right"
-            --     ]
-            --     [ renderChange <| Random.step gen ]
             ]
         ]
 

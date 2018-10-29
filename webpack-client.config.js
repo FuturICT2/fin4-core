@@ -1,4 +1,5 @@
 var path = require("path")
+var CopyWebpackPlugin = require('copy-webpack-plugin')
 
 module.exports = {
   entry: {
@@ -53,6 +54,14 @@ module.exports = {
     ],
     noParse: /\.elm$/,
   },
+  plugins: [
+      new CopyWebpackPlugin([
+        {
+          context: __dirname +'/client/src/res/',
+          from: '**/*'
+        }
+      ])
+  ],
   devServer: {
         hot: true,
         inline: true,
@@ -64,6 +73,7 @@ module.exports = {
         proxy: {
           '/api/*': 'http://localhost:3000',
           '/wapi/*': 'http://localhost:3000',
+          '/static/*': 'http://localhost:3000',
           '/assets/*': 'http://localhost:3000',
           '/avatar/*': 'http://localhost:3000'
         }

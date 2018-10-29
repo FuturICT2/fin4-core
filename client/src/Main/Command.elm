@@ -1,4 +1,4 @@
-module Main.Command exposing (checkSessionCmd, commands)
+module Main.Command exposing (checkSessionCmd, commands, logoutCmd)
 
 import Common.Api exposing (get, postWithCsrf)
 import Common.Json exposing (emptyResponseDecoder)
@@ -23,3 +23,12 @@ commands ctx =
 checkSessionCmd : Context -> Cmd Msg
 checkSessionCmd ctx =
     get ctx OnCheckSessionResponse "/session" [] userDecoder
+
+
+logoutCmd : Context -> Model -> Cmd Msg
+logoutCmd ctx model =
+    postWithCsrf ctx
+        OnLogoutResponse
+        "/logout"
+        (JE.object [])
+        emptyResponseDecoder

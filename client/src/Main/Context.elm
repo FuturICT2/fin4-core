@@ -1,4 +1,10 @@
-module Main.Context exposing (Context, DeviceSize(..), initContext, isUserId)
+module Main.Context exposing
+    ( Context
+    , DeviceSize(..)
+    , initContext
+    , isLoggedIn
+    , isUserId
+    )
 
 import Main.Flags exposing (Flags)
 import Main.Routing exposing (Route)
@@ -38,6 +44,16 @@ initContext flags route =
         , isMobile = False
         }
     }
+
+
+isLoggedIn : Context -> Bool
+isLoggedIn ctx =
+    case ctx.user of
+        Just _ ->
+            True
+
+        Nothing ->
+            False
 
 
 isUserId : Context -> Int -> Bool

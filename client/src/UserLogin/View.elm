@@ -1,4 +1,4 @@
-module UserLogin.ViewLogin exposing (helperStyle, loginWrapStyle, onKeyDown, render)
+module UserLogin.View exposing (helperStyle, loginWrapStyle, onKeyDown, render)
 
 --import Html.Events exposing (..)
 
@@ -6,7 +6,7 @@ import Common.Error exposing (renderHttpError)
 import Debug exposing (log)
 import Html exposing (..)
 import Html.Attributes exposing (href, style)
-import Html.Events exposing (keyCode, on)
+import Html.Events exposing (keyCode, on, onClick)
 import Json.Decode as JD
 import Main.Routing exposing (loginPath, signupPath)
 import Material.Button as Button
