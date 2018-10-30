@@ -3,7 +3,6 @@ package ethereum
 import (
 	"errors"
 	"math/big"
-	"strings"
 
 	"github.com/FuturICT2/fin4-core/server/util"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
@@ -11,6 +10,7 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core"
 	"github.com/ethereum/go-ethereum/core/types"
+	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/lytics/logrus"
 )
@@ -24,16 +24,17 @@ type Ethereum struct {
 
 // MustNewEthereum create new Ethereum interface, panic if no connection
 func MustNewEthereum() *Ethereum {
-	key := util.MustGetenv("ETH_KEY")
-	passphrase := util.MustGetenv("ETH_PASSPHRASE")
-	ipcPath := util.MustGetenv("IPC_PATH")
-	//////// TEST Net connection
-	conn, err := ethclient.Dial(ipcPath)
+	rawKey := util.MustGetenv("ETH_KEY_RAW")
+	conn, err := ethclient.Dial("https://rinkeby.infura.io/")
 	if err != nil {
 		logrus.Fatal("Failed to connect to the Ethereum client: %v", err)
 	}
-	// Create an authorized transactor and spend 1 unicorn
-	auth, err := bind.NewTransactor(strings.NewReader(key), passphrase)
+	rawKeyECDSA, err := crypto.HexToECDSA(rawKey)
+	if err != nil {
+		logrus.Fatal("Something wrong with server private key.", err)
+	}
+	// Create an authorized transactor
+	auth := bind.NewKeyedTransactor(rawKeyECDSA)
 	if err != nil {
 		logrus.Fatal("Failed to create transactor: %v", err)
 	}
