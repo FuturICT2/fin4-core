@@ -4,7 +4,7 @@ import Common.Decimal exposing (renderDecimal)
 import Common.Error as Error
 import Common.Styles exposing (padding, textLeft, textRight, toMdlCss)
 import Html exposing (..)
-import Html.Attributes exposing (style)
+import Html.Attributes exposing (href, style)
 import List exposing (reverse, sortBy)
 import Main.Context exposing (Context)
 import Main.User exposing (User)
@@ -122,10 +122,17 @@ renderData ctx model tokens =
     in
     case List.length sorted > 0 of
         False ->
-            div []
+            div
+                [ style
+                    [ ( "margin", "auto" )
+                    , ( "padding-top", "60px" )
+                    , ( "text-align", "center" )
+                    ]
+                ]
                 [ Options.styled p
-                    [ Typo.caption ]
-                    [ text "empty" ]
+                    [ Typo.caption
+                    ]
+                    [ text "No tokens has been created yet!" ]
                 ]
 
         True ->
@@ -164,6 +171,17 @@ renderRow model token =
                 [ Icon.i "favorite_border"
                 , text <| " " ++ toString token.favouriteCount
                 ]
+            , Button.render Mdl
+                [ 1, 0 ]
+                model.mdl
+                [ Button.ripple
+                , Button.accent
+                , Button.link <| "https://rinkeby.etherscan.io/tx/" ++ token.txAddress
+
+                -- , Options.attribute <| Html.Attributes.target "_blank"
+                , css "float" "right"
+                ]
+                [ text "transaction" ]
             ]
         ]
 
