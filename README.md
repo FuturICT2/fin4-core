@@ -1,6 +1,6 @@
 [![CircleCI](https://circleci.com/gh/FuturICT2/fin4-core/tree/master.svg?style=svg&circle-token=fe8beee27987a1dd0a05f68f1fdef4ca17051a14)](https://circleci.com/gh/FuturICT2/fin4-core/tree/master)
 
-# Finance 4.0
+# Finance 4.0 Demonstrator
 Finance 4.0 is a multi-dimensional incentive system to manage complex systems and promote a circular sharing economy to create a high quality of life for more people with less resources. Users can obtain cryptographic tokens for actions that are deemed sustainable and good for the community. Also, the entire system is govoerned democratically through tokens.
 
 Video on smart coordination: [YouTube](https://www.youtube.com/watch?v=DSmF2donfBQ)
