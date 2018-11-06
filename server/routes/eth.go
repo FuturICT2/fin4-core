@@ -7,26 +7,12 @@ import (
 
 	"github.com/FuturICT2/fin4-core/server/models"
 	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
 )
 
 var (
 	// ErrServerError for any internal server error
 	ErrServerError = errors.New("Server error")
 )
-
-// BestBlock route handler that returns best block number of fin4 ethereum node
-func (env *Env) BestBlock(c *gin.Context) {
-	blockNumber, err := env.Ethereum.GetBlockNumber()
-	if err != nil {
-		logrus.WithFields(logrus.Fields{
-			"error": err.Error(),
-		}).Error("server:eth:e1")
-		c.String(http.StatusFailedDependency, ErrServerError.Error())
-		return
-	}
-	c.JSON(http.StatusOK, blockNumber)
-}
 
 // Token token struct
 type Token struct {
@@ -134,14 +120,17 @@ func (env *Env) TokensList(c *gin.Context) {
 	userModel := env.DB.NewUserModel()
 	tokens, err := userModel.FindTokens()
 	if err != nil {
-		c.JSON(http.StatusBadRequest, err)
+		c.String(http.StatusBadRequest, err.Error())
 		return
 	}
 	users, err := userModel.FindUsers()
+
 	if err != nil {
-		c.JSON(http.StatusBadRequest, err)
+
+		c.String(http.StatusBadRequest, err.Error())
 		return
 	}
+
 	c.JSON(http.StatusOK, struct {
 		Count      int
 		Limit      int

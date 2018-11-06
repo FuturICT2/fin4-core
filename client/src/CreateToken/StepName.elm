@@ -29,19 +29,20 @@ render ctx model =
                 ]
                 []
             ]
-        , div [ style [ ( "15px", "0" ) ] ]
-            [ Textfield.render Mdl
-                [ 1 ]
-                model.mdl
-                [ css "width" "200px"
-                , Textfield.label "Total supply"
-                , Textfield.floatingLabel
-                , Textfield.text_
-                , Textfield.value model.shares
-                , Options.onInput SetShares
-                ]
-                []
-            ]
+
+        -- , div [ style [ ( "15px", "0" ) ] ]
+        --     [ Textfield.render Mdl
+        --         [ 1 ]
+        --         model.mdl
+        --         [ css "width" "200px"
+        --         , Textfield.label "Total supply"
+        --         , Textfield.floatingLabel
+        --         , Textfield.text_
+        --         , Textfield.value model.shares
+        --         , Options.onInput SetShares
+        --         ]
+        --         []
+        --     ]
         , div
             []
             [ Textfield.render Mdl

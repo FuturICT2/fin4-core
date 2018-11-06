@@ -26,19 +26,18 @@ func (env *Env) StartRouter() *gin.Engine {
 		wapi.GET("/csrf", middleware.SetCsrfToken())
 		wapi.GET("/session", mustAuth, env.SessionGet)
 		wapi.POST("/login", env.UserLogin)
-		wapi.POST("/logout", env.UserLogout)
+		wapi.POST("/logout", mustAuth, env.UserLogout)
 		wapi.GET("/tokens", env.TokensList)
 		wapi.GET("/people", env.PeopleList)
-		wapi.GET("/portfolio/positions", env.Portfolio)
-		wapi.POST("/create-token", env.CreateToken)
-		wapi.GET("/like/:tokenID", env.DoLike)
+		wapi.GET("/portfolio/positions", mustAuth, env.Portfolio)
+		wapi.POST("/create-token", mustAuth, env.CreateToken)
+		wapi.GET("/like/:tokenID", mustAuth, env.DoLike)
 	}
 
 	// Ethereum specific APIs
 	eth := r.Group("/eth")
 	eth.Use(middleware.CheckCsrfToken())
 	{
-		eth.GET("/best-block", env.BestBlock)
 	}
 
 	// Core API

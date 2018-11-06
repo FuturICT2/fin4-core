@@ -31,7 +31,7 @@ render ctx model =
     in
     div
         [ mainStyle ]
-        [ Options.styled p [ Typo.headline ] [ text "New Token" ]
+        [ h3 [ style [ ( "text-align", "center" ) ] ] [ text "Tokenizer" ]
         , div [ style [ ( "margin", "15px" ) ] ]
             [ case model.step of
                 0 ->

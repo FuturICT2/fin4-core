@@ -28,7 +28,7 @@ render model =
                 , bhNavBorderedRightStyle
                 , style [ ( "width", "25%" ) ]
                 ]
-                [ Icon.i "all_inbox"
+                [ Icon.i "list"
                 ]
             , a
                 [ href actionsPath
@@ -37,7 +37,7 @@ render model =
                 , bhNavBorderedRightStyle
                 , style [ ( "width", "25%" ) ]
                 ]
-                [ Icon.i "gavel"
+                [ Icon.i "group_work"
                 ]
             , a
                 [ href newTokenPath

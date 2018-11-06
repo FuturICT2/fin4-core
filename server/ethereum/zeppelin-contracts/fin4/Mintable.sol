@@ -1,26 +1,28 @@
 pragma solidity ^0.4.24;
 
-import "../token/ERC20/ERC20.sol";
-
+import "../token/ERC20/ERC20Mintable.sol";
 /**
  * @title SimpleToken
  * @dev Very simple ERC20 Token example, where all tokens are pre-assigned to the creator.
  * Note they can later distribute these tokens as they wish using `transfer` and other
  * `ERC20` functions.
  */
-contract SimpleToken is ERC20 {
+contract Mintable is ERC20Mintable {
 
-  string public constant name = "SimpleToken";
-  string public constant symbol = "SIM";
-  uint8 public constant decimals = 18;
+  string public  name;
+  string public  symbol;
+  uint8 public  decimals;
 
-  uint256 public constant INITIAL_SUPPLY = 10000 * (10 ** uint256(decimals));
+  uint256 public  INITIAL_SUPPLY = 0;
 
   /**
    * @dev Constructor that gives msg.sender all of existing tokens.
    */
-  constructor() public {
+  constructor(string name_, string symbol_, uint8 decimals_, address minter) public {
+    name = name_;
+    symbol = symbol_;
+    decimals = decimals_;
+    _addMinter(minter);
     _mint(msg.sender, INITIAL_SUPPLY);
   }
-
 }

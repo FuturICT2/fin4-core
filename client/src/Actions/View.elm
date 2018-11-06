@@ -18,5 +18,11 @@ import Model.Actions exposing (Action, Actions)
 render : Context -> Model -> Html Msg
 render ctx model =
     div []
-        [ Options.styled p [ Typo.headline ] [ text "Actions" ]
+        [ div
+            [ style
+                [ ( "text-align", "center" )
+                , ( "padding-top", "80px" )
+                ]
+            ]
+            [ text "No actions yet" ]
         ]

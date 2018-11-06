@@ -10,6 +10,7 @@ import (
 	"github.com/FuturICT2/fin4-core/server/auth"
 	"github.com/FuturICT2/fin4-core/server/ethereum"
 	"github.com/FuturICT2/fin4-core/server/models"
+	"github.com/ethereum/go-ethereum/common"
 	"github.com/gin-gonic/gin"
 )
 
@@ -21,6 +22,7 @@ type Env struct {
 
 // CreateToken creat a token
 func (env *Env) CreateToken(c *gin.Context) {
+	user := mustGetUser(c)
 	logos := []string{
 		"https://trello-attachments.s3.amazonaws.com/5b39f1d06f761ae7c1c7d22c/5b9f76d5afa89e794357c6d9/6b63377efe7ee3d2e6d1b2af22ca51b7/coin1.png",
 		"https://trello-attachments.s3.amazonaws.com/5b39f1d06f761ae7c1c7d22c/5b9f76d5afa89e794357c6d9/8b0075fcddb11360a8bbd9bc2673b73f/coin3.png",
@@ -55,7 +57,12 @@ func (env *Env) CreateToken(c *gin.Context) {
 			return
 		}
 	}
-	address, tx, err := env.Ethereum.DeployNewToken(totalSupply, body.Name, 0, body.Symbol)
+	address, tx, err := env.Ethereum.DeployMintable(
+		body.Name,
+		body.Symbol,
+		8,
+		common.HexToAddress(user.EthereumAddress),
+	)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
 		return
@@ -78,7 +85,11 @@ func (env *Env) UserLogin(c *gin.Context) {
 	}{}
 	c.BindJSON(&body)
 	userModel := env.DB.NewUserModel()
-	user, err := userModel.Register(body.Name)
+	ethereumAddress, err := env.Ethereum.CreateNewAddress()
+	if err != nil {
+		c.String(http.StatusInternalServerError, "We are not able to create your ethereum address, please try again.")
+	}
+	user, err := userModel.Register(body.Name, ethereumAddress)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err)
 	}

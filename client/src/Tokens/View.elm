@@ -51,13 +51,13 @@ render ctx model =
                 [ Options.center ]
                 [ Icon.view "trending_up" [ Icon.size18, css "color" "red" ]
                 , Options.span [ css "width" "4px" ] []
-                , text "Trending"
+                , text "Rising"
                 ]
             , Tabs.label
                 [ Options.center ]
                 [ Icon.view "favorite_border" [ Icon.size18, css "color" "red" ]
                 , Options.span [ css "width" "4px" ] []
-                , text "Following"
+                , text "favourites"
                 ]
             ]
             [ case model.selectedTab of
@@ -69,7 +69,7 @@ render ctx model =
                         Nothing ->
                             case model.tokens of
                                 Nothing ->
-                                    div [] [ text "E" ]
+                                    div [] [ text "We are not able to fetch tokens. Please try again" ]
 
                                 Just tokens ->
                                     renderData ctx model tokens

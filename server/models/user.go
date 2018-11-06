@@ -12,10 +12,11 @@ import (
 
 // User user type
 type User struct {
-	ID        ID        `json:"id"`
-	Name      string    `json:"name"`
-	CreatedAt time.Time `json:"createdAt"`
-	UpdatedAt time.Time `json:"updatedAt"`
+	ID              ID        `json:"id"`
+	Name            string    `json:"name"`
+	EthereumAddress string    `json:"ethereumAddress"`
+	CreatedAt       time.Time `json:"createdAt"`
+	UpdatedAt       time.Time `json:"updatedAt"`
 }
 
 // Balance balance type
@@ -48,7 +49,7 @@ const tokenMaxTTLInHours = 48
 
 // UserStore interface for user store
 type UserStore interface {
-	Register(name string) (*User, error)
+	Register(name string, address string) (*User, error)
 	FindByID(ID) (*User, error)
 	InsertToken(
 		userID ID,
@@ -86,7 +87,7 @@ func (db *UserModel) DoLike(userID ID, tokenID ID) error {
 func (db *UserModel) FindUsers() ([]User, error) {
 	result := []User{}
 	rows, err := db.Query(
-		fmt.Sprintf(`SELECT id, name FROM user`),
+		fmt.Sprintf(`SELECT id, name, ethereumAddress FROM user`),
 	)
 	if err != nil {
 		return nil, err
@@ -97,6 +98,7 @@ func (db *UserModel) FindUsers() ([]User, error) {
 		err := rows.Scan(
 			&c.ID,
 			&c.Name,
+			&c.EthereumAddress,
 		)
 		if err != nil {
 			return nil, err
@@ -110,7 +112,7 @@ func (db *UserModel) FindUsers() ([]User, error) {
 }
 
 //Register Registers a new user
-func (db *UserModel) Register(name string) (*User, error) {
+func (db *UserModel) Register(name string, address string) (*User, error) {
 	var err error
 	u, err := db.FindByName(name)
 	if err == nil {
@@ -121,9 +123,11 @@ func (db *UserModel) Register(name string) (*User, error) {
 	res, err := db.Exec(
 		`INSERT INTO user SET
 			name = ?,
+			ethereumAddress = ?,
 			createdAt = ?,
 			updatedAt = ?`,
 		user.Name,
+		address,
 		user.CreatedAt,
 		user.UpdatedAt,
 	)
@@ -167,7 +171,7 @@ func (db *UserModel) IsNameRegistered(name string) bool {
 }
 
 func getUserCols() string {
-	return "id, name, createdAt, updatedAt"
+	return "id, name, ethereumAddress, createdAt, updatedAt"
 }
 
 func scanUser(row *sql.Row) (*User, error) {
@@ -175,6 +179,7 @@ func scanUser(row *sql.Row) (*User, error) {
 	err := row.Scan(
 		&user.ID,
 		&user.Name,
+		&user.EthereumAddress,
 		&user.CreatedAt,
 		&user.UpdatedAt,
 	)

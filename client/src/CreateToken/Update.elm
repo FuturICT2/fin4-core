@@ -7,6 +7,7 @@ import Debug
 import List.Extra
 import Main.Context exposing (Context)
 import Material
+import Navigation exposing (newUrl)
 
 
 update : Context -> Msg -> Model -> ( Model, Cmd Msg )
@@ -27,7 +28,7 @@ update ctx msg model =
                         , createTokenError = Nothing
                         , step = model.step + 1
                     }
-                        ! []
+                        ! [ newUrl "#tokens" ]
 
                 Err error ->
                     Debug.log (toString error)
