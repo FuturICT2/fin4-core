@@ -5,24 +5,24 @@ import Json.Decode.Pipeline as JP
 
 
 type alias Position =
-    { tokenId : String
-    , name : String
-    , symbol : String
+    { userId : Int
+    , tokenId : Int
     , balance : String
-    , valueInUSD : String
+    , tokenName : String
+    , tokenSymbol : String
+    , logoFile : String
+    , blockchainAddress : String
     }
 
 
 type alias Portfolio =
     { positions : List Position
-    , valueInUSD : String
     }
 
 
 init : Portfolio
 init =
     { positions = []
-    , valueInUSD = "0.00"
     }
 
 
@@ -30,14 +30,15 @@ portfolioDecoder : JD.Decoder Portfolio
 portfolioDecoder =
     JP.decode Portfolio
         |> JP.required "Positions" (JD.list positionDecoder)
-        |> JP.required "ValueInUSD" JD.string
 
 
 positionDecoder : JD.Decoder Position
 positionDecoder =
     JP.decode Position
-        |> JP.required "TokenID" JD.string
-        |> JP.required "Name" JD.string
-        |> JP.required "Symbol" JD.string
+        |> JP.required "UserID" JD.int
+        |> JP.required "TokenID" JD.int
         |> JP.required "Balance" JD.string
-        |> JP.required "ValueInUSD" JD.string
+        |> JP.required "TokenName" JD.string
+        |> JP.required "TokenSymbol" JD.string
+        |> JP.required "LogoFile" JD.string
+        |> JP.required "BlockchainAddress" JD.string

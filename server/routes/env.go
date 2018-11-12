@@ -10,7 +10,6 @@ import (
 	"github.com/FuturICT2/fin4-core/server/auth"
 	"github.com/FuturICT2/fin4-core/server/ethereum"
 	"github.com/FuturICT2/fin4-core/server/models"
-	"github.com/ethereum/go-ethereum/common"
 	"github.com/gin-gonic/gin"
 )
 
@@ -57,20 +56,20 @@ func (env *Env) CreateToken(c *gin.Context) {
 			return
 		}
 	}
-	address, tx, err := env.Ethereum.DeployMintable(
-		body.Name,
-		body.Symbol,
-		8,
-		common.HexToAddress(user.EthereumAddress),
-	)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, err.Error())
-		return
-	}
+	// address, tx, err := env.Ethereum.DeployMintable(
+	// 	body.Name,
+	// 	body.Symbol,
+	// 	8,
+	// 	common.HexToAddress(user.EthereumAddress),
+	// )
+	// if err != nil {
+	// 	c.JSON(http.StatusBadRequest, err.Error())
+	// 	return
+	// }
 	rand := rand.Intn(len(logos))
 	a, err := env.DB.NewUserModel().InsertToken(
-		models.ID(1), body.Name, body.Symbol, body.Purpose,
-		body.TotalSupply, address.Hash().Hex(), tx.Hash().Hex(), logos[rand])
+		user.ID, body.Name, body.Symbol, body.Purpose,
+		body.TotalSupply, "hash", "hash", logos[rand]) //address.Hash().Hex(), tx.Hash().Hex(), logos[rand])
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
 		return

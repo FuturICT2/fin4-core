@@ -39,7 +39,7 @@ render ctx model =
                 Nothing ->
                     "0.00"
     in
-    div [ style [ ( "padding-top", "15px" ) ] ]
+    div [ style [ ( "padding-top", "15px" ), ( "width", "100%" ) ] ]
         [ Tabs.render Mdl
             [ 0 ]
             model.mdl
@@ -51,13 +51,13 @@ render ctx model =
                 [ Options.center ]
                 [ Icon.view "trending_up" [ Icon.size18, css "color" "red" ]
                 , Options.span [ css "width" "4px" ] []
-                , text "Rising"
+                , text "Tokens"
                 ]
             , Tabs.label
                 [ Options.center ]
-                [ Icon.view "favorite_border" [ Icon.size18, css "color" "red" ]
+                [ Icon.view "people" [ Icon.size18, css "color" "red" ]
                 , Options.span [ css "width" "4px" ] []
-                , text "favourites"
+                , text "people"
                 ]
             ]
             [ case model.selectedTab of
@@ -171,17 +171,18 @@ renderRow model token =
                 [ Icon.i "favorite_border"
                 , text <| " " ++ toString token.favouriteCount
                 ]
-            , Button.render Mdl
-                [ 1, 0 ]
-                model.mdl
-                [ Button.ripple
-                , Button.accent
-                , Button.link <| "https://rinkeby.etherscan.io/tx/" ++ token.txAddress
 
-                -- , Options.attribute <| Html.Attributes.target "_blank"
-                , css "float" "right"
-                ]
-                [ text "transaction" ]
+            -- , Button.render Mdl
+            --     [ 1, 0 ]
+            --     model.mdl
+            --     [ Button.ripple
+            --     , Button.accent
+            --     , Button.link <| "https://rinkeby.etherscan.io/tx/" ++ token.txAddress
+            --
+            --     -- , Options.attribute <| Html.Attributes.target "_blank"
+            --     , css "float" "right"
+            --     ]
+            --     [ text "transaction" ]
             ]
         ]
 

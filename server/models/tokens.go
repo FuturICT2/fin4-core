@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/kjda/exchange/server/decimaldt"
 	"github.com/lytics/logrus"
 )
 
@@ -55,6 +56,67 @@ func (db *UserModel) FindTokens() ([]Token, error) {
 			"error": err.Error(),
 		}).Error("models:FindTokens:e2")
 		return nil, err
+	}
+	return result, nil
+}
+
+// Balance balance type
+type Balance struct {
+	UserID            ID
+	TokenID           ID
+	Balance           decimaldt.Decimal
+	TokenName         string
+	TokenSymbol       string
+	LogoFile          string
+	BlockchainAddress string
+}
+
+// GetUserBalance returns token balance of a user
+func (db *UserModel) GetUserBalances(userId ID) ([]Balance, error) {
+	result := []Balance{}
+	rows, err := db.Query(`SELECT
+			b.tokenId,
+			b.balance,
+			t.name,
+			t.symbol,
+			t.logo,
+			t.blockchainAddress
+		FROM user_holding b
+		LEFT JOIN
+			token t ON t.id = b.tokenId
+		WHERE b.userId=?`,
+		userId,
+	)
+	if err != nil {
+		logrus.WithFields(
+			logrus.Fields{"error": err.Error()},
+		).Error("GetUserBalances:1")
+		return result, ErrServerError
+	}
+	defer rows.Close()
+	for rows.Next() {
+		entry := Balance{UserID: userId}
+		err = rows.Scan(
+			&entry.TokenID,
+			&entry.Balance,
+			&entry.TokenName,
+			&entry.TokenSymbol,
+			&entry.LogoFile,
+			&entry.BlockchainAddress,
+		)
+		if err != nil {
+			logrus.WithFields(
+				logrus.Fields{"error": err.Error()},
+			).Error("GetUserBalances:2")
+			return result, ErrServerError
+		}
+		result = append(result, entry)
+	}
+	if err = rows.Err(); err != nil {
+		logrus.WithFields(
+			logrus.Fields{"error": err.Error()},
+		).Error("GetUserBalances:3")
+		return result, ErrServerError
 	}
 	return result, nil
 }
@@ -203,7 +265,33 @@ func (db *UserModel) InsertToken(
 	token.BlockchainAddress = blockchainAddress
 	token.TxAddress = txAddress
 	token.Logo = logo
+	db.InsertBalance(userID, ID(tokenID), "10")
 	return &token, nil
+}
+
+// InsertBalance insert balance
+func (db *UserModel) InsertBalance(
+	userID ID,
+	tokenID ID,
+	balance string,
+) error {
+	_, err := db.Exec(
+		`INSERT INTO user_holding SET
+          userId = ?,
+	        tokenId = ?,
+					balance = ?
+	      `,
+		userID,
+		tokenID,
+		balance,
+	)
+	if err != nil {
+		logrus.WithFields(logrus.Fields{
+			"error": err.Error(),
+		}).Error("InsertBalance:1")
+		return ErrServerError
+	}
+	return nil
 }
 
 func getTokenCols() string {

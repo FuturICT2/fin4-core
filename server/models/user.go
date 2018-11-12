@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/FuturICT2/fin4-core/server/decimaldt"
 	"github.com/sirupsen/logrus"
 )
 
@@ -17,20 +16,6 @@ type User struct {
 	EthereumAddress string    `json:"ethereumAddress"`
 	CreatedAt       time.Time `json:"createdAt"`
 	UpdatedAt       time.Time `json:"updatedAt"`
-}
-
-// Balance balance type
-type Balance struct {
-	UserID              ID
-	AssetID             ID
-	AssetName           string
-	AssetSymbol         string
-	Balance             decimaldt.Decimal
-	Reserved            decimaldt.Decimal
-	DepositAddress      sql.NullString
-	IsDepositEnabled    bool
-	IsWithdrawalEnabled bool
-	NetworkFee          decimaldt.Decimal
 }
 
 // NewUser creates a new user
@@ -51,6 +36,7 @@ const tokenMaxTTLInHours = 48
 type UserStore interface {
 	Register(name string, address string) (*User, error)
 	FindByID(ID) (*User, error)
+	GetUserBalances(userId ID) ([]Balance, error)
 	InsertToken(
 		userID ID,
 		name string,
