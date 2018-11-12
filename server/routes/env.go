@@ -83,6 +83,11 @@ func (env *Env) UserLogin(c *gin.Context) {
 		Name string `json:"name"`
 	}{}
 	c.BindJSON(&body)
+
+	if len(body.Name) < 2 || len(body.Name) > 35 {
+		c.String(http.StatusBadRequest, "Name length should be between than 2 and 35 characters")
+		return
+	}
 	userModel := env.DB.NewUserModel()
 	ethereumAddress, err := env.Ethereum.CreateNewAddress()
 	if err != nil {
