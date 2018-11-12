@@ -73,7 +73,7 @@ func (b *Ethereum) DeployNewToken(
 	tokenSymbol string,
 ) (common.Address, *types.Transaction, error) {
 	address, tx, _, err := DeployToken(
-		b.auth, b.rpc, initialSupply, tokenName, decimals, tokenSymbol)
+		b.auth, b.sim, initialSupply, tokenName, decimals, tokenSymbol)
 	if err != nil {
 		logrus.WithFields(logrus.Fields{
 			"error": err.Error(),

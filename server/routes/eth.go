@@ -180,40 +180,22 @@ type Position struct {
 
 // Portfolio handler to return json of existing tokens
 func (env *Env) Portfolio(c *gin.Context) {
+	user := mustGetUser(c)
+	userModel := env.DB.NewUserModel()
+	balances, err := userModel.GetUserBalances(user.ID)
+	if err != nil {
+		c.String(http.StatusBadRequest, err.Error())
+		return
+	}
 	c.JSON(http.StatusOK, struct {
-		Count      int
-		Limit      int
-		Page       int
-		ValueInUSD string
-		Positions  []Position
+		Count     int
+		Limit     int
+		Page      int
+		Positions []models.Balance
 	}{
-		Count:      2,
-		Limit:      10,
-		Page:       0,
-		ValueInUSD: "0",
-		Positions:  []Position{},
-		// Positions: []Position{
-		// 	Position{
-		// 		TokenID:    "1",
-		// 		Name:       "Fin4",
-		// 		Symbol:     "FIN",
-		// 		Balance:    "23.4",
-		// 		ValueInUSD: "2344",
-		// 	},
-		// 	Position{
-		// 		TokenID:    "2",
-		// 		Name:       "FinDevCoin",
-		// 		Symbol:     "FDC",
-		// 		Balance:    "3443.4",
-		// 		ValueInUSD: "23344",
-		// 	},
-		// 	Position{
-		// 		TokenID:    "3",
-		// 		Name:       "TreeCoint",
-		// 		Symbol:     "TCN",
-		// 		Balance:    "13.4",
-		// 		ValueInUSD: "3",
-		// 	},
-		// },
+		Count:     2,
+		Limit:     10,
+		Page:      0,
+		Positions: balances,
 	})
 }

@@ -4,7 +4,7 @@ import Common.Decimal exposing (renderDecimal)
 import Common.Error as Error
 import Common.Styles exposing (padding, textLeft, textRight, toMdlCss)
 import Html exposing (..)
-import Html.Attributes exposing (style)
+import Html.Attributes exposing (src, style)
 import Html.Events exposing (onClick)
 import Main.Context exposing (Context)
 import Main.Msg exposing (Msg(..))
@@ -18,14 +18,6 @@ import Portfolio.Model exposing (Model)
 render : Context -> Model -> Html Msg
 render ctx model =
     let
-        portfolioValue =
-            case model.portfolio of
-                Just portfolio ->
-                    portfolio.valueInUSD
-
-                Nothing ->
-                    "0.00"
-
         userName =
             case ctx.user of
                 Just user ->
@@ -39,6 +31,7 @@ render ctx model =
         , text <| "Welcome, " ++ userName ++ "! ("
         , a [ onClick Main.Msg.UserLogout ] [ text "logout" ]
         , text ")"
+        , h6 [] [ text "Your tokens" ]
         , case model.error of
             Just _ ->
                 Error.renderMaybeError model.error
@@ -46,7 +39,7 @@ render ctx model =
             Nothing ->
                 case model.portfolio of
                     Nothing ->
-                        div [] [ text "..." ]
+                        div [] [ text "Loading..." ]
 
                     Just portfolio ->
                         renderData ctx model portfolio
@@ -60,9 +53,139 @@ renderData ctx model portfolio =
             div []
                 [ Options.styled p
                     [ Typo.caption ]
-                    [ text "" ]
+                    [ text "You have no tokens yet" ]
                 ]
 
         True ->
-            div []
+            div [] <| List.map (renderRow model) portfolio.positions
+
+
+renderRow : Model -> Position -> Html Msg
+renderRow model balance =
+    a
+        [ style
+            [ ( "display", "flex" )
+            , ( "border", "1px solid #ddd" )
+            , ( "height", "70px" )
+            , ( "padding", "6px" )
+            , ( "color", "black" )
+            , ( "text-decoration", "none" )
+            , ( "border-radius", "8px" )
+            , ( "margin-bottom", "15px" )
+            ]
+        ]
+        [ div
+            [ style
+                [ ( "width", "70px" )
+                , ( "padding", "5px" )
+                ]
+            ]
+            [ img
+                [ style
+                    [ ( "width", "100%" )
+                    , ( "height", "100%" )
+                    , ( "border-radius", "8px" )
+                    ]
+                , src balance.logoFile
+                ]
                 []
+            ]
+        , div
+            [ style
+                [ ( "flex-grow", "1" )
+                , ( "padding", "8px" )
+                ]
+            ]
+            [ div
+                [ style
+                    [ ( "flex-grow", "1" )
+                    , ( "font-weight", "bold" )
+                    , ( "display", "block" )
+                    ]
+                ]
+                [ span
+                    []
+                    [ text balance.tokenName
+                    ]
+                ]
+            , div []
+                [ renderDecimalWithPrecision balance.balance 2
+                , text <| " " ++ balance.tokenSymbol
+                ]
+            ]
+        ]
+
+
+renderDecimalWithPrecision : String -> Int -> Html a
+renderDecimalWithPrecision value precision =
+    case String.contains "." value of
+        False ->
+            span [] [ text value ]
+
+        True ->
+            let
+                ( p, decimals, decimalZeros ) =
+                    splitDecimal (round precision value) "" ""
+            in
+            span []
+                [ text p
+                , span [ style [ ( "font-size", "80%" ) ] ]
+                    [ text decimals
+                    , span [ style [ ( "opacity", "0.5" ) ] ] [ text decimalZeros ]
+                    ]
+                ]
+
+
+{-| Splits decimal in three parts as follows:
+10.340420000 becomes
+part1: 10. --- main number
+part2: 34042 --- decimal value
+part3: 00000 --- Tail decimal zeros
+-}
+splitDecimal : String -> String -> String -> ( String, String, String )
+splitDecimal value decimals decimalZeros =
+    let
+        ( decimalZeros, remaining_ ) =
+            getDecimalZeros value ""
+
+        ( decimals, remaining ) =
+            getDecimals remaining_ ""
+    in
+    ( remaining, decimals, decimalZeros )
+
+
+getDecimalZeros : String -> String -> ( String, String )
+getDecimalZeros value decimalZeros =
+    case String.right 1 value of
+        "0" ->
+            getDecimalZeros (String.dropRight 1 value) (decimalZeros ++ "0")
+
+        remaining ->
+            ( decimalZeros, value )
+
+
+getDecimals : String -> String -> ( String, String )
+getDecimals value decimals =
+    case String.right 1 value of
+        "." ->
+            ( decimals, value )
+
+        digit ->
+            getDecimals (String.dropRight 1 value) (digit ++ decimals)
+
+
+round : Int -> String -> String
+round precision value =
+    case String.split "." value of
+        [ number, decimals ] ->
+            number
+                ++ "."
+                ++ (if String.length decimals > precision then
+                        String.left precision decimals
+
+                    else
+                        decimals
+                   )
+
+        _ ->
+            value
