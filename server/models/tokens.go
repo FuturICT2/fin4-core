@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/kjda/exchange/server/decimaldt"
+	"github.com/FuturICT2/fin4-core/server/decimaldt"
 	"github.com/lytics/logrus"
 )
 
@@ -282,6 +282,7 @@ func (db *UserModel) InsertToken(
 	token.TxAddress = txAddress
 	token.Logo = logo
 	db.InsertBalance(userID, ID(tokenID), "10")
+	// @TODO use blockahin for minting
 	db.AddToBalance(userID, 1, "2")
 	db.AddToBalance(1, 1, "1")
 	return &token, nil
