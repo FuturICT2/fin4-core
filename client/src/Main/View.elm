@@ -45,10 +45,7 @@ renderBeforeSessionLoaded =
 renderAfterSessionLoaded : Model -> Html Msg
 renderAfterSessionLoaded model =
     div
-        [ style
-            [ ( "padding-top", "15px" )
-            ]
-        , containerStyle model.context.window.isMobile
+        [ containerStyle model.context.window.isMobile
         ]
         [ case isLoggedIn model.context of
             True ->

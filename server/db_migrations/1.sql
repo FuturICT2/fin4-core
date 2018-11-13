@@ -10,7 +10,7 @@ CREATE TABLE `user` (
   UNIQUE KEY `id_UNIQUE` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=65 DEFAULT CHARSET=utf8;
 
-INSERT INTO `user` SET id=1, name='Qusai', ethereumAddress='0xeed1a5d1d51893bb6fa057a1a27262c1ebabb57b', createdAt=NOW(), updatedAt=NOW();
+INSERT INTO `user` SET id=1, name='Demo Community', ethereumAddress='0xeed1a5d1d51893bb6fa057a1a27262c1ebabb57b', createdAt=NOW(), updatedAt=NOW();
 
 DROP TABLE IF EXISTS `token`;
 CREATE TABLE `token` (
@@ -52,7 +52,7 @@ CREATE TABLE `user_holding` (
   CONSTRAINT `userID_FKK` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `user_holding` SET userId=1, tokenId=1, balance=10;
+INSERT INTO `user_holding` SET userId=1, tokenId=1, balance=0;
 
 DROP TABLE IF EXISTS `token_like`;
 CREATE TABLE `token_like` (

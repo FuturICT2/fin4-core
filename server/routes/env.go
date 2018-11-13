@@ -10,6 +10,7 @@ import (
 	"github.com/FuturICT2/fin4-core/server/auth"
 	"github.com/FuturICT2/fin4-core/server/ethereum"
 	"github.com/FuturICT2/fin4-core/server/models"
+	"github.com/ethereum/go-ethereum/common"
 	"github.com/gin-gonic/gin"
 )
 
@@ -56,20 +57,20 @@ func (env *Env) CreateToken(c *gin.Context) {
 			return
 		}
 	}
-	// address, tx, err := env.Ethereum.DeployMintable(
-	// 	body.Name,
-	// 	body.Symbol,
-	// 	8,
-	// 	common.HexToAddress(user.EthereumAddress),
-	// )
-	// if err != nil {
-	// 	c.JSON(http.StatusBadRequest, err.Error())
-	// 	return
-	// }
+	address, tx, err := env.Ethereum.DeployMintable(
+		body.Name,
+		body.Symbol,
+		8,
+		common.HexToAddress(user.EthereumAddress),
+	)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, err.Error())
+		return
+	}
 	rand := rand.Intn(len(logos))
 	a, err := env.DB.NewUserModel().InsertToken(
 		user.ID, body.Name, body.Symbol, body.Purpose,
-		body.TotalSupply, "hash", "hash", logos[rand]) //address.Hash().Hex(), tx.Hash().Hex(), logos[rand])
+		body.TotalSupply, address.Hash().Hex(), tx.Hash().Hex(), logos[rand])
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
 		return
@@ -83,6 +84,11 @@ func (env *Env) UserLogin(c *gin.Context) {
 		Name string `json:"name"`
 	}{}
 	c.BindJSON(&body)
+
+	if len(body.Name) < 2 || len(body.Name) > 35 {
+		c.String(http.StatusBadRequest, "Name length should be between than 2 and 35 characters")
+		return
+	}
 	userModel := env.DB.NewUserModel()
 	ethereumAddress, err := env.Ethereum.CreateNewAddress()
 	if err != nil {
@@ -105,7 +111,24 @@ func (env *Env) DoLike(c *gin.Context) {
 		return
 	}
 	tm := env.DB.NewUserModel()
-	err = tm.DoLike(user.ID, models.ID(tokenID))
+	err = tm.DoLike(user.ID, models.ID(tokenID), true)
+	if err != nil {
+		c.String(http.StatusBadRequest, err.Error())
+		return
+	}
+	c.JSON(http.StatusOK, struct{}{})
+}
+
+// DoUnLike unlike from logged in user to the passed token
+func (env *Env) DoUnLike(c *gin.Context) {
+	user := mustGetUser(c)
+	tokenID, err := strconv.Atoi(c.Params.ByName("tokenID"))
+	if err != nil {
+		c.String(http.StatusBadRequest, "Bad request")
+		return
+	}
+	tm := env.DB.NewUserModel()
+	err = tm.DoLike(user.ID, models.ID(tokenID), false)
 	if err != nil {
 		c.String(http.StatusBadRequest, err.Error())
 		return

@@ -11,5 +11,5 @@ type Msg
     | OnLoadTokensResponse (Result Http.Error Tokens)
     | OnDoLikeResponse (Result Http.Error Tokens)
     | SelectTab Int
-    | DoLike Int
+    | DoLike Int Bool
     | TickerTimout

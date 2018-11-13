@@ -25,37 +25,41 @@ render model =
                 [ href tokensPath
                 , bhNavItemStyle
                 , activeRouteStyle (model.context.route == TokensRoute)
-                , bhNavBorderedRightStyle
                 , style [ ( "width", "25%" ) ]
                 ]
-                [ Icon.i "list"
+                [ Icon.view "home"
+                    [ Icon.size36
+                    ]
                 ]
             , a
                 [ href actionsPath
                 , bhNavItemStyle
                 , activeRouteStyle (model.context.route == ActionsRoute)
-                , bhNavBorderedRightStyle
                 , style [ ( "width", "25%" ) ]
                 ]
-                [ Icon.i "group_work"
+                [ Icon.view "group_work"
+                    [ Icon.size36
+                    ]
                 ]
             , a
                 [ href newTokenPath
                 , bhNavItemStyle
-                , bhNavBorderedRightStyle
                 , activeRouteStyle (model.context.route == CreateTokenRoute)
                 , style [ ( "width", "25%" ) ]
                 ]
-                [ Icon.i "add_circle_outline"
+                [ Icon.view "add_circle_outline"
+                    [ Icon.size36
+                    ]
                 ]
             , a
                 [ href portfolioPath
                 , bhNavItemStyle
-                , bhNavBorderedRightStyle
                 , activeRouteStyle (model.context.route == PortfolioRoute)
                 , style [ ( "width", "25%" ) ]
                 ]
-                [ Icon.i "account_box"
+                [ Icon.view "account_box"
+                    [ Icon.size36
+                    ]
                 ]
             ]
         ]
@@ -156,7 +160,7 @@ bhStyle =
         , ( "bottom", "0" )
         , ( "left", "0" )
         , ( "width", "100%" )
-        , ( "height", "36px" )
+        , ( "height", "60px" )
         , ( "background", "white" )
         , ( "min-width", "320px" )
         , ( "opacity", ".95" )
@@ -175,12 +179,5 @@ bhNavItemStyle =
         , ( "color", "black" )
         , ( "overflow", "hidden" )
         , ( "cursor", "pointer" )
-        ]
-
-
-bhNavBorderedRightStyle : Attribute a
-bhNavBorderedRightStyle =
-    style
-        [ ( "box-sizing", "border-box" )
-        , ( "border-right", "1px solid " ++ textColor )
+        , ( "padding-top", "8px" )
         ]

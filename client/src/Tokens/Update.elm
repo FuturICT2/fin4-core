@@ -30,8 +30,8 @@ update ctx msg model =
         SelectTab tab ->
             { model | selectedTab = tab } ! []
 
-        DoLike tokenId ->
-            model ! [ likeCmd ctx tokenId ]
+        DoLike tokenId state ->
+            model ! [ likeCmd ctx tokenId state ]
 
         TickerTimout ->
             model ! [ loadTokensCmd ctx 1 ]

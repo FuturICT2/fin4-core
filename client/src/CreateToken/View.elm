@@ -31,7 +31,13 @@ render ctx model =
     in
     div
         [ mainStyle ]
-        [ h3 [ style [ ( "text-align", "center" ) ] ] [ text "Tokenizer" ]
+        [ header
+            [ style
+                [ ( "text-align", "center" )
+                , ( "margin", "30px 0px" )
+                ]
+            ]
+            [ text "Create a token" ]
         , div [ style [ ( "margin", "15px" ) ] ]
             [ case model.step of
                 0 ->

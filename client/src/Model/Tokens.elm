@@ -15,12 +15,12 @@ type alias Token =
     , blockchainAddress : String
     , txAddress : String
     , favouriteCount : Int
+    , didUserLike : Bool
     }
 
 
 type alias Tokens =
     { entries : List Token
-    , valueInUSD : String
     , count : Int
     , page : Int
     , limit : Int
@@ -31,7 +31,6 @@ type alias Tokens =
 init : Tokens
 init =
     { entries = []
-    , valueInUSD = "0.00"
     , count = 0
     , page = 0
     , limit = 0
@@ -43,7 +42,6 @@ tokensDecoder : JD.Decoder Tokens
 tokensDecoder =
     JP.decode Tokens
         |> JP.required "Entries" (JD.list tokenDecoder)
-        |> JP.required "ValueInUSD" JD.string
         |> JP.required "Count" JD.int
         |> JP.required "Limit" JD.int
         |> JP.required "Page" JD.int
@@ -62,6 +60,7 @@ tokenDecoder =
         |> JP.required "BlockchainAddress" JD.string
         |> JP.required "TxAddress" JD.string
         |> JP.required "FavouriteCount" JD.int
+        |> JP.required "DidUserLike" JD.bool
 
 
 

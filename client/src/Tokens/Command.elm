@@ -29,9 +29,18 @@ loadTokensCmd ctx page =
         tokensDecoder
 
 
-likeCmd ctx tokenId =
+likeCmd ctx tokenId state =
+    let
+        url =
+            case state of
+                True ->
+                    "/unlike/" ++ toString tokenId
+
+                False ->
+                    "/like/" ++ toString tokenId
+    in
     get ctx
         OnDoLikeResponse
-        ("/like/" ++ toString tokenId)
+        url
         []
         tokensDecoder

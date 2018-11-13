@@ -8,6 +8,7 @@ import Json.Encode as JE
 type alias User =
     { id : Int
     , name : String
+    , ethereumAddress : String
     }
 
 
@@ -23,6 +24,7 @@ noUserYet : User
 noUserYet =
     { id = 0
     , name = ""
+    , ethereumAddress = ""
     }
 
 
@@ -40,3 +42,4 @@ userDecoder =
     JP.decode User
         |> JP.required "id" JD.int
         |> JP.required "name" JD.string
+        |> JP.required "ethereumAddress" JD.string

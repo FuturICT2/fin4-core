@@ -37,6 +37,11 @@ type UserStore interface {
 	Register(name string, address string) (*User, error)
 	FindByID(ID) (*User, error)
 	GetUserBalances(userId ID) ([]Balance, error)
+	InsertBalance(
+		userID ID,
+		tokenID ID,
+		balance string,
+	) error
 	InsertToken(
 		userID ID,
 		name string,
@@ -49,24 +54,38 @@ type UserStore interface {
 	) (*Token, error)
 	FindByName(string) (*User, error)
 	IsNameRegistered(string) bool
-	FindTokens() ([]Token, error)
+	FindTokens(userID ID) ([]Token, error)
 	FindUsers() ([]User, error)
-	DoLike(userID ID, tokenID ID) error
+	DoLike(userID ID, tokenID ID, state bool) error
 }
 
 //DoLike Registers a new user
-func (db *UserModel) DoLike(userID ID, tokenID ID) error {
-	_, err := db.Exec(
-		`INSERT INTO token_like SET
-			userId = ?,
-			tokenId = ?`,
-		userID,
-		tokenID,
-	)
-	if err != nil {
-		return ErrServerError
+func (db *UserModel) DoLike(userID ID, tokenID ID, state bool) error {
+	if state == false {
+		_, err := db.Exec(
+			`delete from token_like where
+				userId = ? and  tokenId = ?`,
+			userID,
+			tokenID,
+		)
+		if err != nil {
+			return ErrServerError
+		}
+		return nil
+	} else {
+		_, err := db.Exec(
+			`INSERT INTO token_like SET
+				userId = ?,
+				tokenId = ?`,
+			userID,
+			tokenID,
+		)
+		if err != nil {
+			return ErrServerError
+		}
+		return nil
 	}
-	return nil
+
 }
 
 // FindUsers finds all users
@@ -124,6 +143,7 @@ func (db *UserModel) Register(name string, address string) (*User, error) {
 	if err != nil {
 		return nil, ErrServerError
 	}
+	db.InsertBalance(ID(id), ID(1), "1")
 	return db.FindByID(ID(id))
 }
 

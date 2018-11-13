@@ -5,7 +5,7 @@ import Common.Spinner as Spinner
 import CreateToken.Msg exposing (Msg(..))
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.Events exposing (keyCode)
+import Html.Events exposing (onInput)
 import Json.Decode as JD
 import Material
 import Material.Card as Card
@@ -17,56 +17,56 @@ import Material.Textfield as Textfield
 render ctx model =
     div
         []
-        [ div [ margin "14" "0" ]
-            [ Textfield.render Mdl
-                [ 2 ]
-                model.mdl
-                [ Textfield.label "Name"
-                , Textfield.floatingLabel
-                , Textfield.text_
-                , Options.onInput SetName
-                , Textfield.value model.name
+        [ div [ style [ ( "margin", "30px 0 0 0" ) ] ]
+            [ p
+                [ style
+                    [ ( "margin", "0" )
+                    , ( "padding-left", "2px" )
+                    ]
+                ]
+                [ text "Enter name" ]
+            , input
+                [ inputStyle
+                , placeholder "e.g Moon"
+                , value model.name
+                , onInput SetName
                 ]
                 []
             ]
-
-        -- , div [ style [ ( "15px", "0" ) ] ]
-        --     [ Textfield.render Mdl
-        --         [ 1 ]
-        --         model.mdl
-        --         [ css "width" "200px"
-        --         , Textfield.label "Total supply"
-        --         , Textfield.floatingLabel
-        --         , Textfield.text_
-        --         , Textfield.value model.shares
-        --         , Options.onInput SetShares
-        --         ]
-        --         []
-        --     ]
+        , div [ style [ ( "margin", "30px 0 0 0" ) ] ]
+            [ p
+                [ style
+                    [ ( "margin", "0" )
+                    , ( "padding-left", "2px" )
+                    ]
+                ]
+                [ text "Enter symbol" ]
+            , input
+                [ inputStyle
+                , placeholder "e.g MNN"
+                , value model.symbol
+                , onInput SetSymbol
+                ]
+                []
+            ]
         , div
-            []
-            [ Textfield.render Mdl
-                [ 3 ]
-                model.mdl
-                [ Textfield.label "Symbol"
-                , Textfield.floatingLabel
-                , Textfield.text_
-                , Options.onInput SetSymbol
-                , Textfield.value model.symbol
+            [ style
+                [ ( "margin", "15px 0 0 0" )
                 ]
-                []
             ]
-        , div []
-            [ Textfield.render
-                Mdl
-                [ 4 ]
-                model.mdl
-                [ Textfield.label "Purpose"
-                , Textfield.floatingLabel
-                , Textfield.textarea
-                , Textfield.rows 3
-                , Options.onInput SetDescription
-                , Textfield.value model.description
+            [ p
+                [ style
+                    [ ( "margin", " 0" )
+                    , ( "padding-left", "2px" )
+                    ]
+                ]
+                [ text "Enter purpose" ]
+            , textarea
+                [ textareaStyle
+                , value model.description
+                , placeholder "e.g Let us go to the moon"
+                , onInput SetDescription
+                , rows 5
                 ]
                 []
             ]
@@ -108,4 +108,31 @@ btnStyle =
         , ( "width", "100%" )
         , ( "position", "fixed" )
         , ( "bottom", "0" )
+        ]
+
+
+inputStyle : Attribute a
+inputStyle =
+    style
+        [ ( "border-radius", "8px" )
+        , ( "background-color", "#f2f2f2" )
+        , ( "height", "50px" )
+        , ( "border", "none" )
+        , ( "padding", "15px" )
+        , ( "width", "100%" )
+        , ( "box-sizing", "border-box" )
+        , ( "margin-bottom", "15px" )
+        ]
+
+
+textareaStyle : Attribute a
+textareaStyle =
+    style
+        [ ( "border-radius", "8px" )
+        , ( "background-color", "#f2f2f2" )
+        , ( "border", "none" )
+        , ( "padding", "15px" )
+        , ( "width", "100%" )
+        , ( "box-sizing", "border-box" )
+        , ( "margin-bottom", "15px" )
         ]
