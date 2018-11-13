@@ -1,5 +1,6 @@
 module CreateToken.View exposing (render)
 
+import Common.Styles exposing (toMdlCss)
 import CreateToken.Model exposing (Model)
 import CreateToken.Msg exposing (Msg(..))
 import CreateToken.StepName as StepName
@@ -13,7 +14,8 @@ import Material
 import Material.Button as Button
 import Material.Chip as Chip
 import Material.Icon as Icon
-import Material.Options as Options
+import Material.Options as Options exposing (css)
+import Material.Spinner as Spinner
 import Material.Textfield as Textfield
 import Material.Typography as Typo
 
@@ -38,7 +40,7 @@ render ctx model =
                 ]
             ]
             [ text "Create a token" ]
-        , div [ style [ ( "margin", "15px" ) ] ]
+        , div []
             [ case model.step of
                 0 ->
                     StepName.render ctx model
@@ -54,18 +56,29 @@ render ctx model =
 
 
 renderActionButton model =
+    let
+        buttonContent =
+            case model.isCreatingToken of
+                True ->
+                    div [ style [ ( "margin-top", "10px" ) ] ]
+                        [ Spinner.spinner [ Spinner.active True ] ]
+
+                False ->
+                    text "confirm"
+    in
     case model.step of
         0 ->
             div [ style [ ( "text-align", "center" ) ] ]
-                [ div [ totalCost ] [ text "network fee: 0.002 ETH" ]
-                , Button.render Mdl
+                [ Button.render Mdl
                     [ 23 ]
                     model.mdl
                     [ Button.ripple
                     , Button.raised
                     , Options.onClick PostToken
+                    , toMdlCss buttonStyle
                     ]
-                    [ text "Create Token" ]
+                    [ buttonContent ]
+                , div [ totalCost ] [ text "network fee: 0.002 ETH" ]
                 ]
 
         _ ->
@@ -80,20 +93,12 @@ mainStyle =
         ]
 
 
-btnStyle : Attribute a
-btnStyle =
+buttonStyle : Attribute a
+buttonStyle =
     style
         [ ( "height", "50px" )
-        , ( "background-color", "#f2f2f2" )
-        , ( "background-color", "#dedede" )
-        , ( "border", "none" )
-        , ( "border-top", "1px solid black" )
-        , ( "font-weight", "bold" )
-        , ( "text-align", "center" )
-        , ( "color", "black" )
+        , ( "border-radius", "8px" )
         , ( "width", "100%" )
-        , ( "font-size", "20px" )
-        , ( "color", "black" )
         ]
 
 
