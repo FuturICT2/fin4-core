@@ -117,8 +117,9 @@ type Token struct {
 
 // TokensList handler to return json of existing tokens
 func (env *Env) TokensList(c *gin.Context) {
+	user := mustGetUser(c)
 	userModel := env.DB.NewUserModel()
-	tokens, err := userModel.FindTokens()
+	tokens, err := userModel.FindTokens(user.ID)
 	if err != nil {
 		c.String(http.StatusBadRequest, err.Error())
 		return
@@ -132,19 +133,17 @@ func (env *Env) TokensList(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, struct {
-		Count      int
-		Limit      int
-		Page       int
-		ValueInUSD string
-		Entries    []models.Token
-		People     []models.User
+		Count   int
+		Limit   int
+		Page    int
+		Entries []models.Token
+		People  []models.User
 	}{
-		Count:      len(tokens),
-		Limit:      10,
-		Page:       0,
-		ValueInUSD: "",
-		Entries:    tokens,
-		People:     users,
+		Count:   len(tokens),
+		Limit:   10,
+		Page:    0,
+		Entries: tokens,
+		People:  users,
 	})
 }
 

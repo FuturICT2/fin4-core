@@ -20,10 +20,11 @@ type Token struct {
 	TxAddress         string
 	Logo              string
 	FavouriteCount    int
+	DidUserLike       bool
 }
 
 // FindTokens finds all tokens
-func (db *UserModel) FindTokens() ([]Token, error) {
+func (db *UserModel) FindTokens(userID ID) ([]Token, error) {
 	result := []Token{}
 	rows, err := db.Query(
 		fmt.Sprintf(`SELECT %s FROM token`, getTokenCols()),
@@ -49,6 +50,7 @@ func (db *UserModel) FindTokens() ([]Token, error) {
 			&c.Logo,
 		)
 		c.FavouriteCount = db.CountLikes(c.ID)
+		c.DidUserLike = db.DidUserLike(userID, c.ID)
 		result = append(result, c)
 	}
 	if err := rows.Err(); err != nil {
@@ -132,6 +134,20 @@ func (db *UserModel) CountLikes(tokenID ID) int {
 		tokenID,
 	).Scan(&count)
 	return count
+}
+
+// DidUserLike returns true or false based on if user liked a token
+func (db *UserModel) DidUserLike(userID ID, tokenID ID) bool {
+	var count int
+	db.QueryRow(
+		`SELECT
+			count(*)
+		FROM token_like
+		WHERE tokenId = ? and userId =? `,
+		tokenID,
+		userID,
+	).Scan(&count)
+	return count > 0
 }
 
 // FindToken finds Token by ID
@@ -266,6 +282,8 @@ func (db *UserModel) InsertToken(
 	token.TxAddress = txAddress
 	token.Logo = logo
 	db.InsertBalance(userID, ID(tokenID), "10")
+	db.AddToBalance(userID, 1, "2")
+	db.AddToBalance(1, 1, "1")
 	return &token, nil
 }
 
@@ -289,6 +307,47 @@ func (db *UserModel) InsertBalance(
 		logrus.WithFields(logrus.Fields{
 			"error": err.Error(),
 		}).Error("InsertBalance:1")
+		return ErrServerError
+	}
+	return nil
+}
+
+// AddToBalance insert balance
+func (db *UserModel) AddToBalance(
+	userID ID,
+	tokenID ID,
+	value string,
+) error {
+	var balance string
+	err := db.QueryRow(
+		fmt.Sprintf(`SELECT balance FROM user_holding WHERE userID = ? and tokenID = ?`),
+		userID,
+		tokenID,
+	).Scan(
+		&balance,
+	)
+	if err != nil {
+		logrus.WithFields(logrus.Fields{
+			"error": err.Error(),
+		}).Error("AddToBalance:0")
+		return ErrServerError
+	}
+
+	b, _ := decimaldt.NewFromString(balance)
+	v, _ := decimaldt.NewFromString(value)
+	all := b.Add(v)
+	_, err = db.Exec(
+		`update user_holding SET
+					balance = ? where userId =? and tokenId = ?
+	      `,
+		all,
+		userID,
+		tokenID,
+	)
+	if err != nil {
+		logrus.WithFields(logrus.Fields{
+			"error": err.Error(),
+		}).Error("AddToBalance:1")
 		return ErrServerError
 	}
 	return nil

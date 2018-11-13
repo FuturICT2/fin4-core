@@ -18,20 +18,22 @@ import Portfolio.Model exposing (Model)
 render : Context -> Model -> Html Msg
 render ctx model =
     let
-        userName =
+        ( userName, ethereumAddress ) =
             case ctx.user of
                 Just user ->
-                    user.name
+                    ( user.name, user.ethereumAddress )
 
                 Nothing ->
-                    ""
+                    ( "", "" )
     in
     div []
-        [ Options.styled p [ Typo.headline ] [ text "Profile" ]
-        , text <| "Welcome, " ++ userName ++ "! ("
-        , a [ onClick Main.Msg.UserLogout ] [ text "logout" ]
-        , text ")"
-        , h6 [] [ text "Your tokens" ]
+        [ header [ style [ ( "text-align", "center" ) ] ]
+            [ text <| userName ++ " ("
+            , a [ onClick Main.Msg.UserLogout ] [ text "logout" ]
+            , text ")"
+            , hr [] []
+            , header [] [ text "Your tokens" ]
+            ]
         , case model.error of
             Just _ ->
                 Error.renderMaybeError model.error
@@ -76,7 +78,7 @@ renderRow model balance =
         ]
         [ div
             [ style
-                [ ( "width", "70px" )
+                [ ( "width", "56px" )
                 , ( "padding", "5px" )
                 ]
             ]
@@ -103,14 +105,14 @@ renderRow model balance =
                     , ( "display", "block" )
                     ]
                 ]
-                [ span
-                    []
+                [ header
+                    [ style [ ( "margin", "0 0 5px 0" ) ] ]
                     [ text balance.tokenName
                     ]
                 ]
             , div []
-                [ renderDecimalWithPrecision balance.balance 2
-                , text <| " " ++ balance.tokenSymbol
+                [ text "You have "
+                , renderDecimalWithPrecision balance.balance 2
                 ]
             ]
         ]

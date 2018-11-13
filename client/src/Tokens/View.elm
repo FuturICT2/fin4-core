@@ -4,7 +4,8 @@ import Common.Decimal exposing (renderDecimal)
 import Common.Error as Error
 import Common.Styles exposing (padding, textLeft, textRight, toMdlCss)
 import Html exposing (..)
-import Html.Attributes exposing (href, style)
+import Html.Attributes exposing (href, src, style)
+import Html.Events exposing (onClick)
 import List exposing (reverse, sortBy)
 import Main.Context exposing (Context)
 import Main.User exposing (User)
@@ -30,63 +31,19 @@ white =
 
 render : Context -> Model -> Html Msg
 render ctx model =
-    let
-        value =
-            case model.tokens of
-                Just tokens ->
-                    tokens.valueInUSD
-
-                Nothing ->
-                    "0.00"
-    in
     div [ style [ ( "padding-top", "15px" ), ( "width", "100%" ) ] ]
-        [ Tabs.render Mdl
-            [ 0 ]
-            model.mdl
-            [ Tabs.ripple
-            , Tabs.activeTab model.selectedTab
-            , Tabs.onSelectTab SelectTab
-            ]
-            [ Tabs.label
-                [ Options.center ]
-                [ Icon.view "trending_up" [ Icon.size18, css "color" "red" ]
-                , Options.span [ css "width" "4px" ] []
-                , text "Tokens"
-                ]
-            , Tabs.label
-                [ Options.center ]
-                [ Icon.view "people" [ Icon.size18, css "color" "red" ]
-                , Options.span [ css "width" "4px" ] []
-                , text "people"
-                ]
-            ]
-            [ case model.selectedTab of
-                0 ->
-                    case model.error of
-                        Just _ ->
-                            Error.renderMaybeError model.error
+        [ header [ style [ ( "text-align", "center" ) ] ] [ text "Tokens" ]
+        , case model.error of
+            Just _ ->
+                Error.renderMaybeError model.error
 
-                        Nothing ->
-                            case model.tokens of
-                                Nothing ->
-                                    div [] [ text "We are not able to fetch tokens. Please try again" ]
+            Nothing ->
+                case model.tokens of
+                    Nothing ->
+                        div [] [ text "We are not able to fetch tokens. Please try again" ]
 
-                                Just tokens ->
-                                    renderData ctx model tokens
-
-                _ ->
-                    case model.error of
-                        Just _ ->
-                            Error.renderMaybeError model.error
-
-                        Nothing ->
-                            case model.tokens of
-                                Nothing ->
-                                    div [] [ text "..." ]
-
-                                Just tokens ->
-                                    div [] <| List.map (renderUser model) <| reverse tokens.people
-            ]
+                    Just tokens ->
+                        renderData ctx model tokens
         ]
 
 
@@ -141,79 +98,80 @@ renderData ctx model tokens =
 
 renderRow : Model -> Token -> Html Msg
 renderRow model token =
-    -- let
-    --     gen =
-    --         Random.float 0 4
-    -- in
-    Card.view
-        [ css "border" "1px solid #ddd"
-        , css "width" "100%"
-        , css "margin-top" "15px"
+    let
+        likeBackground =
+            case token.didUserLike of
+                True ->
+                    "red"
+
+                False ->
+                    "inherit"
+    in
+    div
+        [ style
+            [ ( "border", "1px solid #ddd" )
+            , ( "margin", "15px 0" )
+            , ( "border-radius", "8px" )
+            ]
         ]
-        [ Card.title []
-            [ Card.head []
-                [ Lists.content []
-                    [ Lists.avatarImage token.logo []
-                    , text <| " " ++ token.name
-                    , small [] [ text <| " (" ++ token.symbol ++ ")" ]
+        [ div
+            [ style
+                [ ( "display", "flex" )
+                , ( "padding", "5px 0 0 5px" )
+                ]
+            ]
+            [ div
+                [ style
+                    [ ( "padding", "5px" )
+                    , ( "text-align", "center" )
+                    ]
+                ]
+                [ img
+                    [ style
+                        [ ( "width", "50px" )
+                        , ( "height", "50px" )
+                        , ( "border-radius", "8px" )
+                        , ( "margin-bottom", "5px" )
+                        ]
+                    , src token.logo
+                    ]
+                    []
+                ]
+            , div
+                [ style
+                    [ ( "padding", "8px" )
+                    ]
+                ]
+                [ header
+                    [ style
+                        [ ( "margin", "0 0 10px 0" )
+                        ]
+                    ]
+                    [ text token.name
+                    ]
+                , div
+                    [ style
+                        [ ( "margin-bottom", "15px" ) ]
+                    ]
+                    [ text token.purpose
                     ]
                 ]
             ]
-        , Card.text
-            []
-            [ text token.purpose ]
-        , Card.actions
-            [ Card.border, css "vertical-align" "center" ]
+        , div
+            [ actionButtonsStyle
+            ]
             [ Button.render Mdl
-                [ 0 ]
+                [ token.id ]
                 model.mdl
-                [ Options.onClick (DoLike token.id) ]
-                [ Icon.i "favorite_border"
+                [ Button.raised
+                , Button.ripple
+                , Options.onClick (DoLike token.id token.didUserLike)
+                , toMdlCss buttonStyle
+                ]
+                [ Icon.view "favorite" [ Icon.size24, css "color" likeBackground ]
                 , text <| " " ++ toString token.favouriteCount
                 ]
-
-            -- , Button.render Mdl
-            --     [ 1, 0 ]
-            --     model.mdl
-            --     [ Button.ripple
-            --     , Button.accent
-            --     , Button.link <| "https://rinkeby.etherscan.io/tx/" ++ token.txAddress
-            --
-            --     -- , Options.attribute <| Html.Attributes.target "_blank"
-            --     , css "float" "right"
-            --     ]
-            --     [ text "transaction" ]
             ]
-        ]
-
-
-renderChange : Float -> Html Msg
-renderChange value =
-    let
-        color =
-            case value > 0 of
-                True ->
-                    "green"
-
-                False ->
-                    "red"
-
-        icon =
-            case value > 0 of
-                True ->
-                    Icon.i "arrow_drop_up"
-
-                False ->
-                    Icon.i "arrow_drop_down"
-    in
-    span [ change24Style color ]
-        [ icon, text <| toString (abs value) ++ "%" ]
-
-
-change24Style color =
-    style
-        [ ( "color", color )
-        , ( "float", "right" )
         ]
 
 
@@ -222,4 +180,26 @@ tokenStyle =
         [ ( "border", "1px solid #ddd" )
         , ( "margin-top", "15px" )
         , ( "padding", "5px" )
+        ]
+
+
+actionButtonsStyle =
+    style
+        [ ( "border-top", "1px solid #ddd" )
+        , ( "background", "#f2f2f2" )
+        , ( "font-weight", "bold" )
+        , ( "display", "block" )
+        ]
+
+
+buttonStyle =
+    style
+        [ ( "width", "100%" )
+        , ( "text-align", "center" )
+        , ( "line-height", "normal" )
+        , ( "text-decoration", "none" )
+        , ( "color", "inherit" )
+        , ( "display", "inline-block" )
+        , ( "box-shadow", "none" )
+        , ( "font-size", "20px" )
         ]
