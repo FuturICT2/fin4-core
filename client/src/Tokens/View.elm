@@ -6,6 +6,7 @@ import Common.Styles exposing (padding, textLeft, textRight, toMdlCss)
 import Html exposing (..)
 import Html.Attributes exposing (href, src, style)
 import Html.Events exposing (onClick)
+import Identicon exposing (identicon)
 import List exposing (reverse, sortBy)
 import Main.Context exposing (Context)
 import Main.User exposing (User)
@@ -110,7 +111,7 @@ renderRow model token =
     div
         [ style
             [ ( "border", "1px solid #ddd" )
-            , ( "margin", "15px 0" )
+            , ( "margin-bottom", "30px" )
             , ( "border-radius", "8px" )
             ]
         ]
@@ -122,20 +123,15 @@ renderRow model token =
             ]
             [ div
                 [ style
-                    [ ( "padding", "5px" )
+                    [ ( "padding", "15px" )
                     , ( "text-align", "center" )
+                    , ( "width", "60px" )
+                    , ( "height", "60px" )
+                    , ( "border", "1px solid #ddd" )
+                    , ( "border-radius", "50%" )
                     ]
                 ]
-                [ img
-                    [ style
-                        [ ( "width", "50px" )
-                        , ( "height", "50px" )
-                        , ( "border-radius", "8px" )
-                        , ( "margin-bottom", "5px" )
-                        ]
-                    , src token.logo
-                    ]
-                    []
+                [ identicon "30px" token.name
                 ]
             , div
                 [ style

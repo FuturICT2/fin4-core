@@ -6,6 +6,7 @@ import CreateToken.Msg exposing (Msg(..))
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onInput)
+import Identicon exposing (identicon)
 import Json.Decode as JD
 import Material
 import Material.Card as Card
@@ -17,7 +18,8 @@ import Material.Textfield as Textfield
 render ctx model =
     div
         []
-        [ div [ style [ ( "margin", "30px 0 0 0" ) ] ]
+        [ div [ identiconStyle ] [ identicon "60px" model.name ]
+        , div [ style [ ( "margin", "30px 0 0 0" ) ] ]
             [ p
                 [ style
                     [ ( "margin", "0" )
@@ -33,7 +35,7 @@ render ctx model =
                 ]
                 []
             ]
-        , div [ style [ ( "margin", "30px 0 0 0" ) ] ]
+        , div []
             [ p
                 [ style
                     [ ( "margin", "0" )
@@ -50,10 +52,7 @@ render ctx model =
                 []
             ]
         , div
-            [ style
-                [ ( "margin", "15px 0 0 0" )
-                ]
-            ]
+            []
             [ p
                 [ style
                     [ ( "margin", " 0" )
@@ -71,19 +70,6 @@ render ctx model =
                 []
             ]
         , renderHttpError model.createTokenError
-        , case model.isCreatingToken of
-            True ->
-                div
-                    [ style
-                        [ ( "marging-top", "50px" )
-                        , ( "text-align", "center" )
-                        ]
-                    ]
-                    [ Spinner.render "Deploying your token to the Ethereum network. This might take few moments."
-                    ]
-
-            False ->
-                div [] []
         ]
 
 
@@ -135,4 +121,16 @@ textareaStyle =
         , ( "width", "100%" )
         , ( "box-sizing", "border-box" )
         , ( "margin-bottom", "15px" )
+        ]
+
+
+identiconStyle : Attribute a
+identiconStyle =
+    style
+        [ ( "width", "100px" )
+        , ( "height", "100px" )
+        , ( "border", "1px solid #ddd" )
+        , ( "border-radius", "50%" )
+        , ( "margin", "auto" )
+        , ( "padding", "20px" )
         ]

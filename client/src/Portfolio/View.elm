@@ -6,6 +6,7 @@ import Common.Styles exposing (padding, textLeft, textRight, toMdlCss)
 import Html exposing (..)
 import Html.Attributes exposing (src, style)
 import Html.Events exposing (onClick)
+import Identicon exposing (identicon)
 import Main.Context exposing (Context)
 import Main.Msg exposing (Msg(..))
 import Material.Options as Options
@@ -68,7 +69,6 @@ renderRow model balance =
         [ style
             [ ( "display", "flex" )
             , ( "border", "1px solid #ddd" )
-            , ( "height", "70px" )
             , ( "padding", "6px" )
             , ( "color", "black" )
             , ( "text-decoration", "none" )
@@ -78,19 +78,25 @@ renderRow model balance =
         ]
         [ div
             [ style
-                [ ( "width", "56px" )
-                , ( "padding", "5px" )
+                [ ( "padding", "15px" )
+                , ( "text-align", "center" )
+                , ( "width", "60px" )
+                , ( "height", "60px" )
+                , ( "border", "1px solid #ddd" )
+                , ( "border-radius", "50%" )
                 ]
             ]
-            [ img
-                [ style
-                    [ ( "width", "100%" )
-                    , ( "height", "100%" )
-                    , ( "border-radius", "8px" )
-                    ]
-                , src balance.logoFile
-                ]
-                []
+            [ -- img
+              --     [ style
+              --         [ ( "width", "50px" )
+              --         , ( "height", "50px" )
+              --         , ( "border-radius", "8px" )
+              --         , ( "margin-bottom", "5px" )
+              --         ]
+              --     , src token.logo
+              --     ]
+              --     []
+              identicon "30px" balance.tokenName
             ]
         , div
             [ style
