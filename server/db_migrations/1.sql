@@ -36,7 +36,7 @@ INSERT INTO `token` SET
   name='Demo',
   symbol='DEM',
   totalSupply=0,
-  purpose='to make awesome demonstrations of the Finance 4.0 system',
+  purpose='to tokenize the demonstrattions of Finance 4.0 system',
   blockchainAddress='0x6Cd99CD0Ca8fDBBBa2c5d6D1821eF932f9fB3170',
   txAddress='0x85295762a185b80343d5c03b08dcaf408b54ab8412768aaba92cac4c1a0c2e20',
   logo='https://trello-attachments.s3.amazonaws.com/5b39f1d06f761ae7c1c7d22c/5b9f76d5afa89e794357c6d9/df4703eeb10e3fbcf1bd63288281cf9d/coin2.png';

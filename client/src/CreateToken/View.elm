@@ -78,7 +78,6 @@ renderActionButton model =
                     , toMdlCss buttonStyle
                     ]
                     [ buttonContent ]
-                , div [ totalCost ] [ text "network fee: 0.002 ETH" ]
                 ]
 
         _ ->
