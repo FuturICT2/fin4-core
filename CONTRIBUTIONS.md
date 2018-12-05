@@ -13,13 +13,18 @@ $ cd fin4-core
 $ go get
 $ npm install
 $ elm package install
-
+```
 # Setting up database:
+
+Next, you need to create a new database called fin4. For this, enter mysql and execute the following command:
 ```SQL
 CREATE DATABASE fin4 default charset utf8;
 ```
-#Env variables
- copying .env_sample file in .env
+This creates a new database. Assign an user full access right to the fin4 database (or leave it with root).
+
+# Env variables
+ Copy .env_sample file to .env.
+ Then, modify the following entries:
 ```bash
 # cp .env_sample .env
 ```
