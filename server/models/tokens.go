@@ -67,6 +67,7 @@ type Balance struct {
 	UserID            ID
 	TokenID           ID
 	Balance           decimaldt.Decimal
+	Reserved          decimaldt.Decimal
 	TokenName         string
 	TokenSymbol       string
 	LogoFile          string
@@ -79,6 +80,7 @@ func (db *UserModel) GetUserBalances(userId ID) ([]Balance, error) {
 	rows, err := db.Query(`SELECT
 			b.tokenId,
 			b.balance,
+			b.reserved,
 			t.name,
 			t.symbol,
 			t.logo,
@@ -101,6 +103,7 @@ func (db *UserModel) GetUserBalances(userId ID) ([]Balance, error) {
 		err = rows.Scan(
 			&entry.TokenID,
 			&entry.Balance,
+			&entry.Reserved,
 			&entry.TokenName,
 			&entry.TokenSymbol,
 			&entry.LogoFile,

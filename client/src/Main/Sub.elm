@@ -1,5 +1,6 @@
 module Main.Sub exposing (subscriptions)
 
+import Actions.Sub
 import Main.Model exposing (Model)
 import Main.Msg exposing (Msg(..))
 import Main.Routing exposing (Route(..))
@@ -17,6 +18,12 @@ subscriptions model =
                     Sub.batch
                         [ Sub.map Tokens <|
                             Tokens.Sub.subscriptions model.context
+                        ]
+
+                ActionsRoute ->
+                    Sub.batch
+                        [ Sub.map Actions <|
+                            Actions.Sub.subscriptions model.context
                         ]
 
                 _ ->

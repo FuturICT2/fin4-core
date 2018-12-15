@@ -4,6 +4,7 @@ module Main.Routing exposing
     , homepagePath
     , loginPath
     , matchers
+    , newActionPath
     , newTokenPath
     , parseLocation
     , portfolioPath
@@ -22,6 +23,7 @@ type Route
     | PortfolioRoute
     | ActionsRoute
     | CreateTokenRoute
+    | CreateActionRoute
     | UserLoginRoute
 
 
@@ -33,6 +35,7 @@ matchers =
         , map PortfolioRoute (s "portfolio")
         , map ActionsRoute (s "actions")
         , map CreateTokenRoute (s "new")
+        , map CreateActionRoute (s "new-action")
         , map UserLoginRoute (s "login")
         ]
 
@@ -65,6 +68,11 @@ trendingPath =
 newTokenPath : String
 newTokenPath =
     "#new"
+
+
+newActionPath : String
+newActionPath =
+    "#new-action"
 
 
 portfolioPath : String

@@ -120,6 +120,10 @@ renderRow model balance =
                 [ text "You have "
                 , renderDecimalWithPrecision balance.balance 2
                 ]
+            , div []
+                [ text "Reserved balance for actions: "
+                , renderDecimalWithPrecision balance.reserved 2
+                ]
             ]
         ]
 

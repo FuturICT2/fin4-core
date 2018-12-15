@@ -51,13 +51,6 @@ render model =
                 ]
                 [ text "Log in" ]
             ]
-        , div []
-            [ img
-                [ style [ ( "margin-top", "45px" ) ]
-                , src "assets/images/demo.png"
-                ]
-                []
-            ]
         ]
 
 

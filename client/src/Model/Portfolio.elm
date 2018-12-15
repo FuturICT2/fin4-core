@@ -8,6 +8,7 @@ type alias Position =
     { userId : Int
     , tokenId : Int
     , balance : String
+    , reserved : String
     , tokenName : String
     , tokenSymbol : String
     , logoFile : String
@@ -38,6 +39,7 @@ positionDecoder =
         |> JP.required "UserID" JD.int
         |> JP.required "TokenID" JD.int
         |> JP.required "Balance" JD.string
+        |> JP.required "Reserved" JD.string
         |> JP.required "TokenName" JD.string
         |> JP.required "TokenSymbol" JD.string
         |> JP.required "LogoFile" JD.string

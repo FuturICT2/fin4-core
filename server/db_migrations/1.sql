@@ -1,7 +1,7 @@
 -- +migrate Up
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `ethereumAddress` varchar(512) NOT NULL,
   `createdAt` datetime NOT NULL,
@@ -14,11 +14,11 @@ INSERT INTO `user` SET id=1, name='Demo Community', ethereumAddress='0xeed1a5d1d
 
 DROP TABLE IF EXISTS `token`;
 CREATE TABLE `token` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `creatorId` int(10) NOT NULL,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `creatorId` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `symbol` varchar(45) NOT NULL,
-  `totalSupply` int(10) unsigned NOT NULL,
+  `totalSupply` int(11) unsigned NOT NULL,
   `purpose` varchar(255) DEFAULT NULL,
   `blockchainAddress` varchar(512) NOT NULL,
   `txAddress` varchar(512) NOT NULL,
@@ -43,8 +43,8 @@ INSERT INTO `token` SET
 
 DROP TABLE IF EXISTS `user_holding`;
 CREATE TABLE `user_holding` (
-  `userId` int(10) unsigned NOT NULL,
-  `tokenId` int(10) unsigned NOT NULL,
+  `userId` int(11) unsigned NOT NULL,
+  `tokenId` int(11) unsigned NOT NULL,
   `balance` decimal(30,8) NOT NULL DEFAULT '0.00000000',
   PRIMARY KEY (`userId`,`tokenId`),
   KEY `tokenId` (`tokenId`),

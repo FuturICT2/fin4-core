@@ -33,6 +33,11 @@ func (env *Env) StartRouter() *gin.Engine {
 		wapi.POST("/create-token", mustAuth, env.CreateToken)
 		wapi.GET("/like/:tokenID", mustAuth, env.DoLike)
 		wapi.GET("/unlike/:tokenID", mustAuth, env.DoUnLike)
+		wapi.POST("/actions", mustAuth, env.CreateAction)
+		wapi.GET("/actions", env.ActionsList)
+		// wapi.POST("/do-action", mustAuth, env.CreateAction)
+		// wapi.POST("/approve-action", mustAuth, env.CreateAction)
+		wapi.POST("/add-rewards-to-action", mustAuth, env.AddSupportToAction)
 	}
 
 	// Ethereum specific APIs
