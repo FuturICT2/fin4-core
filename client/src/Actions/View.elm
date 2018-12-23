@@ -5,9 +5,10 @@ import Actions.Msg exposing (Msg(..))
 import Common.Decimal exposing (renderDecimal, renderDecimalWithPrecision)
 import Common.Error as Error
 import Common.Styles exposing (padding, textLeft, textRight, toMdlCss)
+import Dict exposing (Dict)
 import Html exposing (..)
-import Html.Attributes exposing (style)
-import Html.Events exposing (onClick)
+import Html.Attributes exposing (placeholder, rows, style, type_, value)
+import Html.Events exposing (onClick, onInput)
 import Identicon exposing (identicon)
 import Main.Context exposing (Context)
 import Material.Button as Button
@@ -40,14 +41,31 @@ render ctx model =
 
 renderActions : Context -> Model -> Actions -> Html Msg
 renderActions ctx model actions =
-    div [ style [ ( "text-align", "center" ) ] ]
-        [ header [] [ text "Actions" ]
-        , div [] <| List.map (renderRow model) actions.entries
+    div
+        [ style
+            [ ( "text-align", "center" )
+            , ( "margin-top", "45px" )
+            ]
+        ]
+        [ div [] <| List.map (renderRow ctx model) actions.entries
         ]
 
 
-renderRow model action =
+renderRow ctx model action =
     let
+        showApproveBtn =
+            case ctx.user of
+                Just user ->
+                    case user.id == action.creatorId of
+                        True ->
+                            True
+
+                        False ->
+                            False
+
+                Nothing ->
+                    False
+
         ( status, statusBG, statusColor ) =
             case action.status of
                 0 ->
@@ -65,10 +83,10 @@ renderRow model action =
         endsIn =
             case action.endsInHours of
                 "1" ->
-                    "ends in " ++ action.endsInMinutes ++ "mins"
+                    "remaining time: " ++ action.endsInMinutes ++ "mins"
 
                 "0" ->
-                    "ends in " ++ action.endsInMinutes ++ "mins"
+                    "remaining time: " ++ action.endsInMinutes ++ "mins"
 
                 "-0" ->
                     ""
@@ -83,12 +101,13 @@ renderRow model action =
             , ( "border-radius", "8px" )
             ]
         ]
-        [ Chip.span
-            [ css "background" statusBG
-            , css "color" statusColor
-            ]
-            [ Chip.content [] [ text status ] ]
-        , div
+        [ -- Chip.span
+          --     [ css "background" statusBG
+          --     , css "color" statusColor
+          --     ]
+          --     [ Chip.content [] [ text status ] ]
+          -- ,
+          div
             [ style
                 [ ( "padding", "5px 0 0 5px" )
                 ]
@@ -98,51 +117,89 @@ renderRow model action =
                     [ ( "padding", "8px" )
                     ]
                 ]
-                [ header
-                    [ style
-                        [ ( "margin-bottom", "15px" )
-                        , ( "line-height", "1.2" )
-                        ]
-                    ]
-                    [ text action.description
-                    ]
+                [ text action.description
                 ]
             ]
-        , span [] [ text <| "you will get " ]
-        , span [] <| List.map renderReward action.supporters
-        , br [] []
-        , span [] [ text <| "Fund this action" ]
-        , br [] []
         , div
-            [ style [ ( "margin", "15px 0" ) ] ]
-            [ Button.render Mdl
-                [ action.id, -1 ]
-                model.mdl
-                [ Button.ripple
-                , Button.raised
-                , Button.colored
-                , css "margin-right" "15px"
-                , Options.onClick (AddRewards action.id "1")
+            [ actionControlsStyle ]
+            [ div
+                [ actionControlStyle
+                , onClick (AddRewards action.id "1")
                 ]
-                [ text <| "+1 " ++ "GDPG"
+                [ text "+1"
                 ]
-            , Button.render Mdl
-                [ action.id, -2 ]
-                model.mdl
-                [ Button.ripple
-                , Button.raised
-                , Button.colored
-                , Options.onClick (AddRewards action.id "5")
+            , div
+                [ actionControlStyle
+                , onClick (AddRewards action.id "5")
                 ]
-                [ text <| "+5 " ++ "GDPG"
+                [ text "+5"
+                ]
+            , div
+                [ actionControlStyle
+                , style [ ( "border", "none" ) ]
+                ]
+                [ text "propose"
                 ]
             ]
-        , case action.isTimeLimit of
-            True ->
-                text endsIn
+        , div
+            [ style
+                [ ( "border-top", "1px solid #ddd" )
+                , ( "border-bottom", "1px solid #ddd" )
+                , ( "text-align", "left" )
+                , ( "margin", "15px 0" )
+                ]
+            ]
+          <|
+            List.map (renderProposal model showApproveBtn action.id) action.proposals
+        , small []
+            [ b []
+                [ text <| "total "
+                , renderDecimalWithPrecision action.totalRewrads 2
+                ]
+            ]
+        , small [] [ text <| ": " ]
+        , small [] <| List.map renderReward action.supporters
 
-            False ->
-                span [] []
+        -- , case action.isTimeLimit of
+        --     True ->
+        --         text endsIn
+        --
+        --     False ->
+        --         span [] []
+        , div
+            []
+            [ p
+                [ style
+                    [ ( "margin", " 0" )
+                    , ( "padding-left", "2px" )
+                    ]
+                ]
+                [ text "" ]
+            , let
+                v =
+                    Maybe.withDefault "" <| Dict.get action.id model.proposals
+              in
+              textarea
+                [ textareaStyle
+                , value v
+                , placeholder "Submit proposal"
+                , onInput <| SetProposal action.id
+                , rows 3
+                ]
+                []
+
+            -- , div []
+            --     [ input
+            --         [ imgInputStyle
+            --         , type_ "file"
+            --
+            --         -- , id model.imageId
+            --         -- , on "change"
+            --         --     (JD.succeed ImageSelected)
+            --         ]
+            --         []
+            --     ]
+            ]
         , div
             [ actionButtonsStyle
             ]
@@ -152,8 +209,9 @@ renderRow model action =
                 [ Button.raised
                 , Button.ripple
                 , toMdlCss buttonStyle
+                , Options.onClick (SubmitProposal action.id <| Maybe.withDefault "" <| Dict.get action.id model.proposals)
                 ]
-                [ text "do it"
+                [ text "Submit"
 
                 -- , text <| " " ++ toString token.favouriteCount
                 ]
@@ -162,10 +220,43 @@ renderRow model action =
 
 
 renderReward reward =
-    div []
-        [ renderDecimalWithPrecision reward.amount 2
-        , span [] [ text <| " " ++ reward.tokenName ++ " from " ]
-        , span [] [ b [] [ text reward.userName ] ]
+    span []
+        [ text reward.userName
+        , text "+"
+        , renderDecimalWithPrecision reward.amount 2
+        , text " "
+        ]
+
+
+renderProposal model showApproveBtn actionId proposal =
+    let
+        btn =
+            case showApproveBtn of
+                True ->
+                    a
+                        [ onClick (ApproveProposal proposal.id actionId proposal.doerId)
+                        ]
+                        [ text "Approve"
+                        ]
+
+                False ->
+                    span [] []
+    in
+    div
+        [ style
+            [ ( "padding", "10px" )
+            , ( "border-bottom", "1px solid #ddd" )
+            ]
+        ]
+        [ b []
+            [ text <|
+                proposal.doerName
+            ]
+        , text " ("
+        , btn
+        , text "):"
+        , div [] []
+        , text proposal.description
         ]
 
 
@@ -178,6 +269,23 @@ renderEmpty =
                 ]
             ]
             [ text "No actions yet" ]
+        ]
+
+
+actionControlsStyle =
+    style
+        [ ( "margin", "15px 0" )
+        , ( "border", "1px solid #ddd" )
+        ]
+
+
+actionControlStyle =
+    style
+        [ ( "border-right", "1px solid #ddd" )
+        , ( "width", "33%" )
+        , ( "display", "inline-block" )
+        , ( "padding", "5px" )
+        , ( "cursor", "pointer" )
         ]
 
 
@@ -202,4 +310,29 @@ buttonStyle =
         , ( "font-size", "26px" )
         , ( "padding", "15px" )
         , ( "height", "60px" )
+        ]
+
+
+textareaStyle : Attribute a
+textareaStyle =
+    style
+        [ ( "background-color", "#f2f2f2" )
+        , ( "border", "none" )
+        , ( "padding", "15px" )
+        , ( "width", "100%" )
+        , ( "border-top", "1px solid #ddd" )
+        , ( "box-sizing", "border-box" )
+        , ( "margin-bottom", "-5px" )
+        ]
+
+
+imgInputStyle =
+    style
+        [-- ( "position", "absolute" )
+         -- , ( "left", "0" )
+         -- , ( "top", "0" )
+         -- , ( "right", "0" )
+         -- , ( "bottom", "0" )
+         -- , ( "opacity", "0" )
+         -- , ( "width", "100%" )
         ]

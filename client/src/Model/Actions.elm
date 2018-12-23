@@ -9,7 +9,6 @@ type alias Proposal =
     , description : String
     , doerId : Int
     , doerName : String
-    , logoFile : String
     , approved : Bool
     }
 
@@ -38,6 +37,7 @@ type alias Action =
     , endsInHours : String
     , endsInMinutes : String
     , isTimeLimit : Bool
+    , totalRewrads : String
     }
 
 
@@ -74,6 +74,7 @@ actionDecoder =
         |> JP.required "endsInHours" JD.string
         |> JP.required "endsInMinutes" JD.string
         |> JP.required "isTimeLimit" JD.bool
+        |> JP.required "totalRewrads" JD.string
 
 
 proposalDecoder : JD.Decoder Proposal
@@ -83,7 +84,6 @@ proposalDecoder =
         |> JP.required "description" JD.string
         |> JP.required "doerId" JD.int
         |> JP.required "doerName" JD.string
-        |> JP.required "logoFile" JD.string
         |> JP.required "approved" JD.bool
 
 

@@ -27,6 +27,7 @@ type ActionProposal struct {
 	LogoFile    sql.NullString `json:"logoFile"`
 	Approved    bool           `json:"approved"`
 	CreatedAt   time.Time      `json:"createdAt"`
+	IsOwner     bool           `json:"isOwner"`
 }
 
 type ActionSupporter struct {
@@ -102,6 +103,103 @@ type UserStore interface {
 		amount decimaldt.Decimal,
 	) error
 	FindActions(userid ID) ([]Action, error)
+	AddActionProposal(userID ID, proposal string, actionID ID) error
+	// AprroveProposal(actoinID ID, proposalID ID, doerID ID, approverID ID) error
+}
+
+// func (db *UserModel) AprroveProposal(
+// 	actoinID ID, proposalID ID, doerID ID, approverID ID) error {
+// 		proposals := db.GetActionProposals(actionID, approverID)
+// 		supporters := db.GetActionSupporters(actionID)
+// 		for _, supporter := range supporters {
+// 			proposal.
+// 		}
+// 		tx, err := db.Begin()
+// 		if err != nil {
+// 			logrus.WithFields(
+// 				logrus.Fields{"e": err.Error()},
+// 			).Error("user:ReserveRewardsForAction:0")
+// 			return ErrServerError
+// 		}
+// 		defer tx.Rollback()
+// 		_, err = tx.Exec(`
+// 			UPDATE user_holding
+// 			SET
+// 				balance = balance - ?,
+// 				reserved = reserved + ?
+// 			WHERE userId = ? AND tokenId = ?`,
+// 			amount,
+// 			amount,
+// 			userID,
+// 			tokenID,
+// 		)
+// 		if err != nil {
+// 			logrus.WithFields(
+// 				logrus.Fields{"e": err.Error()},
+// 			).Error("user:ReserveRewardsForAction:1")
+// 			return ErrServerError
+// 		}
+// 		_, err = tx.Exec(`
+// 			INSERT INTO action_reward SET
+// 				userId = ?,
+// 				tokenId = ?,
+// 				actionId = ?,
+// 				amount = ?,
+// 				status = 0
+// 			ON DUPLICATE KEY UPDATE
+// 				amount = amount + ?`,
+// 			userID,
+// 			tokenID,
+// 			actionID,
+// 			amount,
+// 			amount,
+// 		)
+// 		if err != nil {
+// 			logrus.WithFields(
+// 				logrus.Fields{"e": err.Error()},
+// 			).Error("user:ReserveRewardsForAction:2")
+// 			return ErrServerError
+// 		}
+// 		err = tx.Commit()
+// 		if err != nil {
+// 			logrus.WithFields(
+// 				logrus.Fields{"e": err.Error()},
+// 			).Error("user:ReserveRewardsForAction:3")
+// 			return ErrServerError
+// 		}
+// 	return nil
+// }
+func (db *UserModel) AddActionProposal(
+	userID ID,
+	proposal string,
+	actionID ID,
+) error {
+	res, err := db.Exec(
+		`INSERT INTO action_proposal SET
+			actionId = ?,
+			userId = ?,
+			proposalTxt = ?,
+			isApproved = 0,
+			createdAt = ?`,
+		actionID,
+		userID,
+		proposal,
+		time.Now(),
+	)
+	if err != nil {
+		logrus.WithFields(
+			logrus.Fields{"e": err.Error()},
+		).Error("user:AddActionProposal:0")
+		return ErrServerError
+	}
+	_, err = res.LastInsertId()
+	if err != nil {
+		logrus.WithFields(
+			logrus.Fields{"e": err.Error()},
+		).Error("user:AddActionProposal:1")
+		return ErrServerError
+	}
+	return nil
 }
 
 func (db *UserModel) FindActions(userID ID) ([]Action, error) {
@@ -120,7 +218,8 @@ func (db *UserModel) FindActions(userID ID) ([]Action, error) {
 				a.createdAt
 			FROM action a
 			LEFT JOIN
-				user u ON a.creatorId = u.id`),
+				user u ON a.creatorId = u.id
+			ORDER BY createdAt DESC`),
 	)
 	if err != nil {
 		return nil, err
@@ -147,10 +246,72 @@ func (db *UserModel) FindActions(userID ID) ([]Action, error) {
 			return nil, err
 		}
 		a.Supporters = supporters
-		a.Proposals = make([]ActionProposal, 0)
+		proposals, err := db.GetActionProposals(a.ID, userID)
+		if err != nil {
+			return nil, err
+		}
+		a.Proposals = proposals
 		result = append(result, a)
 	}
 	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+func (db *UserModel) GetActionProposals(actionID ID, userID ID) ([]ActionProposal, error) {
+	result := []ActionProposal{}
+	// ID          ID             `json:"id"`
+	// Description string         `json:"description"`
+	// DoerID      ID             `json:"doerId"`
+	// DoerName    string         `json:"doerName"`
+	// LogoFile    sql.NullString `json:"logoFile"`
+	// Approved    bool           `json:"approved"`
+	// CreatedAt   time.Time      `json:"createdAt"`
+	rows, err := db.Query(`
+		SELECT
+			ap.id,
+			ap.proposalTxt,
+			ap.isApproved,
+			ap.createdAt,
+			ap.userId,
+			u.name
+		FROM action_proposal ap
+		LEFT JOIN
+			user u ON ap.userId = u.id
+		WHERE actionId=?`,
+		actionID,
+	)
+	if err != nil {
+		logrus.WithFields(
+			logrus.Fields{"e": err.Error()},
+		).Error("user:GetActionProposals:0")
+		return nil, err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var a ActionProposal
+		err := rows.Scan(
+			&a.ID,
+			&a.Description,
+			&a.Approved,
+			&a.CreatedAt,
+			&a.DoerID,
+			&a.DoerName,
+		)
+		if err != nil {
+			logrus.WithFields(
+				logrus.Fields{"e": err.Error()},
+			).Error("user:GetActionProposals:2")
+			return nil, err
+		}
+		a.IsOwner = a.DoerID == userID
+		result = append(result, a)
+	}
+	if err := rows.Err(); err != nil {
+		logrus.WithFields(
+			logrus.Fields{"e": err.Error()},
+		).Error("user:GetActionProposals:3")
 		return nil, err
 	}
 	return result, nil

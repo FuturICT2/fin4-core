@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/FuturICT2/fin4-core/server/decimaldt"
 	"github.com/FuturICT2/fin4-core/server/models"
 	"github.com/gin-gonic/gin"
 )
@@ -29,6 +30,46 @@ func (env *Env) ActionsList(c *gin.Context) {
 		Page:    0,
 		Entries: toActionsResponse(actions),
 	})
+}
+
+// AprroveProposal approve a proposal, disburse funds, and close action
+// func (env *Env) AprroveProposal(c *gin.Context) {
+// 	user := mustGetUser(c)
+// 	body := struct {
+// 		ActionID   int `json:"actionId"`
+// 		ProposalID int `json:"proposalId"`
+// 		DoerID     int `json:"doerId"`
+// 	}{}
+// 	c.BindJSON(&body)
+// 	userModel := env.DB.NewUserModel()
+// 	err := userModel.AprroveProposal(
+// 		body.ActionID, body.ProposalID, body.DoerID, user.ID)
+// 	if err != nil {
+// 		c.String(http.StatusBadRequest, err.Error())
+// 		return
+// 	}
+// 	c.String(http.StatusOK, "")
+// }
+
+// ProposeActionSolution API to add action propsal soltion
+func (env *Env) AddActionProposal(c *gin.Context) {
+	user := mustGetUser(c)
+	body := struct {
+		Proposal string `json:"proposal"`
+		ActionID int    `json:"actionId"`
+	}{}
+	c.BindJSON(&body)
+	if len(body.Proposal) < 1 || len(body.Proposal) > 10000 {
+		c.String(http.StatusBadRequest, "Proposal length should be between than 1 and 10000 characters")
+		return
+	}
+	userModel := env.DB.NewUserModel()
+	err := userModel.AddActionProposal(user.ID, body.Proposal, models.ID(body.ActionID))
+	if err != nil {
+		c.String(http.StatusBadRequest, err.Error())
+		return
+	}
+	c.String(http.StatusOK, "")
 }
 
 func toActionsResponse(entries []models.Action) []interface{} {
@@ -62,6 +103,7 @@ func toActionsResponse(entries []models.Action) []interface{} {
 			EndsInMinutes string                   `json:"endsInMinutes"`
 			IsTimeout     bool                     `json:'isTimeout'`
 			IsTimeLimit   bool                     `json:"isTimeLimit"`
+			TotalRewards  decimaldt.Decimal        `json:"totalRewrads"`
 		}{
 			ID:            entry.ID,
 			Description:   entry.Description,
@@ -78,7 +120,16 @@ func toActionsResponse(entries []models.Action) []interface{} {
 			EndsInMinutes: endsInMinutes,
 			IsTimeout:     isTimeout,
 			IsTimeLimit:   !entry.StartsAt.Equal(entry.EndsAt),
+			TotalRewards:  getTotalRewards(entry.Supporters),
 		})
 	}
 	return res
+}
+
+func getTotalRewards(supporters []models.ActionSupporter) decimaldt.Decimal {
+	var total decimaldt.Decimal
+	for _, supporter := range supporters {
+		total = total.Add(supporter.Amount)
+	}
+	return total
 }
