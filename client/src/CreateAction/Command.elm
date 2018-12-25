@@ -25,5 +25,5 @@ encodeCreateAction : Model -> JE.Value
 encodeCreateAction model =
     JE.object
         [ ( "description", JE.string model.description )
-        , ( "timeLimit", JE.string model.timeLimit )
+        , ( "timeLimit", JE.string "0" )
         ]

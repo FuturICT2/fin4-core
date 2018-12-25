@@ -43,8 +43,7 @@ renderActions : Context -> Model -> Actions -> Html Msg
 renderActions ctx model actions =
     div
         [ style
-            [ ( "text-align", "center" )
-            , ( "margin-top", "45px" )
+            [ ( "margin-top", "45px" )
             ]
         ]
         [ div [] <| List.map (renderRow ctx model) actions.entries
@@ -117,65 +116,13 @@ renderRow ctx model action =
                     [ ( "padding", "8px" )
                     ]
                 ]
-                [ text action.description
+                [ b [] [ text <| action.creatorName ++ ": " ]
+                , text action.description
                 ]
             ]
-        , div
-            [ actionControlsStyle ]
-            [ div
-                [ actionControlStyle
-                , onClick (AddRewards action.id "1")
-                ]
-                [ text "+1"
-                ]
-            , div
-                [ actionControlStyle
-                , onClick (AddRewards action.id "5")
-                ]
-                [ text "+5"
-                ]
-            , div
-                [ actionControlStyle
-                , style [ ( "border", "none" ) ]
-                ]
-                [ text "propose"
-                ]
-            ]
-        , div
-            [ style
-                [ ( "border-top", "1px solid #ddd" )
-                , ( "border-bottom", "1px solid #ddd" )
-                , ( "text-align", "left" )
-                , ( "margin", "15px 0" )
-                ]
-            ]
-          <|
-            List.map (renderProposal model showApproveBtn action.id) action.proposals
-        , small []
-            [ b []
-                [ text <| "total "
-                , renderDecimalWithPrecision action.totalRewrads 2
-                ]
-            ]
-        , small [] [ text <| ": " ]
-        , small [] <| List.map renderReward action.supporters
-
-        -- , case action.isTimeLimit of
-        --     True ->
-        --         text endsIn
-        --
-        --     False ->
-        --         span [] []
         , div
             []
-            [ p
-                [ style
-                    [ ( "margin", " 0" )
-                    , ( "padding-left", "2px" )
-                    ]
-                ]
-                [ text "" ]
-            , let
+            [ let
                 v =
                     Maybe.withDefault "" <| Dict.get action.id model.proposals
               in
@@ -187,6 +134,22 @@ renderRow ctx model action =
                 , rows 3
                 ]
                 []
+            , div
+                [ actionButtonsStyle
+                ]
+                [ Button.render Mdl
+                    [ action.id ]
+                    model.mdl
+                    [ Button.raised
+                    , Button.ripple
+                    , toMdlCss buttonStyle
+                    , Options.onClick (SubmitProposal action.id <| Maybe.withDefault "" <| Dict.get action.id model.proposals)
+                    ]
+                    [ text "Submit"
+
+                    -- , text <| " " ++ toString token.favouriteCount
+                    ]
+                ]
 
             -- , div []
             --     [ input
@@ -200,22 +163,19 @@ renderRow ctx model action =
             --         []
             --     ]
             ]
+        , div [ style [ ( "padding", "5px" ) ] ]
+            [ text <| toString (List.length action.proposals)
+            , text " proposals"
+            ]
         , div
-            [ actionButtonsStyle
-            ]
-            [ Button.render Mdl
-                [ action.id ]
-                model.mdl
-                [ Button.raised
-                , Button.ripple
-                , toMdlCss buttonStyle
-                , Options.onClick (SubmitProposal action.id <| Maybe.withDefault "" <| Dict.get action.id model.proposals)
-                ]
-                [ text "Submit"
-
-                -- , text <| " " ++ toString token.favouriteCount
+            [ style
+                [ ( "border-top", "1px solid #ddd" )
+                , ( "border-bottom", "1px solid #ddd" )
+                , ( "text-align", "left" )
                 ]
             ]
+          <|
+            List.map (renderProposal model showApproveBtn action.id) action.proposals
         ]
 
 
@@ -254,8 +214,7 @@ renderProposal model showApproveBtn actionId proposal =
             ]
         , text " ("
         , btn
-        , text "):"
-        , div [] []
+        , text "): "
         , text proposal.description
         ]
 

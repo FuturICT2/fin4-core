@@ -70,11 +70,25 @@ func (env *Env) CreateToken(c *gin.Context) {
 		return
 	}
 	rand := rand.Intn(len(logos))
-	a, err := env.DB.NewUserModel().InsertToken(
+	userModel := env.DB.NewUserModel()
+	a, err := userModel.InsertToken(
 		user.ID, body.Name, body.Symbol, body.Purpose,
 		body.TotalSupply, address.Hash().Hex(), tx.Hash().Hex(), logos[rand])
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
+		return
+	}
+	// add minter action to the token
+	now := time.Now()
+	timeLimit, err := strconv.ParseFloat("0", 64)
+	err = userModel.InsertAction(
+		user.ID,
+		body.Purpose,
+		now,
+		now.Add(time.Duration(timeLimit*60*60*1000000000)),
+	)
+	if err != nil {
+		c.String(http.StatusBadRequest, err.Error())
 		return
 	}
 	c.JSON(http.StatusOK, a)

@@ -36,22 +36,6 @@ render ctx model =
                 ]
                 []
             ]
-        , div []
-            [ p
-                [ style
-                    [ ( "margin", "0" )
-                    , ( "padding-left", "2px" )
-                    ]
-                ]
-                [ text "Set time limit in Hours" ]
-            , input
-                [ inputStyle
-                , placeholder "e.g 1, enter 0 to make it unlimited"
-                , value model.timeLimit
-                , onInput SetTimeLimit
-                ]
-                []
-            ]
         , renderHttpError model.createActionError
         ]
 

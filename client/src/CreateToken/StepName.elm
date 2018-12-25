@@ -29,7 +29,7 @@ render ctx model =
                 [ text "Enter name" ]
             , input
                 [ inputStyle
-                , placeholder "e.g Moon"
+                , placeholder "e.g TreeCoin"
                 , value model.name
                 , onInput SetName
                 ]
@@ -45,7 +45,7 @@ render ctx model =
                 [ text "Enter symbol" ]
             , input
                 [ inputStyle
-                , placeholder "e.g MNN"
+                , placeholder "e.g TRR"
                 , value model.symbol
                 , onInput SetSymbol
                 ]
@@ -63,9 +63,23 @@ render ctx model =
             , textarea
                 [ textareaStyle
                 , value model.description
-                , placeholder "e.g Let us go to the moon"
+                , placeholder "e.g Plant a tree and get 2 Treecoins"
                 , onInput SetDescription
                 , rows 5
+                ]
+                []
+            ]
+        , div []
+            [ p
+                [ style
+                    [ ( "margin", "0" )
+                    , ( "padding-left", "2px" )
+                    ]
+                ]
+                [ text "Enter how much coins per action" ]
+            , input
+                [ inputStyle
+                , placeholder "e.g 2"
                 ]
                 []
             ]

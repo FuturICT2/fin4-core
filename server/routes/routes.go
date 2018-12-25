@@ -3,8 +3,6 @@ package routes
 import (
 	"github.com/FuturICT2/fin4-core/server/routes/middleware"
 	"github.com/gin-gonic/gin"
-
-	api "gopkg.in/appleboy/gin-status-api.v1"
 )
 
 // StartRouter sets up routes
@@ -40,18 +38,5 @@ func (env *Env) StartRouter() *gin.Engine {
 		wapi.POST("/add-rewards-to-action", mustAuth, env.AddSupportToAction)
 	}
 
-	// Ethereum specific APIs
-	eth := r.Group("/eth")
-	eth.Use(middleware.CheckCsrfToken())
-	{
-	}
-
-	// Core API
-	v1 := r.Group("/api")
-	v1.Use(middleware.HeadersNoCache())
-	v1.Use(middleware.HeadersCors())
-	{
-		v1.GET("/status", middleware.APIAuth(), api.StatusHandler)
-	}
 	return r
 }
