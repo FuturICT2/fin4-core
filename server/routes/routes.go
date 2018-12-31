@@ -9,12 +9,10 @@ import (
 func (env *Env) StartRouter() *gin.Engine {
 	r := gin.Default()
 	r.Static("./assets", "./public")
-	// html
 	web := r.Group("/")
 	{
 		web.GET("/", env.Index)
 	}
-	// website specific api
 	wapi := r.Group("/wapi")
 	wapi.Use(middleware.Session())
 	wapi.Use(middleware.SessionSetUser(env.DB))
@@ -33,10 +31,14 @@ func (env *Env) StartRouter() *gin.Engine {
 		wapi.GET("/unlike/:tokenID", mustAuth, env.DoUnLike)
 		wapi.POST("/actions", mustAuth, env.CreateAction)
 		wapi.GET("/actions", env.TokensList)
-		wapi.POST("/submit-proposal", mustAuth, env.AddActionProposal)
-		wapi.POST("/approve-proposal", mustAuth, env.AprroveProposal)
+		wapi.POST("/submit-proposal", mustAuth, env.NewActionClaim)
+		wapi.POST("/approve-proposal", mustAuth, env.ApproveActionClaim)
 		wapi.POST("/add-rewards-to-action", mustAuth, env.AddSupportToAction)
 	}
-
 	return r
+}
+
+// Index index route
+func (env *Env) Index(c *gin.Context) {
+	c.File("public/index.html")
 }

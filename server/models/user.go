@@ -10,101 +10,12 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-// User user type
-type User struct {
-	ID              ID        `json:"id"`
-	Name            string    `json:"name"`
-	EthereumAddress string    `json:"ethereumAddress"`
-	CreatedAt       time.Time `json:"createdAt"`
-	UpdatedAt       time.Time `json:"updatedAt"`
-}
-
-type ActionProposal struct {
-	ID          ID             `json:"id"`
-	Description string         `json:"description"`
-	DoerID      ID             `json:"doerId"`
-	DoerName    string         `json:"doerName"`
-	LogoFile    sql.NullString `json:"logoFile"`
-	Approved    bool           `json:"approved"`
-	CreatedAt   time.Time      `json:"createdAt"`
-	IsOwner     bool           `json:"isOwner"`
-}
-
-type ActionSupporter struct {
-	Amount    decimaldt.Decimal `json:"amount"`
-	TokenId   ID                `json:"tokenId"`
-	TokenName string            `json:"tokenName"`
-	UserId    ID                `json:"userId"`
-	UserName  string            `json:"userName"`
-	Status    int               `json:"status"`
-}
-
-type Action struct {
-	ID          ID                `json:"id"`
-	Description string            `json:"description"`
-	CreatorID   ID                `json:"creatorID"`
-	CreatorName string            `json:"creatorName"`
-	Status      int               `json:"status"`
-	LogoFile    sql.NullString    `json:"logoFile"`
-	StartsAt    time.Time         `json:"startsAt"`
-	EndsAt      time.Time         `json:"endsAt"`
-	CreatedAt   time.Time         `json:"createdAt"`
-	Proposals   []ActionProposal  `json:"proposals"`
-	Supporters  []ActionSupporter `json: "supporters"`
-}
-
 // NewUser creates a new user
 func NewUser() *User {
 	return &User{
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
 	}
-}
-
-const (
-	tableUser = "user"
-)
-
-// UserStore interface for user store
-type UserStore interface {
-	Register(name string, address string) (*User, error)
-	FindByID(ID) (*User, error)
-	GetUserBalances(userId ID) ([]Balance, error)
-	InsertBalance(
-		userID ID,
-		tokenID ID,
-		balance string,
-	) error
-	InsertToken(
-		userID ID,
-		name string,
-		symbol string,
-		purpose string,
-		totalSupply string,
-		blockchainAddress string,
-		txAddress string,
-		logo string,
-	) (*Token, error)
-	FindByName(string) (*User, error)
-	IsNameRegistered(string) bool
-	FindTokens(userID ID) ([]Token, error)
-	FindUsers() ([]User, error)
-	DoLike(userID ID, tokenID ID, state bool) error
-	InsertAction(
-		userID ID,
-		description string,
-		startsAt time.Time,
-		endsAt time.Time,
-	) error
-	ReserveRewardsForAction(
-		userID ID,
-		tokenID ID,
-		actionID ID,
-		amount decimaldt.Decimal,
-	) error
-	FindActions(userid ID) ([]Action, error)
-	AddActionProposal(userID ID, proposal string, actionID ID) error
-	AprroveProposal(claimID ID, approverID ID) error
 }
 
 func (db *UserModel) FindClaim(claimID ID) (*Claim, error) {
@@ -138,12 +49,12 @@ func (db *UserModel) FindClaim(claimID ID) (*Claim, error) {
 	return &entry, nil
 }
 
-func (db *UserModel) AprroveProposal(claimID ID, approverID ID) error {
+func (db *UserModel) ApproveActionClaim(claimID ID, approverID ID) error {
 	claim, err := db.FindClaim(claimID)
 	if err != nil {
 		logrus.WithFields(
 			logrus.Fields{"e": err.Error()},
-		).Error("user:AprroveProposal:0")
+		).Error("user:ApproveActionClaim:0")
 		return ErrServerError
 	}
 	token := db.FindToken(claim.TokenID)
@@ -157,7 +68,7 @@ func (db *UserModel) AprroveProposal(claimID ID, approverID ID) error {
 	if err != nil {
 		logrus.WithFields(
 			logrus.Fields{"e": err.Error()},
-		).Error("user:AprroveProposal:0")
+		).Error("user:ApproveActionClaim:0")
 		return ErrServerError
 	}
 	defer tx.Rollback()
@@ -171,7 +82,7 @@ func (db *UserModel) AprroveProposal(claimID ID, approverID ID) error {
 	if err != nil {
 		logrus.WithFields(
 			logrus.Fields{"e": err.Error()},
-		).Error("user:AprroveProposal:1")
+		).Error("user:ApproveActionClaim:1")
 		return ErrServerError
 	}
 	_, err = tx.Exec(`
@@ -185,7 +96,7 @@ func (db *UserModel) AprroveProposal(claimID ID, approverID ID) error {
 	if err != nil {
 		logrus.WithFields(
 			logrus.Fields{"e": err.Error()},
-		).Error("user:AprroveProposal:1.1")
+		).Error("user:ApproveActionClaim:1.1")
 		return ErrServerError
 	}
 	_, err = tx.Exec(`
@@ -198,20 +109,20 @@ func (db *UserModel) AprroveProposal(claimID ID, approverID ID) error {
 	if err != nil {
 		logrus.WithFields(
 			logrus.Fields{"e": err.Error()},
-		).Error("user:AprroveProposal:1.4")
+		).Error("user:ApproveActionClaim:1.4")
 		return ErrServerError
 	}
 	err = tx.Commit()
 	if err != nil {
 		logrus.WithFields(
 			logrus.Fields{"e": err.Error()},
-		).Error("user:AprroveProposal:3")
+		).Error("user:ApproveActionClaim:3")
 		return ErrServerError
 	}
 	return nil
 }
 
-func (db *UserModel) AddActionProposal(
+func (db *UserModel) NewActionClaim(
 	userID ID,
 	proposal string,
 	actionID ID,
@@ -230,14 +141,14 @@ func (db *UserModel) AddActionProposal(
 	if err != nil {
 		logrus.WithFields(
 			logrus.Fields{"e": err.Error()},
-		).Error("user:AddActionProposal:0")
+		).Error("user:NewActionClaim:0")
 		return ErrServerError
 	}
 	_, err = res.LastInsertId()
 	if err != nil {
 		logrus.WithFields(
 			logrus.Fields{"e": err.Error()},
-		).Error("user:AddActionProposal:1")
+		).Error("user:NewActionClaim:1")
 		return ErrServerError
 	}
 	return nil
@@ -302,13 +213,6 @@ func (db *UserModel) FindActions(userID ID) ([]Action, error) {
 
 func (db *UserModel) GetActionProposals(actionID ID, userID ID) ([]ActionProposal, error) {
 	result := []ActionProposal{}
-	// ID          ID             `json:"id"`
-	// Description string         `json:"description"`
-	// DoerID      ID             `json:"doerId"`
-	// DoerName    string         `json:"doerName"`
-	// LogoFile    sql.NullString `json:"logoFile"`
-	// Approved    bool           `json:"approved"`
-	// CreatedAt   time.Time      `json:"createdAt"`
 	rows, err := db.Query(`
 		SELECT
 			ap.id,

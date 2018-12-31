@@ -8,22 +8,6 @@ import (
 	"github.com/lytics/logrus"
 )
 
-// Token Token data type
-type Token struct {
-	ID                ID
-	CreatorID         ID
-	Name              string
-	Symbol            string
-	BlockchainAddress string
-	TotalSupply       string
-	Purpose           string
-	TxAddress         string
-	Logo              string
-	FavouriteCount    int
-	DidUserLike       bool
-	Claims            []Claim
-}
-
 // FindTokens finds all tokens
 func (db *UserModel) FindTokens(userID ID) ([]Token, error) {
 	result := []Token{}
@@ -69,18 +53,6 @@ func (db *UserModel) FindTokens(userID ID) ([]Token, error) {
 		return nil, err
 	}
 	return result, nil
-}
-
-// Balance balance type
-type Balance struct {
-	UserID            ID
-	TokenID           ID
-	Balance           decimaldt.Decimal
-	Reserved          decimaldt.Decimal
-	TokenName         string
-	TokenSymbol       string
-	LogoFile          string
-	BlockchainAddress string
 }
 
 // GetUserBalance returns token balance of a user
@@ -146,17 +118,6 @@ func (db *UserModel) CountLikes(tokenID ID) int {
 		tokenID,
 	).Scan(&count)
 	return count
-}
-
-// Balance balance type
-type Claim struct {
-	ID         ID
-	UserID     ID
-	UserName   string
-	TokenID    ID
-	Text       string
-	IsApproved bool
-	LogoFile   string
 }
 
 func (db *UserModel) GetTokenClaims(userID ID, tokenID ID) ([]Claim, error) {
