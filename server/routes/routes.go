@@ -32,9 +32,9 @@ func (env *Env) StartRouter() *gin.Engine {
 		wapi.GET("/like/:tokenID", mustAuth, env.DoLike)
 		wapi.GET("/unlike/:tokenID", mustAuth, env.DoUnLike)
 		wapi.POST("/actions", mustAuth, env.CreateAction)
-		wapi.GET("/actions", env.ActionsList)
+		wapi.GET("/actions", env.TokensList)
 		wapi.POST("/submit-proposal", mustAuth, env.AddActionProposal)
-		// wapi.POST("/approve-proposal", mustAuth, env.AprroveProposal)
+		wapi.POST("/approve-proposal", mustAuth, env.AprroveProposal)
 		wapi.POST("/add-rewards-to-action", mustAuth, env.AddSupportToAction)
 	}
 

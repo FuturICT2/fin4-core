@@ -50,12 +50,12 @@ renderActions ctx model actions =
         ]
 
 
-renderRow ctx model action =
+renderRow ctx model token =
     let
         showApproveBtn =
             case ctx.user of
                 Just user ->
-                    case user.id == action.creatorId of
+                    case user.id == token.creatorId of
                         True ->
                             True
 
@@ -64,34 +64,6 @@ renderRow ctx model action =
 
                 Nothing ->
                     False
-
-        ( status, statusBG, statusColor ) =
-            case action.status of
-                0 ->
-                    ( "new", "green", "white" )
-
-                1 ->
-                    ( "unconfirmed", "orange", "white" )
-
-                2 ->
-                    ( "done", "grey", "black" )
-
-                _ ->
-                    ( "unkown", "none", "black" )
-
-        endsIn =
-            case action.endsInHours of
-                "1" ->
-                    "remaining time: " ++ action.endsInMinutes ++ "mins"
-
-                "0" ->
-                    "remaining time: " ++ action.endsInMinutes ++ "mins"
-
-                "-0" ->
-                    ""
-
-                _ ->
-                    "ends in " ++ action.endsInHours ++ "hrs"
     in
     div
         [ style
@@ -100,13 +72,7 @@ renderRow ctx model action =
             , ( "border-radius", "8px" )
             ]
         ]
-        [ -- Chip.span
-          --     [ css "background" statusBG
-          --     , css "color" statusColor
-          --     ]
-          --     [ Chip.content [] [ text status ] ]
-          -- ,
-          div
+        [ div
             [ style
                 [ ( "padding", "5px 0 0 5px" )
                 ]
@@ -114,23 +80,25 @@ renderRow ctx model action =
             [ div
                 [ style
                     [ ( "padding", "8px" )
+                    , ( "font-size", "26px" )
+                    , ( "font-weight", "bold" )
+                    , ( "line-height", "1" )
                     ]
                 ]
-                [ b [] [ text <| action.creatorName ++ ": " ]
-                , text action.description
+                [ text token.purpose
                 ]
             ]
         , div
             []
             [ let
                 v =
-                    Maybe.withDefault "" <| Dict.get action.id model.proposals
+                    Maybe.withDefault "" <| Dict.get token.id model.claims
               in
               textarea
                 [ textareaStyle
                 , value v
                 , placeholder "Submit proposal"
-                , onInput <| SetProposal action.id
+                , onInput <| SetClaim token.id
                 , rows 3
                 ]
                 []
@@ -138,34 +106,22 @@ renderRow ctx model action =
                 [ actionButtonsStyle
                 ]
                 [ Button.render Mdl
-                    [ action.id ]
+                    [ token.id ]
                     model.mdl
                     [ Button.raised
                     , Button.ripple
                     , toMdlCss buttonStyle
-                    , Options.onClick (SubmitProposal action.id <| Maybe.withDefault "" <| Dict.get action.id model.proposals)
+                    , Options.onClick (SubmitProposal token.id <| Maybe.withDefault "" <| Dict.get token.id model.claims)
                     ]
                     [ text "Submit"
-
-                    -- , text <| " " ++ toString token.favouriteCount
                     ]
                 ]
-
-            -- , div []
-            --     [ input
-            --         [ imgInputStyle
-            --         , type_ "file"
-            --
-            --         -- , id model.imageId
-            --         -- , on "change"
-            --         --     (JD.succeed ImageSelected)
-            --         ]
-            --         []
-            --     ]
             ]
         , div [ style [ ( "padding", "5px" ) ] ]
-            [ text <| toString (List.length action.proposals)
-            , text " proposals"
+            [ text <| toString (List.length token.claims)
+            , text " claims - "
+            , text <| toString (List.length <| List.filter (\v -> v.isApproved == True) token.claims)
+            , text " approved"
             ]
         , div
             [ style
@@ -175,32 +131,28 @@ renderRow ctx model action =
                 ]
             ]
           <|
-            List.map (renderProposal model showApproveBtn action.id) action.proposals
+            List.map (renderClaim model showApproveBtn token.id) token.claims
         ]
 
 
-renderReward reward =
-    span []
-        [ text reward.userName
-        , text "+"
-        , renderDecimalWithPrecision reward.amount 2
-        , text " "
-        ]
-
-
-renderProposal model showApproveBtn actionId proposal =
+renderClaim model showApproveBtn actionId claim =
     let
         btn =
-            case showApproveBtn of
+            case claim.isApproved of
                 True ->
-                    a
-                        [ onClick (ApproveProposal proposal.id actionId proposal.doerId)
-                        ]
-                        [ text "Approve"
-                        ]
+                    i [] [ text " - approved" ]
 
                 False ->
-                    span [] []
+                    case showApproveBtn of
+                        True ->
+                            a
+                                [ onClick (ApproveClaim claim.id)
+                                ]
+                                [ text " (approve)"
+                                ]
+
+                        False ->
+                            i [] []
     in
     div
         [ style
@@ -210,12 +162,11 @@ renderProposal model showApproveBtn actionId proposal =
         ]
         [ b []
             [ text <|
-                proposal.doerName
+                claim.userName
             ]
-        , text " ("
         , btn
-        , text "): "
-        , text proposal.description
+        , text ": "
+        , text claim.text
         ]
 
 

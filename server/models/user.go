@@ -104,87 +104,128 @@ type UserStore interface {
 	) error
 	FindActions(userid ID) ([]Action, error)
 	AddActionProposal(userID ID, proposal string, actionID ID) error
-	// AprroveProposal(actoinID ID, proposalID ID, doerID ID, approverID ID) error
+	AprroveProposal(claimID ID, approverID ID) error
 }
 
-// func (db *UserModel) AprroveProposal(
-// 	actoinID ID, proposalID ID, doerID ID, approverID ID) error {
-// 		proposals := db.GetActionProposals(actionID, approverID)
-// 		supporters := db.GetActionSupporters(actionID)
-// 		for _, supporter := range supporters {
-// 			proposal.
-// 		}
-// 		tx, err := db.Begin()
-// 		if err != nil {
-// 			logrus.WithFields(
-// 				logrus.Fields{"e": err.Error()},
-// 			).Error("user:ReserveRewardsForAction:0")
-// 			return ErrServerError
-// 		}
-// 		defer tx.Rollback()
-// 		_, err = tx.Exec(`
-// 			UPDATE user_holding
-// 			SET
-// 				balance = balance - ?,
-// 				reserved = reserved + ?
-// 			WHERE userId = ? AND tokenId = ?`,
-// 			amount,
-// 			amount,
-// 			userID,
-// 			tokenID,
-// 		)
-// 		if err != nil {
-// 			logrus.WithFields(
-// 				logrus.Fields{"e": err.Error()},
-// 			).Error("user:ReserveRewardsForAction:1")
-// 			return ErrServerError
-// 		}
-// 		_, err = tx.Exec(`
-// 			INSERT INTO action_reward SET
-// 				userId = ?,
-// 				tokenId = ?,
-// 				actionId = ?,
-// 				amount = ?,
-// 				status = 0
-// 			ON DUPLICATE KEY UPDATE
-// 				amount = amount + ?`,
-// 			userID,
-// 			tokenID,
-// 			actionID,
-// 			amount,
-// 			amount,
-// 		)
-// 		if err != nil {
-// 			logrus.WithFields(
-// 				logrus.Fields{"e": err.Error()},
-// 			).Error("user:ReserveRewardsForAction:2")
-// 			return ErrServerError
-// 		}
-// 		err = tx.Commit()
-// 		if err != nil {
-// 			logrus.WithFields(
-// 				logrus.Fields{"e": err.Error()},
-// 			).Error("user:ReserveRewardsForAction:3")
-// 			return ErrServerError
-// 		}
-// 	return nil
-// }
+func (db *UserModel) FindClaim(claimID ID) (*Claim, error) {
+	row := db.QueryRow(`SELECT
+			c.id,
+			c.tokenId,
+			c.userId,
+			u.name,
+			c.text,
+			c.logoFile,
+			c.isApproved
+		FROM claim c
+		LEFT JOIN
+			user u ON u.id = c.userId
+		WHERE c.id=?`,
+		claimID,
+	)
+	entry := Claim{}
+	err := row.Scan(
+		&entry.ID,
+		&entry.TokenID,
+		&entry.UserID,
+		&entry.UserName,
+		&entry.Text,
+		&entry.LogoFile,
+		&entry.IsApproved,
+	)
+	if err != nil {
+		return nil, err
+	}
+	return &entry, nil
+}
+
+func (db *UserModel) AprroveProposal(claimID ID, approverID ID) error {
+	claim, err := db.FindClaim(claimID)
+	if err != nil {
+		logrus.WithFields(
+			logrus.Fields{"e": err.Error()},
+		).Error("user:AprroveProposal:0")
+		return ErrServerError
+	}
+	token := db.FindToken(claim.TokenID)
+	if token != nil && token.CreatorID != approverID {
+		return errors.New("Token creator only can approve")
+	}
+	if claim.IsApproved == true {
+		return errors.New("Claim already approved")
+	}
+	tx, err := db.Begin()
+	if err != nil {
+		logrus.WithFields(
+			logrus.Fields{"e": err.Error()},
+		).Error("user:AprroveProposal:0")
+		return ErrServerError
+	}
+	defer tx.Rollback()
+	_, err = tx.Exec(`
+			UPDATE token
+			SET
+				totalSupply = totalSupply + 1
+			WHERE id=?`,
+		claim.TokenID,
+	)
+	if err != nil {
+		logrus.WithFields(
+			logrus.Fields{"e": err.Error()},
+		).Error("user:AprroveProposal:1")
+		return ErrServerError
+	}
+	_, err = tx.Exec(`
+		INSERT INTO user_holding (userId, tokenId, balance, reserved)
+		VALUES (?, ?, 1, 0)
+		ON DUPLICATE KEY UPDATE
+			balance = balance + 1`,
+		claim.UserID,
+		claim.TokenID,
+	)
+	if err != nil {
+		logrus.WithFields(
+			logrus.Fields{"e": err.Error()},
+		).Error("user:AprroveProposal:1.1")
+		return ErrServerError
+	}
+	_, err = tx.Exec(`
+			UPDATE claim
+			SET
+				isApproved = true
+			WHERE id=?`,
+		claim.ID,
+	)
+	if err != nil {
+		logrus.WithFields(
+			logrus.Fields{"e": err.Error()},
+		).Error("user:AprroveProposal:1.4")
+		return ErrServerError
+	}
+	err = tx.Commit()
+	if err != nil {
+		logrus.WithFields(
+			logrus.Fields{"e": err.Error()},
+		).Error("user:AprroveProposal:3")
+		return ErrServerError
+	}
+	return nil
+}
+
 func (db *UserModel) AddActionProposal(
 	userID ID,
 	proposal string,
 	actionID ID,
 ) error {
 	res, err := db.Exec(
-		`INSERT INTO action_proposal SET
-			actionId = ?,
+		`INSERT INTO claim SET
+			tokenId = ?,
 			userId = ?,
-			proposalTxt = ?,
+			text = ?,
 			isApproved = 0,
-			createdAt = ?`,
+			logoFile = ""`,
 		actionID,
 		userID,
 		proposal,
-		time.Now(),
 	)
 	if err != nil {
 		logrus.WithFields(

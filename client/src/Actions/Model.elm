@@ -9,7 +9,7 @@ type alias Model =
     { mdl : Material.Model
     , actions : Maybe Actions
     , error : Maybe String
-    , proposals : Dict Int String
+    , claims : Dict Int String
     }
 
 
@@ -18,5 +18,5 @@ init =
     { mdl = Material.model
     , actions = Nothing
     , error = Nothing
-    , proposals = Dict.empty
+    , claims = Dict.empty
     }

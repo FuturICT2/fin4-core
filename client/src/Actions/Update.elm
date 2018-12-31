@@ -44,22 +44,22 @@ update ctx msg model =
         SubmitProposal actionId proposal ->
             let
                 props =
-                    Dict.remove actionId model.proposals
+                    Dict.remove actionId model.claims
             in
-            { model | proposals = props } ! [ submitProposalCmd ctx model actionId proposal ]
+            { model | claims = props } ! [ submitProposalCmd ctx model actionId proposal ]
 
-        ApproveProposal proposalId actionId doerId ->
-            model ! [ approveProposalCmd ctx model proposalId actionId doerId ]
+        ApproveClaim claimId ->
+            model ! [ approveProposalCmd ctx model claimId ]
 
-        ApproveProposalResponse resp ->
+        ApproveClaimResponse resp ->
             model ! [ loadActionsCmd ctx 1 ]
 
-        SetProposal actionId proposal ->
+        SetClaim tokenId proposal ->
             let
                 props =
-                    Dict.insert actionId proposal model.proposals
+                    Dict.insert tokenId proposal model.claims
             in
-            { model | proposals = props } ! []
+            { model | claims = props } ! []
 
         Mdl msg_ ->
             Material.update Mdl msg_ model

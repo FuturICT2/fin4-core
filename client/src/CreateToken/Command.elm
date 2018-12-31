@@ -26,6 +26,5 @@ encodeCreateToken model =
     JE.object
         [ ( "name", JE.string model.name )
         , ( "purpose", JE.string model.description )
-        , ( "totalSupply", JE.string "0" )
         , ( "symbol", JE.string model.symbol )
         ]

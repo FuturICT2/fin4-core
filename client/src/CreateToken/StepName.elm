@@ -59,27 +59,13 @@ render ctx model =
                     , ( "padding-left", "2px" )
                     ]
                 ]
-                [ text "Enter purpose" ]
+                [ text "Enter action purpose" ]
             , textarea
                 [ textareaStyle
                 , value model.description
-                , placeholder "e.g Plant a tree and get 2 Treecoins"
+                , placeholder "e.g Plant a tree, proof it and get rewarded with Treecoins"
                 , onInput SetDescription
                 , rows 5
-                ]
-                []
-            ]
-        , div []
-            [ p
-                [ style
-                    [ ( "margin", "0" )
-                    , ( "padding-left", "2px" )
-                    ]
-                ]
-                [ text "Enter how much coins per action" ]
-            , input
-                [ inputStyle
-                , placeholder "e.g 2"
                 ]
                 []
             ]

@@ -36,12 +36,12 @@ addRewardsCmd ctx model actionId amount =
         emptyResponseDecoder
 
 
-approveProposalCmd : Context -> Model -> Int -> Int -> Int -> Cmd Msg
-approveProposalCmd ctx model proposalId actionId doerId =
+approveProposalCmd : Context -> Model -> Int -> Cmd Msg
+approveProposalCmd ctx model claimId =
     postWithCsrf ctx
-        ApproveProposalResponse
+        ApproveClaimResponse
         "/approve-proposal"
-        (encodeApproveProposal proposalId actionId doerId)
+        (encodeApproveProposal claimId)
         emptyResponseDecoder
 
 
@@ -63,19 +63,17 @@ encodeAddRewardsAction model actionId amount =
         ]
 
 
-encodeApproveProposal : Int -> Int -> Int -> JE.Value
-encodeApproveProposal proposalId actionId doerId =
+encodeApproveProposal : Int -> JE.Value
+encodeApproveProposal claimId =
     JE.object
-        [ ( "proposalId", JE.int proposalId )
-        , ( "actionId", JE.int actionId )
-        , ( "doerId", JE.int doerId )
+        [ ( "claimId", JE.int claimId )
         ]
 
 
-encodeSubmitProposal actionId proposal =
+encodeSubmitProposal tokenId claim =
     JE.object
-        [ ( "actionId", JE.int actionId )
-        , ( "proposal", JE.string proposal )
+        [ ( "tokenId", JE.int tokenId )
+        , ( "proposal", JE.string claim )
         ]
 
 

@@ -33,30 +33,27 @@ func (env *Env) ActionsList(c *gin.Context) {
 }
 
 // AprroveProposal approve a proposal, disburse funds, and close action
-// func (env *Env) AprroveProposal(c *gin.Context) {
-// 	user := mustGetUser(c)
-// 	body := struct {
-// 		ActionID   int `json:"actionId"`
-// 		ProposalID int `json:"proposalId"`
-// 		DoerID     int `json:"doerId"`
-// 	}{}
-// 	c.BindJSON(&body)
-// 	userModel := env.DB.NewUserModel()
-// 	err := userModel.AprroveProposal(
-// 		body.ActionID, body.ProposalID, body.DoerID, user.ID)
-// 	if err != nil {
-// 		c.String(http.StatusBadRequest, err.Error())
-// 		return
-// 	}
-// 	c.String(http.StatusOK, "")
-// }
+func (env *Env) AprroveProposal(c *gin.Context) {
+	user := mustGetUser(c)
+	body := struct {
+		ClaimID int `json:"claimId"`
+	}{}
+	c.BindJSON(&body)
+	userModel := env.DB.NewUserModel()
+	err := userModel.AprroveProposal(models.ID(body.ClaimID), user.ID)
+	if err != nil {
+		c.String(http.StatusBadRequest, err.Error())
+		return
+	}
+	c.String(http.StatusOK, "")
+}
 
 // ProposeActionSolution API to add action propsal soltion
 func (env *Env) AddActionProposal(c *gin.Context) {
 	user := mustGetUser(c)
 	body := struct {
 		Proposal string `json:"proposal"`
-		ActionID int    `json:"actionId"`
+		TokenID  int    `json:"tokenId"`
 	}{}
 	c.BindJSON(&body)
 	if len(body.Proposal) < 1 || len(body.Proposal) > 10000 {
@@ -64,7 +61,7 @@ func (env *Env) AddActionProposal(c *gin.Context) {
 		return
 	}
 	userModel := env.DB.NewUserModel()
-	err := userModel.AddActionProposal(user.ID, body.Proposal, models.ID(body.ActionID))
+	err := userModel.AddActionProposal(user.ID, body.Proposal, models.ID(body.TokenID))
 	if err != nil {
 		c.String(http.StatusBadRequest, err.Error())
 		return

@@ -13,6 +13,6 @@ type Msg
     | SubmitProposal Int String
     | OnAddRewardsResponse (Result Http.Error EmptyResponse)
     | TickerTimout
-    | SetProposal Int String
-    | ApproveProposal Int Int Int
-    | ApproveProposalResponse (Result Http.Error EmptyResponse)
+    | SetClaim Int String
+    | ApproveClaim Int
+    | ApproveClaimResponse (Result Http.Error EmptyResponse)
