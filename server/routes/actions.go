@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"log"
+	"fmt"
 	"net/http"
 	"strconv"
 	"time"
@@ -10,6 +10,10 @@ import (
 	"github.com/FuturICT2/fin4-core/server/models"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/gin-gonic/gin"
+	"github.com/kjda/exchange/server/appstrings"
+	"github.com/kjda/exchange/server/filestorage"
+	"github.com/kjda/exchange/server/img"
+	"github.com/lytics/logrus"
 )
 
 // ActionsList handler to return existing socially actionable tokens
@@ -66,7 +70,6 @@ func (env *Env) ApproveActionClaim(c *gin.Context) {
 		c.String(http.StatusBadRequest, err.Error())
 		return
 	}
-	log.Println("TX of minting --=-->>>>>", tx.Hash())
 	err = userModel.ApproveActionClaim(models.ID(body.ClaimID), user.ID)
 	if err != nil {
 		c.String(http.StatusBadRequest, err.Error())
@@ -81,14 +84,44 @@ func (env *Env) NewActionClaim(c *gin.Context) {
 	body := struct {
 		Proposal string `json:"proposal"`
 		TokenID  int    `json:"tokenId"`
+		Image64  string `json:"image64"`
 	}{}
 	c.BindJSON(&body)
+	var logoPath string
+	{
+		imgData, contentType, ext, err := img.FromBase64(body.Image64)
+		logoPath = fmt.Sprintf(
+			"tokenlogos/%d-%s.%s",
+			user.ID,
+			appstrings.GetRandomString(20),
+			ext,
+		)
+		err = env.FileStorage.Put(
+			logoPath,
+			contentType,
+			imgData,
+			filestorage.AclPublicRead,
+		)
+		if err != nil {
+			logrus.WithFields(logrus.Fields{
+				"error": err.Error(),
+			}).Error("actions/create-new-claim:3")
+			c.String(http.StatusBadRequest, err.Error())
+			return
+		}
+		logoPath = "https://s3.amazonaws.com/anychange/" + logoPath
+	}
 	if len(body.Proposal) < 1 || len(body.Proposal) > 10000 {
 		c.String(http.StatusBadRequest, "Proposal length should be between than 1 and 10000 characters")
 		return
 	}
 	userModel := env.DB.NewUserModel()
-	err := userModel.NewActionClaim(user.ID, body.Proposal, models.ID(body.TokenID))
+	err := userModel.NewActionClaim(
+		user.ID,
+		body.Proposal,
+		models.ID(body.TokenID),
+		logoPath,
+	)
 	if err != nil {
 		c.String(http.StatusBadRequest, err.Error())
 		return

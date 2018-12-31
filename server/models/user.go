@@ -126,6 +126,7 @@ func (db *UserModel) NewActionClaim(
 	userID ID,
 	proposal string,
 	actionID ID,
+	logoPath string,
 ) error {
 	res, err := db.Exec(
 		`INSERT INTO claim SET
@@ -133,10 +134,11 @@ func (db *UserModel) NewActionClaim(
 			userId = ?,
 			text = ?,
 			isApproved = 0,
-			logoFile = ""`,
+			logoFile = ?`,
 		actionID,
 		userID,
 		proposal,
+		logoPath,
 	)
 	if err != nil {
 		logrus.WithFields(

@@ -13,7 +13,7 @@ import (
 
 const AclPublicRead = "public-read"
 
-var ErrStorageServiceNotAvailable = errors.New("Error uploading token image, please try again later")
+var ErrStorageServiceNotAvailable = errors.New("Error uploading claim image")
 
 type Acl string
 

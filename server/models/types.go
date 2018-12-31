@@ -55,7 +55,7 @@ type UserStore interface {
 		amount decimaldt.Decimal,
 	) error
 	FindActions(userid ID) ([]Action, error)
-	NewActionClaim(userID ID, proposal string, actionID ID) error
+	NewActionClaim(userID ID, proposal string, actionID ID, logoPath string) error
 	ApproveActionClaim(claimID ID, approverID ID) error
 	FindClaim(claimID ID) (*Claim, error)
 }
