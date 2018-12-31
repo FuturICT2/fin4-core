@@ -11,6 +11,7 @@ import Actions.Model exposing (Model)
 import Actions.Msg exposing (Msg(..))
 import Common.Api exposing (get, postWithCsrf)
 import Common.Json exposing (decodeAt, deocdeIntWithDefault, emptyResponseDecoder)
+import Dict
 import Json.Decode as JD
 import Json.Encode as JE
 import Main.Context exposing (Context)
@@ -48,10 +49,19 @@ approveProposalCmd ctx model claimId =
 
 submitProposalCmd : Context -> Model -> Int -> String -> Cmd Msg
 submitProposalCmd ctx model actionId proposal =
+    let
+        v =
+            Maybe.withDefault
+                { contents = ""
+                , filename = ""
+                }
+            <|
+                Dict.get actionId model.claimImages
+    in
     postWithCsrf ctx
         OnAddRewardsResponse
         "/submit-proposal"
-        (encodeSubmitProposal actionId proposal)
+        (encodeSubmitProposal actionId proposal v.contents)
         emptyResponseDecoder
 
 
@@ -88,10 +98,11 @@ encodeApproveProposal claimId =
         ]
 
 
-encodeSubmitProposal tokenId claim =
+encodeSubmitProposal tokenId claim base64 =
     JE.object
         [ ( "tokenId", JE.int tokenId )
         , ( "proposal", JE.string claim )
+        , ( "image64", JE.string base64 )
         ]
 
 

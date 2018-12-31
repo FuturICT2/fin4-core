@@ -7,9 +7,10 @@ import Common.Error as Error
 import Common.Styles exposing (padding, textLeft, textRight, toMdlCss)
 import Dict exposing (Dict)
 import Html exposing (..)
-import Html.Attributes exposing (placeholder, rows, style, type_, value)
-import Html.Events exposing (onClick, onInput)
+import Html.Attributes exposing (id, placeholder, rows, src, style, type_, value)
+import Html.Events exposing (on, onClick, onInput)
 import Identicon exposing (identicon)
+import Json.Decode as JD
 import Main.Context exposing (Context)
 import Material.Button as Button
 import Material.Chip as Chip
@@ -96,6 +97,7 @@ renderTokenInfo ctx model token =
                     ]
                     [ text token.name
                     ]
+                , span [] [ text <| " approver: " ++ token.creatorName ]
                 ]
             ]
         , div
@@ -250,11 +252,31 @@ renderClaim model showApproveBtn actionId claim =
 
 
 renderClaimForm ctx model token =
+    let
+        v =
+            Maybe.withDefault
+                { contents = ""
+                , filename = ""
+                }
+            <|
+                Dict.get token.id model.claimImages
+    in
     div
         [ style [ ( "margin", "10px 3px 0 3px" ) ] ]
         [ div
             []
-            [ let
+            [ div []
+                [ img
+                    [ src v.contents
+                    , style
+                        [ ( "max-width", "90%" )
+                        , ( "max-height", "200px" )
+                        , ( "margin-bottom", "25px" )
+                        ]
+                    ]
+                    []
+                ]
+            , let
                 v =
                     Maybe.withDefault "" <| Dict.get token.id model.claims
               in
@@ -279,14 +301,19 @@ renderClaimForm ctx model token =
                     ]
                     [ text "Submit"
                     ]
-                , Button.render Mdl
-                    [ token.id, -1 ]
-                    model.mdl
-                    [ Button.raised
-                    , Button.ripple
-                    , toMdlCss buttonStyle
+                , div
+                    [ buttonStyle
+                    , style [ ( "position", "relative" ) ]
                     ]
-                    [ text "Photo"
+                    [ input
+                        [ imgInputStyle
+                        , type_ "file"
+                        , id <| "imgclaim-" ++ toString token.id
+                        , on "change"
+                            (JD.succeed <| ImageSelected token.id)
+                        ]
+                        []
+                    , text "add photo"
                     ]
                 ]
             ]
@@ -302,6 +329,19 @@ renderEmpty =
                 ]
             ]
             [ text "No actions yet" ]
+        ]
+
+
+imgInputStyle =
+    style
+        [ ( "position", "absolute" )
+        , ( "left", "0" )
+        , ( "top", "0" )
+        , ( "right", "0" )
+        , ( "bottom", "0" )
+        , ( "opacity", "0" )
+        , ( "width", "100%" )
+        , ( "z-index", "1" )
         ]
 
 
@@ -370,16 +410,4 @@ cardBtnStyle =
         [ ( "display", "inline-block" )
         , ( "text-align", "center" )
         , ( "padding", "5px" )
-        ]
-
-
-imgInputStyle =
-    style
-        [-- ( "position", "absolute" )
-         -- , ( "left", "0" )
-         -- , ( "top", "0" )
-         -- , ( "right", "0" )
-         -- , ( "bottom", "0" )
-         -- , ( "opacity", "0" )
-         -- , ( "width", "100%" )
         ]

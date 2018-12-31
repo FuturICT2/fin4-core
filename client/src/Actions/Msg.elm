@@ -1,5 +1,6 @@
 module Actions.Msg exposing (Msg(..))
 
+import Actions.Ports exposing (ImagePortData)
 import Common.Json exposing (EmptyResponse)
 import Http
 import Material
@@ -18,3 +19,5 @@ type Msg
     | ApproveClaimResponse (Result Http.Error EmptyResponse)
     | OnDoLikeResponse (Result Http.Error EmptyResponse)
     | DoLike Int Bool
+    | ImageSelected Int
+    | ImageRead ImagePortData
