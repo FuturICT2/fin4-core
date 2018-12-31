@@ -2,6 +2,7 @@ module Actions.Command exposing
     ( addRewardsCmd
     , approveProposalCmd
     , commands
+    , likeCmd
     , loadActionsCmd
     , submitProposalCmd
     )
@@ -51,6 +52,23 @@ submitProposalCmd ctx model actionId proposal =
         OnAddRewardsResponse
         "/submit-proposal"
         (encodeSubmitProposal actionId proposal)
+        emptyResponseDecoder
+
+
+likeCmd ctx tokenId state =
+    let
+        url =
+            case state of
+                True ->
+                    "/unlike/" ++ toString tokenId
+
+                False ->
+                    "/like/" ++ toString tokenId
+    in
+    get ctx
+        OnDoLikeResponse
+        url
+        []
         emptyResponseDecoder
 
 

@@ -30,7 +30,7 @@ renderBeforeSessionLoaded =
                 [ ( "margin-top", "60px" )
                 ]
             ]
-            [ text "Finance 4.0" ]
+            [ text "Demo" ]
         , Card.view
             [ css "width" "95px"
             , css "height" "95px"

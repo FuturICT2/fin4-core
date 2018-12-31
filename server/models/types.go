@@ -98,6 +98,7 @@ type Action struct {
 type Token struct {
 	ID                ID
 	CreatorID         ID
+	CreatorName       string
 	Name              string
 	Symbol            string
 	BlockchainAddress string

@@ -16,3 +16,5 @@ type Msg
     | SetClaim Int String
     | ApproveClaim Int
     | ApproveClaimResponse (Result Http.Error EmptyResponse)
+    | OnDoLikeResponse (Result Http.Error EmptyResponse)
+    | DoLike Int Bool

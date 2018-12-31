@@ -46,12 +46,121 @@ renderActions ctx model actions =
             [ ( "margin-top", "45px" )
             ]
         ]
-        [ div [] <| List.map (renderRow ctx model) actions.entries
+        [ div [] <| List.map (renderToken ctx model) actions.entries
         ]
 
 
-renderRow ctx model token =
+renderToken ctx model token =
+    div
+        [ style
+            [ ( "border-left", "10px solid #ddd" )
+            , ( "margin-bottom", "15px" )
+            ]
+        ]
+        [ renderTokenInfo ctx model token
+        , renderTokenClaims ctx model token
+        , renderClaimForm ctx model token
+
+        -- , renderTokenControls ctx model token
+        ]
+
+
+renderTokenInfo ctx model token =
+    div
+        []
+        [ div
+            [ style
+                [ ( "display", "flex" )
+                , ( "padding", "5px 0 0 5px" )
+                ]
+            ]
+            [ div
+                [ style
+                    [ ( "padding", "10px" )
+                    , ( "text-align", "center" )
+                    , ( "width", "40px" )
+                    , ( "height", "40px" )
+                    , ( "border", "1px solid #ddd" )
+                    , ( "border-radius", "50%" )
+                    ]
+                ]
+                [ identicon "20px" token.name
+                ]
+            , div []
+                [ b
+                    [ style
+                        [ ( "margin", "0 0 10px 0" )
+                        , ( "padding", "10px" )
+                        , ( "font-size", "26px" )
+                        ]
+                    ]
+                    [ text token.name
+                    ]
+                ]
+            ]
+        , div
+            []
+            [ div
+                [ style
+                    [ ( "padding", "7px" )
+                    , ( "line-height", "1" )
+                    , ( "font-size", "26px" )
+                    ]
+                ]
+                [ text token.purpose
+                ]
+            ]
+        ]
+
+
+renderTokenControls ctx model token =
     let
+        likeBackground =
+            case token.didUserLike of
+                True ->
+                    "red"
+
+                False ->
+                    "inherit"
+    in
+    div
+        [ style
+            [ ( "border", "1px solid #ddd" )
+            , ( "border-top", "none" )
+            , ( "border-radius", "0 0 8px 8px" )
+            , ( "background", "#eee" )
+            ]
+        ]
+        [ div [ cardBtnsStyle ]
+            [ div
+                [ cardBtnStyle
+                ]
+                [ Button.render Mdl
+                    [ token.id ]
+                    model.mdl
+                    [ Button.raised
+                    , Button.ripple
+                    , Options.onClick (DoLike token.id token.didUserLike)
+                    , toMdlCss buttonStyle
+                    ]
+                    [ Icon.view "favorite" [ Icon.size24, css "color" likeBackground ]
+                    , text <| " " ++ toString token.favouriteCount
+                    ]
+                ]
+            ]
+        ]
+
+
+renderTokenClaims ctx model token =
+    let
+        likeColor =
+            case token.didUserLike of
+                True ->
+                    "blue"
+
+                False ->
+                    "green"
+
         showApproveBtn =
             case ctx.user of
                 Just user ->
@@ -66,68 +175,37 @@ renderRow ctx model token =
                     False
     in
     div
-        [ style
-            [ ( "border", "1px solid #ddd" )
-            , ( "margin-bottom", "30px" )
-            , ( "border-radius", "8px" )
-            ]
-        ]
-        [ div
-            [ style
-                [ ( "padding", "5px 0 0 5px" )
-                ]
-            ]
-            [ div
-                [ style
-                    [ ( "padding", "8px" )
-                    , ( "font-size", "26px" )
-                    , ( "font-weight", "bold" )
-                    , ( "line-height", "1" )
-                    ]
-                ]
-                [ text token.purpose
-                ]
-            ]
-        , div
-            []
-            [ let
-                v =
-                    Maybe.withDefault "" <| Dict.get token.id model.claims
-              in
-              textarea
-                [ textareaStyle
-                , value v
-                , placeholder "Submit proposal"
-                , onInput <| SetClaim token.id
-                , rows 3
-                ]
-                []
-            , div
-                [ actionButtonsStyle
-                ]
-                [ Button.render Mdl
-                    [ token.id ]
-                    model.mdl
-                    [ Button.raised
-                    , Button.ripple
-                    , toMdlCss buttonStyle
-                    , Options.onClick (SubmitProposal token.id <| Maybe.withDefault "" <| Dict.get token.id model.claims)
-                    ]
-                    [ text "Submit"
-                    ]
-                ]
-            ]
-        , div [ style [ ( "padding", "5px" ) ] ]
-            [ text <| toString (List.length token.claims)
+        []
+        [ div [ style [ ( "padding", "5px" ) ] ]
+            [ case token.didUserLike of
+                True ->
+                    a
+                        [ style [ ( "color", "blue" ), ( "padding", "15px" ) ]
+                        , onClick (DoLike token.id token.didUserLike)
+                        ]
+                        [ text "Unlike" ]
+
+                False ->
+                    a
+                        [ style [ ( "color", "green" ), ( "padding", "15px" ) ]
+                        , onClick (DoLike token.id token.didUserLike)
+                        ]
+                        [ text "like" ]
+            , text " ("
+            , text <| toString token.favouriteCount
+            , text " likes - "
+            , text <| toString (List.length token.claims)
             , text " claims - "
-            , text <| toString (List.length <| List.filter (\v -> v.isApproved == True) token.claims)
-            , text " approved"
+            , text <|
+                toString
+                    (List.length <|
+                        List.filter (\v -> v.isApproved == True) token.claims
+                    )
+            , text " approved)"
             ]
         , div
             [ style
-                [ ( "border-top", "1px solid #ddd" )
-                , ( "border-bottom", "1px solid #ddd" )
-                , ( "text-align", "left" )
+                [ ( "text-align", "left" )
                 ]
             ]
           <|
@@ -157,7 +235,8 @@ renderClaim model showApproveBtn actionId claim =
     div
         [ style
             [ ( "padding", "10px" )
-            , ( "border-bottom", "1px solid #ddd" )
+            , ( "border", "1px solid #ddd" )
+            , ( "margin", "3px" )
             ]
         ]
         [ b []
@@ -167,6 +246,50 @@ renderClaim model showApproveBtn actionId claim =
         , btn
         , text ": "
         , text claim.text
+        ]
+
+
+renderClaimForm ctx model token =
+    div
+        [ style [ ( "margin", "10px 3px 0 3px" ) ] ]
+        [ div
+            []
+            [ let
+                v =
+                    Maybe.withDefault "" <| Dict.get token.id model.claims
+              in
+              textarea
+                [ textareaStyle
+                , value v
+                , placeholder "Submit proposal"
+                , onInput <| SetClaim token.id
+                , rows 3
+                ]
+                []
+            , div
+                [ actionButtonsStyle
+                ]
+                [ Button.render Mdl
+                    [ token.id, -2 ]
+                    model.mdl
+                    [ Button.raised
+                    , Button.ripple
+                    , toMdlCss buttonStyle
+                    , Options.onClick (SubmitProposal token.id <| Maybe.withDefault "" <| Dict.get token.id model.claims)
+                    ]
+                    [ text "Submit"
+                    ]
+                , Button.render Mdl
+                    [ token.id, -1 ]
+                    model.mdl
+                    [ Button.raised
+                    , Button.ripple
+                    , toMdlCss buttonStyle
+                    ]
+                    [ text "Photo"
+                    ]
+                ]
+            ]
         ]
 
 
@@ -210,7 +333,7 @@ actionButtonsStyle =
 
 buttonStyle =
     style
-        [ ( "width", "100%" )
+        [ ( "width", "50%" )
         , ( "text-align", "center" )
         , ( "line-height", "normal" )
         , ( "text-decoration", "none" )
@@ -228,11 +351,25 @@ textareaStyle =
     style
         [ ( "background-color", "#f2f2f2" )
         , ( "border", "none" )
-        , ( "padding", "15px" )
+        , ( "padding", "4px" )
         , ( "width", "100%" )
         , ( "border-top", "1px solid #ddd" )
         , ( "box-sizing", "border-box" )
         , ( "margin-bottom", "-5px" )
+        ]
+
+
+cardBtnsStyle =
+    style
+        [ ( "border-top", "1px solid #dd" )
+        ]
+
+
+cardBtnStyle =
+    style
+        [ ( "display", "inline-block" )
+        , ( "text-align", "center" )
+        , ( "padding", "5px" )
         ]
 
 

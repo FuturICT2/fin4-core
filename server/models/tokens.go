@@ -12,7 +12,12 @@ import (
 func (db *UserModel) FindTokens(userID ID) ([]Token, error) {
 	result := []Token{}
 	rows, err := db.Query(
-		fmt.Sprintf(`SELECT %s FROM token ORDER BY id DESC`, getTokenCols()),
+		fmt.Sprintf(`
+			SELECT %s, u.name
+			FROM token t
+			LEFT JOIN
+				user u ON u.id = t.creatorId
+			ORDER BY id DESC`, getTokenCols()),
 	)
 	if err != nil {
 		logrus.WithFields(logrus.Fields{
@@ -33,6 +38,7 @@ func (db *UserModel) FindTokens(userID ID) ([]Token, error) {
 			&c.BlockchainAddress,
 			&c.TxAddress,
 			&c.Logo,
+			&c.CreatorName,
 		)
 		c.FavouriteCount = db.CountLikes(c.ID)
 		c.DidUserLike = db.DidUserLike(userID, c.ID)
@@ -189,7 +195,7 @@ func (db *UserModel) DidUserLike(userID ID, tokenID ID) bool {
 func (db *UserModel) FindToken(id ID) *Token {
 	var c Token
 	db.QueryRow(
-		fmt.Sprintf(`SELECT %s FROM token WHERE id = ?`, getTokenCols()),
+		fmt.Sprintf(`SELECT %s FROM token t WHERE id = ?`, getTokenCols()),
 		id,
 	).Scan(
 		&c.ID,
@@ -209,7 +215,7 @@ func (db *UserModel) FindToken(id ID) *Token {
 func (db *UserModel) FindTokenBySymbol(symbol string) *Token {
 	var c Token
 	err := db.QueryRow(
-		fmt.Sprintf(`SELECT %s FROM token WHERE symbol = ?`, getTokenCols()),
+		fmt.Sprintf(`SELECT %s FROM token t WHERE symbol = ?`, getTokenCols()),
 		symbol,
 	).Scan(
 		&c.ID,
@@ -232,7 +238,7 @@ func (db *UserModel) FindTokenBySymbol(symbol string) *Token {
 func (db *UserModel) FindTokenByName(name string) *Token {
 	var c Token
 	err := db.QueryRow(
-		fmt.Sprintf(`SELECT %s FROM token WHERE name = ?`, getTokenCols()),
+		fmt.Sprintf(`SELECT %s FROM token t WHERE name = ?`, getTokenCols()),
 		name,
 	).Scan(
 		&c.ID,
@@ -386,5 +392,14 @@ func (db *UserModel) AddToBalance(
 }
 
 func getTokenCols() string {
-	return `id, creatorId, name, symbol, totalSupply, purpose, blockchainAddress, txAddress, logo`
+	return `
+		t.id,
+		t.creatorId,
+		t.name,
+		t.symbol,
+		t.totalSupply,
+		t.purpose,
+		t.blockchainAddress,
+		t.txAddress,
+		t.logo`
 }

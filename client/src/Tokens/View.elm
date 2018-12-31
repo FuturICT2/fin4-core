@@ -33,7 +33,7 @@ white =
 render : Context -> Model -> Html Msg
 render ctx model =
     div [ style [ ( "padding-top", "15px" ), ( "width", "100%" ) ] ]
-        [ header [ style [ ( "text-align", "center" ) ] ] [ text "Tokens" ]
+        [ header [ style [ ( "text-align", "center" ) ] ] [ text "Demo tokens" ]
         , case model.error of
             Just _ ->
                 Error.renderMaybeError model.error
@@ -149,7 +149,7 @@ renderRow model token =
                     [ style
                         [ ( "margin-bottom", "15px" ) ]
                     ]
-                    [ text token.purpose
+                    [ text <| "total supply: " ++ token.totalSupply
                     ]
                 ]
             ]

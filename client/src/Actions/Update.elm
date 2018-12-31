@@ -4,6 +4,7 @@ import Actions.Command
     exposing
         ( addRewardsCmd
         , approveProposalCmd
+        , likeCmd
         , loadActionsCmd
         , submitProposalCmd
         )
@@ -60,6 +61,12 @@ update ctx msg model =
                     Dict.insert tokenId proposal model.claims
             in
             { model | claims = props } ! []
+
+        OnDoLikeResponse resp ->
+            model ! []
+
+        DoLike tokenId state ->
+            model ! [ likeCmd ctx tokenId state ]
 
         Mdl msg_ ->
             Material.update Mdl msg_ model
