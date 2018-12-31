@@ -1,8 +1,8 @@
-module CreateToken.StepName exposing (render)
+module CreateAction.StepName exposing (render)
 
 import Common.Error exposing (renderHttpError)
 import Common.Spinner as Spinner
-import CreateToken.Msg exposing (Msg(..))
+import CreateAction.Msg exposing (Msg(..))
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onInput)
@@ -18,40 +18,7 @@ import Material.Textfield as Textfield
 render ctx model =
     div
         []
-        [ div [ identiconStyle ] [ identicon "60px" model.name ]
-        , div [ style [ ( "margin", "30px 0 0 0" ) ] ]
-            [ p
-                [ style
-                    [ ( "margin", "0" )
-                    , ( "padding-left", "2px" )
-                    ]
-                ]
-                [ text "Enter name" ]
-            , input
-                [ inputStyle
-                , placeholder "e.g TreeCoin"
-                , value model.name
-                , onInput SetName
-                ]
-                []
-            ]
-        , div []
-            [ p
-                [ style
-                    [ ( "margin", "0" )
-                    , ( "padding-left", "2px" )
-                    ]
-                ]
-                [ text "Enter symbol" ]
-            , input
-                [ inputStyle
-                , placeholder "e.g TRR"
-                , value model.symbol
-                , onInput SetSymbol
-                ]
-                []
-            ]
-        , div
+        [ div
             []
             [ p
                 [ style
@@ -59,17 +26,17 @@ render ctx model =
                     , ( "padding-left", "2px" )
                     ]
                 ]
-                [ text "Enter action purpose" ]
+                [ text "What needs to be done?" ]
             , textarea
                 [ textareaStyle
                 , value model.description
-                , placeholder "e.g Plant a tree, proof it and get rewarded with Treecoins"
+                , placeholder "e.g take a picture of the UN building"
                 , onInput SetDescription
                 , rows 5
                 ]
                 []
             ]
-        , renderHttpError model.createTokenError
+        , renderHttpError model.createActionError
         ]
 
 

@@ -68,7 +68,7 @@ renderData : Context -> Model -> Tokens -> Html Msg
 renderData ctx model tokens =
     let
         sorted =
-            reverse tokens.entries
+            tokens.entries
 
         userId =
             case ctx.user of

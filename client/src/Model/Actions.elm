@@ -4,8 +4,22 @@ import Json.Decode as JD
 import Json.Decode.Pipeline as JP
 
 
+type alias Claim =
+    { id : Int
+    , userId : Int
+    , userName : String
+    , isApproved : Bool
+    , text : String
+    }
+
+
 type alias Action =
-    { name : String
+    { id : Int
+    , purpose : String
+    , name : String
+    , symbol : String
+    , claims : List Claim
+    , creatorId : Int
     }
 
 
@@ -23,10 +37,25 @@ init =
 actionsDecoder : JD.Decoder Actions
 actionsDecoder =
     JP.decode Actions
-        |> JP.required "entries" (JD.list actionDecoder)
+        |> JP.required "Entries" (JD.list actionDecoder)
 
 
 actionDecoder : JD.Decoder Action
 actionDecoder =
     JP.decode Action
-        |> JP.required "Names" JD.string
+        |> JP.required "ID" JD.int
+        |> JP.required "Purpose" JD.string
+        |> JP.required "Name" JD.string
+        |> JP.required "Symbol" JD.string
+        |> JP.required "Claims" (JD.list claimDecoder)
+        |> JP.required "CreatorID" JD.int
+
+
+claimDecoder : JD.Decoder Claim
+claimDecoder =
+    JP.decode Claim
+        |> JP.required "ID" JD.int
+        |> JP.required "UserID" JD.int
+        |> JP.required "UserName" JD.string
+        |> JP.required "IsApproved" JD.bool
+        |> JP.required "Text" JD.string

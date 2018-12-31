@@ -1,10 +1,10 @@
-module CreateToken.View exposing (render)
+module CreateAction.View exposing (render)
 
 import Common.Styles exposing (toMdlCss)
-import CreateToken.Model exposing (Model)
-import CreateToken.Msg exposing (Msg(..))
-import CreateToken.StepName as StepName
-import CreateToken.StepSuccess as StepSuccess
+import CreateAction.Model exposing (Model)
+import CreateAction.Msg exposing (Msg(..))
+import CreateAction.StepName as StepName
+import CreateAction.StepSuccess as StepSuccess
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
@@ -39,7 +39,7 @@ render ctx model =
                 , ( "margin", "30px 0px" )
                 ]
             ]
-            [ text "Create a token" ]
+            [ text "Create an action" ]
         , div []
             [ case model.step of
                 0 ->
@@ -58,13 +58,13 @@ render ctx model =
 renderActionButton model =
     let
         buttonContent =
-            case model.isCreatingToken of
+            case model.isCreatingAction of
                 True ->
                     div [ style [ ( "margin-top", "10px" ) ] ]
                         [ Spinner.spinner [ Spinner.active True ] ]
 
                 False ->
-                    text "confirm"
+                    text "Create"
     in
     case model.step of
         0 ->
@@ -74,7 +74,7 @@ renderActionButton model =
                     model.mdl
                     [ Button.ripple
                     , Button.raised
-                    , Options.onClick PostToken
+                    , Options.onClick PostAction
                     , toMdlCss buttonStyle
                     ]
                     [ buttonContent ]

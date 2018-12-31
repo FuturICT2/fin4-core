@@ -3,6 +3,8 @@ module Main.Update exposing (mountRoute, update)
 import Actions.Command
 import Actions.Model
 import Actions.Update
+import CreateAction.Model
+import CreateAction.Update
 import CreateToken.Model
 import CreateToken.Update
 import Debug
@@ -59,6 +61,7 @@ update msg model =
                         }
                     , showMobileNav = False
                     , createToken = CreateToken.Model.init
+                    , createAction = CreateAction.Model.init
                 }
 
         OnCheckSessionResponse resp ->
@@ -104,6 +107,13 @@ update msg model =
             in
             { model | createToken = childModel } ! [ Cmd.map CreateToken cmd ]
 
+        CreateAction msg_ ->
+            let
+                ( childModel, cmd ) =
+                    CreateAction.Update.update model.context msg_ model.createAction
+            in
+            { model | createAction = childModel } ! [ Cmd.map CreateAction cmd ]
+
         UserLogin msg_ ->
             let
                 ( userlogin, userloginCmd ) =
@@ -124,10 +134,10 @@ update msg model =
                     case userlogin.user of
                         Just _ ->
                             if userlogin.isNewUser then
-                                [ newUrl "#welcome" ]
+                                [ newUrl "#actions" ]
 
                             else
-                                [ newUrl tokensPath ]
+                                [ newUrl "#actions" ]
 
                         _ ->
                             [ Cmd.map UserLogin userloginCmd ]

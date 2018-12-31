@@ -5,7 +5,7 @@ module UserLogin.View exposing (helperStyle, loginWrapStyle, onKeyDown, render)
 import Common.Error exposing (renderHttpError)
 import Debug exposing (log)
 import Html exposing (..)
-import Html.Attributes exposing (href, style)
+import Html.Attributes exposing (href, src, style)
 import Html.Events exposing (keyCode, on, onClick)
 import Json.Decode as JD
 import Main.Routing exposing (loginPath, signupPath)

@@ -1,6 +1,7 @@
 module Main.Model exposing (Model, initModel)
 
 import Actions.Model
+import CreateAction.Model
 import CreateToken.Model
 import Main.Context exposing (Context, initContext)
 import Main.Flags exposing (Flags)
@@ -20,6 +21,7 @@ type alias Model =
     , portfolio : Portfolio.Model.Model
     , actions : Actions.Model.Model
     , createToken : CreateToken.Model.Model
+    , createAction : CreateAction.Model.Model
     , userlogin : UserLogin.Model.Model
     }
 
@@ -34,5 +36,6 @@ initModel flags route =
     , portfolio = Portfolio.Model.init
     , actions = Actions.Model.init
     , createToken = CreateToken.Model.init
+    , createAction = CreateAction.Model.init
     , userlogin = UserLogin.Model.init
     }

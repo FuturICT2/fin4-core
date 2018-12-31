@@ -42,7 +42,7 @@ update ctx msg model =
                         , signupError = Nothing
                         , isNewUser = True
                     }
-                        ! [ newUrl "#welcome" ]
+                        ! [ newUrl "#actions" ]
 
                 Err error ->
                     { model | isSigningUp = False, signupError = Just error } ! []

@@ -21,13 +21,14 @@ type Token struct {
 	Logo              string
 	FavouriteCount    int
 	DidUserLike       bool
+	Claims            []Claim
 }
 
 // FindTokens finds all tokens
 func (db *UserModel) FindTokens(userID ID) ([]Token, error) {
 	result := []Token{}
 	rows, err := db.Query(
-		fmt.Sprintf(`SELECT %s FROM token`, getTokenCols()),
+		fmt.Sprintf(`SELECT %s FROM token ORDER BY id DESC`, getTokenCols()),
 	)
 	if err != nil {
 		logrus.WithFields(logrus.Fields{
@@ -51,6 +52,14 @@ func (db *UserModel) FindTokens(userID ID) ([]Token, error) {
 		)
 		c.FavouriteCount = db.CountLikes(c.ID)
 		c.DidUserLike = db.DidUserLike(userID, c.ID)
+		claims, err := db.GetTokenClaims(userID, c.ID)
+		if err != nil {
+			logrus.WithFields(logrus.Fields{
+				"error": err.Error(),
+			}).Error("models:FindTokens:e1.2")
+			return nil, err
+		}
+		c.Claims = claims
 		result = append(result, c)
 	}
 	if err := rows.Err(); err != nil {
@@ -67,6 +76,7 @@ type Balance struct {
 	UserID            ID
 	TokenID           ID
 	Balance           decimaldt.Decimal
+	Reserved          decimaldt.Decimal
 	TokenName         string
 	TokenSymbol       string
 	LogoFile          string
@@ -79,6 +89,7 @@ func (db *UserModel) GetUserBalances(userId ID) ([]Balance, error) {
 	rows, err := db.Query(`SELECT
 			b.tokenId,
 			b.balance,
+			b.reserved,
 			t.name,
 			t.symbol,
 			t.logo,
@@ -101,6 +112,7 @@ func (db *UserModel) GetUserBalances(userId ID) ([]Balance, error) {
 		err = rows.Scan(
 			&entry.TokenID,
 			&entry.Balance,
+			&entry.Reserved,
 			&entry.TokenName,
 			&entry.TokenSymbol,
 			&entry.LogoFile,
@@ -134,6 +146,68 @@ func (db *UserModel) CountLikes(tokenID ID) int {
 		tokenID,
 	).Scan(&count)
 	return count
+}
+
+// Balance balance type
+type Claim struct {
+	ID         ID
+	UserID     ID
+	UserName   string
+	TokenID    ID
+	Text       string
+	IsApproved bool
+	LogoFile   string
+}
+
+func (db *UserModel) GetTokenClaims(userID ID, tokenID ID) ([]Claim, error) {
+	result := []Claim{}
+	rows, err := db.Query(`SELECT
+			c.id,
+			c.tokenId,
+			c.userId,
+			u.name,
+			c.text,
+			c.logoFile,
+			c.isApproved
+		FROM claim c
+		LEFT JOIN
+			user u ON u.id = c.userId
+		WHERE c.tokenId=?`,
+		tokenID,
+	)
+	if err != nil {
+		logrus.WithFields(
+			logrus.Fields{"error": err.Error()},
+		).Error("GetTokenClaims:1")
+		return result, ErrServerError
+	}
+	defer rows.Close()
+	for rows.Next() {
+		entry := Claim{}
+		err = rows.Scan(
+			&entry.ID,
+			&entry.TokenID,
+			&entry.UserID,
+			&entry.UserName,
+			&entry.Text,
+			&entry.LogoFile,
+			&entry.IsApproved,
+		)
+		if err != nil {
+			logrus.WithFields(
+				logrus.Fields{"error": err.Error()},
+			).Error("GetTokenClaims:2")
+			return result, ErrServerError
+		}
+		result = append(result, entry)
+	}
+	if err = rows.Err(); err != nil {
+		logrus.WithFields(
+			logrus.Fields{"error": err.Error()},
+		).Error("GetTokenClaims:3")
+		return result, ErrServerError
+	}
+	return result, nil
 }
 
 // DidUserLike returns true or false based on if user liked a token
@@ -281,10 +355,6 @@ func (db *UserModel) InsertToken(
 	token.BlockchainAddress = blockchainAddress
 	token.TxAddress = txAddress
 	token.Logo = logo
-	db.InsertBalance(userID, ID(tokenID), "10")
-	// @TODO use blockahin for minting
-	db.AddToBalance(userID, 1, "2")
-	db.AddToBalance(1, 1, "1")
 	return &token, nil
 }
 
