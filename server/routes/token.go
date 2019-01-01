@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"log"
 	"net/http"
 	"strconv"
 
@@ -13,6 +14,7 @@ import (
 func (env *Env) TokensList(c *gin.Context) {
 	user := mustGetUser(c)
 	userModel := env.DB.NewUserModel()
+	log.Println("---------------------------", user.ID)
 	tokens, err := userModel.FindTokens(user.ID)
 	if err != nil {
 		c.String(http.StatusBadRequest, err.Error())

@@ -10,6 +10,7 @@ type alias Claim =
     , userName : String
     , isApproved : Bool
     , text : String
+    , logoFile : String
     }
 
 
@@ -67,3 +68,4 @@ claimDecoder =
         |> JP.required "UserName" JD.string
         |> JP.required "IsApproved" JD.bool
         |> JP.required "Text" JD.string
+        |> JP.required "LogoFile" JD.string

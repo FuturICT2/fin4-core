@@ -74,7 +74,7 @@ func (b *Ethereum) DeployMintable(
 ) (common.Address, *types.Transaction, error) {
 	address, tx, _, err := DeployMintable(
 		b.auth,
-		b.sim,
+		b.rpc,
 		name_,
 		symbol_,
 		decimals_,
@@ -95,7 +95,7 @@ func (b *Ethereum) Mint(
 	toAddress common.Address,
 	amount int64,
 ) (*types.Transaction, error) {
-	mintable, err := NewMintable(tokenAddress, b.sim)
+	mintable, err := NewMintable(tokenAddress, b.rpc)
 	if err != nil {
 		logrus.WithFields(logrus.Fields{
 			"error": err.Error(),

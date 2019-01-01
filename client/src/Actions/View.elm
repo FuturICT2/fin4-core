@@ -88,7 +88,7 @@ renderTokenInfo ctx model token =
                 [ identicon "20px" token.name
                 ]
             , div []
-                [ b
+                [ header
                     [ style
                         [ ( "margin", "0 0 10px 0" )
                         , ( "padding", "10px" )
@@ -97,7 +97,6 @@ renderTokenInfo ctx model token =
                     ]
                     [ text token.name
                     ]
-                , span [] [ text <| " approver: " ++ token.creatorName ]
                 ]
             ]
         , div
@@ -106,7 +105,7 @@ renderTokenInfo ctx model token =
                 [ style
                     [ ( "padding", "7px" )
                     , ( "line-height", "1" )
-                    , ( "font-size", "26px" )
+                    , ( "font-size", "18px" )
                     ]
                 ]
                 [ text token.purpose
@@ -241,7 +240,21 @@ renderClaim model showApproveBtn actionId claim =
             , ( "margin", "3px" )
             ]
         ]
-        [ b []
+        [ case claim.logoFile == "" of
+            True ->
+                span [] []
+
+            False ->
+                div
+                    [ style
+                        [ ( "width", "100%" )
+                        , ( "height", "200px" )
+                        , ( "margin-bottom", "15px" )
+                        , ( "background", "url(" ++ claim.logoFile ++ ") no-repeat center center" )
+                        ]
+                    ]
+                    []
+        , b []
             [ text <|
                 claim.userName
             ]
@@ -265,17 +278,22 @@ renderClaimForm ctx model token =
         [ style [ ( "margin", "10px 3px 0 3px" ) ] ]
         [ div
             []
-            [ div []
-                [ img
-                    [ src v.contents
-                    , style
-                        [ ( "max-width", "90%" )
-                        , ( "max-height", "200px" )
-                        , ( "margin-bottom", "25px" )
+            [ case v.contents == "" of
+                True ->
+                    div [] []
+
+                False ->
+                    div []
+                        [ img
+                            [ src v.contents
+                            , style
+                                [ ( "max-width", "90%" )
+                                , ( "max-height", "200px" )
+                                , ( "margin-bottom", "25px" )
+                                ]
+                            ]
+                            []
                         ]
-                    ]
-                    []
-                ]
             , let
                 v =
                     Maybe.withDefault "" <| Dict.get token.id model.claims

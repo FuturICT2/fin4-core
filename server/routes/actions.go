@@ -61,7 +61,7 @@ func (env *Env) ApproveActionClaim(c *gin.Context) {
 		c.String(http.StatusBadRequest, err.Error())
 		return
 	}
-	tx, err := env.Ethereum.Mint(
+	_, err = env.Ethereum.Mint(
 		common.HexToAddress(token.BlockchainAddress),
 		common.HexToAddress(doer.EthereumAddress),
 		1,
@@ -88,7 +88,7 @@ func (env *Env) NewActionClaim(c *gin.Context) {
 	}{}
 	c.BindJSON(&body)
 	var logoPath string
-	{
+	if body.Image64 != "" {
 		imgData, contentType, ext, err := img.FromBase64(body.Image64)
 		logoPath = fmt.Sprintf(
 			"tokenlogos/%d-%s.%s",
@@ -111,7 +111,7 @@ func (env *Env) NewActionClaim(c *gin.Context) {
 		}
 		logoPath = "https://s3.amazonaws.com/anychange/" + logoPath
 	}
-	if len(body.Proposal) < 1 || len(body.Proposal) > 10000 {
+	if (len(body.Proposal) < 1 || len(body.Proposal) > 10000) && body.Image64 == "" {
 		c.String(http.StatusBadRequest, "Proposal length should be between than 1 and 10000 characters")
 		return
 	}

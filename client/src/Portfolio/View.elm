@@ -33,7 +33,6 @@ render ctx model =
             , a [ onClick Main.Msg.UserLogout ] [ text "logout" ]
             , text ")"
             ]
-        , div [] [ text <| "Your ethereum address: " ++ ethereumAddress ]
         , hr [] []
         , header [] [ text "Your tokens" ]
         , case model.error of
