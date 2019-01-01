@@ -27,14 +27,14 @@ render ctx model =
                 Nothing ->
                     ( "", "" )
     in
-    div []
-        [ header [ style [ ( "text-align", "center" ) ] ]
+    div [ style [ ( "text-align", "center" ) ] ]
+        [ header []
             [ text <| userName ++ " ("
             , a [ onClick Main.Msg.UserLogout ] [ text "logout" ]
             , text ")"
-            , hr [] []
-            , header [] [ text "Your tokens" ]
             ]
+        , hr [] []
+        , header [] [ text "Your tokens" ]
         , case model.error of
             Just _ ->
                 Error.renderMaybeError model.error

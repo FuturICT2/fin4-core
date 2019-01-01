@@ -29,7 +29,7 @@ render ctx model =
                 [ text "Enter name" ]
             , input
                 [ inputStyle
-                , placeholder "e.g TreeCoin"
+                , placeholder "e.g SchoolCoin"
                 , value model.name
                 , onInput SetName
                 ]
@@ -45,7 +45,7 @@ render ctx model =
                 [ text "Enter symbol" ]
             , input
                 [ inputStyle
-                , placeholder "e.g TRR"
+                , placeholder "e.g SCL"
                 , value model.symbol
                 , onInput SetSymbol
                 ]
@@ -63,7 +63,7 @@ render ctx model =
             , textarea
                 [ textareaStyle
                 , value model.description
-                , placeholder "e.g Plant a tree, proof it and get rewarded with Treecoins"
+                , placeholder "e.g Take a picture of a school, post it here with it's location and get rewarded with SchoolCoin"
                 , onInput SetDescription
                 , rows 5
                 ]

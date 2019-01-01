@@ -26,19 +26,9 @@ render model =
                 [ href actionsPath
                 , bhNavItemStyle
                 , activeRouteStyle (model.context.route == ActionsRoute)
-                , style [ ( "width", "25%" ) ]
+                , style [ ( "width", "33%" ) ]
                 ]
                 [ Icon.view "group_work"
-                    [ Icon.size36
-                    ]
-                ]
-            , a
-                [ href tokensPath
-                , bhNavItemStyle
-                , activeRouteStyle (model.context.route == TokensRoute)
-                , style [ ( "width", "25%" ) ]
-                ]
-                [ Icon.view "list"
                     [ Icon.size36
                     ]
                 ]
@@ -46,7 +36,7 @@ render model =
                 [ href newTokenPath
                 , bhNavItemStyle
                 , activeRouteStyle (model.context.route == CreateTokenRoute)
-                , style [ ( "width", "25%" ) ]
+                , style [ ( "width", "33%" ) ]
                 ]
                 [ Icon.view "add_circle_outline"
                     [ Icon.size36
@@ -56,7 +46,7 @@ render model =
                 [ href portfolioPath
                 , bhNavItemStyle
                 , activeRouteStyle (model.context.route == PortfolioRoute)
-                , style [ ( "width", "25%" ) ]
+                , style [ ( "width", "34%" ) ]
                 ]
                 [ Icon.view "account_box"
                     [ Icon.size36

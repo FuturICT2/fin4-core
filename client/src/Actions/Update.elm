@@ -4,11 +4,13 @@ import Actions.Command
     exposing
         ( addRewardsCmd
         , approveProposalCmd
+        , likeCmd
         , loadActionsCmd
         , submitProposalCmd
         )
 import Actions.Model exposing (Model)
 import Actions.Msg exposing (Msg(..))
+import Actions.Ports exposing (fileSelected)
 import Debug
 import Dict exposing (Dict)
 import Main.Context exposing (Context)
@@ -45,8 +47,11 @@ update ctx msg model =
             let
                 props =
                     Dict.remove actionId model.claims
+
+                imgs =
+                    Dict.remove actionId model.claimImages
             in
-            { model | claims = props } ! [ submitProposalCmd ctx model actionId proposal ]
+            { model | claims = props, claimImages = imgs } ! [ submitProposalCmd ctx model actionId proposal ]
 
         ApproveClaim claimId ->
             model ! [ approveProposalCmd ctx model claimId ]
@@ -60,6 +65,30 @@ update ctx msg model =
                     Dict.insert tokenId proposal model.claims
             in
             { model | claims = props } ! []
+
+        OnDoLikeResponse resp ->
+            model ! []
+
+        DoLike tokenId state ->
+            model ! [ likeCmd ctx tokenId state ]
+
+        ImageSelected tokenId ->
+            model ! [ fileSelected <| "imgclaim-" ++ toString tokenId ]
+
+        ImageRead data ->
+            let
+                newImage =
+                    { contents = data.contents
+                    , filename = data.filename
+                    }
+
+                imgs =
+                    Dict.insert data.tokenId newImage model.claimImages
+            in
+            { model
+                | claimImages = imgs
+            }
+                ! [ Cmd.none ]
 
         Mdl msg_ ->
             Material.update Mdl msg_ model

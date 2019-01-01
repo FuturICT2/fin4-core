@@ -30,7 +30,7 @@ func MustNewEthereum() *Ethereum {
 	if err != nil {
 		logrus.Fatal("Failed to connect to the Ethereum client: %v", err)
 	}
-	// keys
+	// server key
 	rawKey := util.MustGetenv("ETH_KEY_RAW")
 	rawKeyECDSA, err := crypto.HexToECDSA(rawKey)
 	if err != nil {
@@ -65,24 +65,6 @@ func (b *Ethereum) CreateNewAddress() (string, error) {
 	return acc.Address.String(), err
 }
 
-// DeployNewToken deployes new token to Ethereum from server account
-func (b *Ethereum) DeployNewToken(
-	initialSupply *big.Int,
-	tokenName string,
-	decimals uint8,
-	tokenSymbol string,
-) (common.Address, *types.Transaction, error) {
-	address, tx, _, err := DeployToken(
-		b.auth, b.sim, initialSupply, tokenName, decimals, tokenSymbol)
-	if err != nil {
-		logrus.WithFields(logrus.Fields{
-			"error": err.Error(),
-		}).Error("ethereum:DeployNewToken:e1")
-		return address, nil, errors.New("Error deploying token contract to Ethereum")
-	}
-	return address, tx, nil
-}
-
 // DeployMintable deployes new Mintable token to Ethereum from server account
 func (b *Ethereum) DeployMintable(
 	name_ string,
@@ -91,7 +73,13 @@ func (b *Ethereum) DeployMintable(
 	minter common.Address,
 ) (common.Address, *types.Transaction, error) {
 	address, tx, _, err := DeployMintable(
-		b.auth, b.rpc, name_, symbol_, decimals_, minter)
+		b.auth,
+		b.rpc,
+		name_,
+		symbol_,
+		decimals_,
+		minter,
+	)
 	if err != nil {
 		logrus.WithFields(logrus.Fields{
 			"error": err.Error(),
@@ -99,4 +87,29 @@ func (b *Ethereum) DeployMintable(
 		return address, nil, errors.New("Error deploying token contract to Ethereum")
 	}
 	return address, tx, nil
+}
+
+// DeployMintable deployes new Mintable token to Ethereum from server account
+func (b *Ethereum) Mint(
+	tokenAddress common.Address,
+	toAddress common.Address,
+	amount int64,
+) (*types.Transaction, error) {
+	mintable, err := NewMintable(tokenAddress, b.rpc)
+	if err != nil {
+		logrus.WithFields(logrus.Fields{
+			"error": err.Error(),
+		}).Error("ethereum:Mint:1")
+		return nil, err
+	}
+	// @TODO change b.auth to the address of the user who is minting the new
+	// tokens i.e claim approver
+	txAddress, err := mintable.Mint(b.auth, toAddress, big.NewInt(amount))
+	if err != nil {
+		logrus.WithFields(logrus.Fields{
+			"error": err.Error(),
+		}).Error("ethereum:Mint:2")
+		return nil, err
+	}
+	return txAddress, nil
 }
