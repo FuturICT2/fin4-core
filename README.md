@@ -11,8 +11,8 @@ Concept paper: [Finance4.0](https://futurict2.eu/finance-4-0-concept-wp3-interim
 
 Slack: todo
 
-# FInance 4.0 demonstrator | This repository
-This repository contains a backend server (written in Golang) and a web front-end (written in Elm)) of the Finance 4.0 demonstrator. THe blockchain system used to manage the tokens is Ethereum.
+# Finance 4.0 demonstrator | This repository
+This repository contains a backend server (written in Golang) and a web front-end (written in Elm) of the Finance 4.0 demonstrator. The smart contracts are written in Solidity for the Ethereum platform.
 
 # Contribute!
 We are looking for collaboration from the Open Source community. The project needs enhancements regarding code quality, documentation, and testing. To contribute to the project please take a look at [open issues](https://github.com/FuturICT2/fin4-core/issues). [Here](CONTRIBUTIONS.md) you can find more details on the architecture of the code and how to run the development environment on your local machine.
