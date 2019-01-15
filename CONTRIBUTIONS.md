@@ -18,10 +18,16 @@ export GOBIN=$GOPATH/bin
 $ git clone https://github.com/FuturICT2/fin4-core.git
 $ cd fin4-core
 $ go get
-$ npm install
-$ elm package install
+$ npm install: install server dependencies
+$ elm package install: install elm web app dependencies
 ```
 # Setting up database:
+
+sudo apt-get install mysql-server
+sudo mysql_secure_installation
+set the root password
+sudo mysql -u root -p
+enter password
 
 Next, you need to create a new database called fin4. For this, enter mysql and execute the following command:
 ```SQL
