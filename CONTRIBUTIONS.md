@@ -1,9 +1,16 @@
 # Dependencies
-- Golang 1.10 (https://golang.org/doc/install)
-- Ganache-cli (https://github.com/trufflesuite/ganache-cli)
-- gin (https://github.com/codegangsta/gin)
-- Elmlang 0.18.0 (you must not use a newer version)
-- MySql server
+- Golang 1.10 (https://golang.org/doc/install): on Ubuntu 18.10, just do it via the package manager
+
+export GOROOT=/usr/local/go -> try whereis go, and then see where the root is installed
+export GOPATH=$HOME/Projects/goprojects -> folder where fin-4 will be installed in
+export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
+export GOBIN=$GOPATH/bin
+
+
+- Ganache-cli (https://github.com/trufflesuite/ganache-cli): npm install -g ganache-cli
+- gin (https://github.com/codegangsta/gin): go get github.com/codegangsta/gin
+- Elmlang 0.18.0 (you must not use a newer version): npm install -g elm@elm0.18.0
+- MySql server: apt-get insall mysql-server
 
 
 # Install
