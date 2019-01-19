@@ -20,6 +20,7 @@ commands ctx =
             Cmd.none
 
 
+loadPortfolioCmd : Context -> Int -> Cmd Msg
 loadPortfolioCmd ctx page =
     get ctx
         OnLoadPortfolioResponse

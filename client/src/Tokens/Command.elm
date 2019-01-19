@@ -26,6 +26,7 @@ commands ctx =
             Cmd.none
 
 
+likeCmd : Context -> Int -> Bool -> Cmd Msg
 likeCmd ctx tokenId state =
     postWithCsrf ctx
         OnDoLikeResponse
@@ -37,6 +38,7 @@ likeCmd ctx tokenId state =
         emptyResponseDecoder
 
 
+loadTokensCmd : Context -> Int -> Cmd Msg
 loadTokensCmd ctx page =
     get ctx
         OnLoadTokensResponse

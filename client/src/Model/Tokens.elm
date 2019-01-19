@@ -1,4 +1,4 @@
-module Model.Tokens exposing (Token, Tokens, init, tokenDecoder, tokensDecoder)
+module Model.Tokens exposing (Claim, Liker, Miner, Token, Tokens, init, tokenDecoder, tokensDecoder)
 
 import Json.Decode as JD
 import Json.Decode.Pipeline as JP

@@ -58,6 +58,7 @@ render model =
 -- Common
 
 
+activeRouteStyle : Bool -> Attribute a
 activeRouteStyle isActive =
     case isActive of
         True ->

@@ -15,7 +15,7 @@ import Material.Button as Button
 import Material.Icon as Icon
 import Material.Options as Options exposing (css)
 import Material.Tabs as Tabs
-import Model.Tokens exposing (Token)
+import Model.Tokens exposing (Claim, Liker, Miner, Token)
 import Token.Model exposing (Model)
 import Token.Msg exposing (Msg(..))
 
@@ -32,11 +32,13 @@ render ctx model tokenId =
         ]
 
 
+renderSpinner : Html Msg
 renderSpinner =
     div []
         [ Spinner.render "One moment..." ]
 
 
+renderToken : Context -> Model -> Token -> Html Msg
 renderToken ctx model token =
     div []
         [ div
@@ -111,6 +113,7 @@ renderTabs ctx model token =
         ]
 
 
+renderLikers : Context -> Model -> Token -> Html Msg
 renderLikers ctx model token =
     case List.length token.likers of
         0 ->
@@ -127,6 +130,7 @@ renderLikers ctx model token =
                 List.map (renderLiker token) token.likers
 
 
+renderLiker : Token -> Liker -> Html Msg
 renderLiker token liker =
     div
         [ style
@@ -141,6 +145,7 @@ renderLiker token liker =
         ]
 
 
+renderMiners : Context -> Model -> Token -> Html Msg
 renderMiners ctx model token =
     case List.length token.miners of
         0 ->
@@ -157,6 +162,7 @@ renderMiners ctx model token =
                 List.map (renderMiner token) token.miners
 
 
+renderMiner : Token -> Miner -> Html Msg
 renderMiner token miner =
     div
         [ style
@@ -180,6 +186,7 @@ renderMiner token miner =
         ]
 
 
+renderTokenClaims : Context -> Model -> Token -> Html Msg
 renderTokenClaims ctx model token =
     let
         likeColor =
@@ -223,6 +230,7 @@ renderTokenClaims ctx model token =
                 List.map (renderClaim model showApproveBtn token.id) token.claims
 
 
+renderClaim : Model -> Bool -> Int -> Claim -> Html Msg
 renderClaim model showApproveBtn tokenId claim =
     let
         btn =
@@ -275,6 +283,7 @@ renderClaim model showApproveBtn tokenId claim =
         ]
 
 
+renderToggleClaimButton : Context -> Model -> Token -> Html Msg
 renderToggleClaimButton ctx model token =
     Button.render Mdl
         [ 0 ]
@@ -287,6 +296,7 @@ renderToggleClaimButton ctx model token =
         [ text <| "Mine " ++ token.symbol ]
 
 
+renderClaimForm : Context -> Model -> Token -> Html Msg
 renderClaimForm ctx model token =
     let
         v =
@@ -358,6 +368,7 @@ renderClaimForm ctx model token =
         ]
 
 
+imgInputStyle : Attribute a
 imgInputStyle =
     style
         [ ( "position", "absolute" )
@@ -372,6 +383,7 @@ imgInputStyle =
         ]
 
 
+tokenControlsStyle : Attribute a
 tokenControlsStyle =
     style
         [ ( "margin", "15px 0" )
@@ -379,6 +391,7 @@ tokenControlsStyle =
         ]
 
 
+tokenControlStyle : Attribute a
 tokenControlStyle =
     style
         [ ( "border-right", "1px solid #ddd" )
@@ -388,6 +401,7 @@ tokenControlStyle =
         ]
 
 
+tokenButtonsStyle : Attribute a
 tokenButtonsStyle =
     style
         [ ( "border-top", "1px solid #ddd" )
@@ -397,6 +411,7 @@ tokenButtonsStyle =
         ]
 
 
+buttonStyle : Attribute a
 buttonStyle =
     style
         [ ( "width", "100%" )
@@ -423,18 +438,21 @@ textareaStyle =
         ]
 
 
+cardBtnsStyle : Attribute a
 cardBtnsStyle =
     style
         [ ( "border-top", "1px solid #dd" )
         ]
 
 
+cardBtnStyle : Attribute a
 cardBtnStyle =
     style
         [ ( "text-align", "center" )
         ]
 
 
+claimButtonStyle : Attribute a
 claimButtonStyle =
     style
         [ ( "width", "100%" )
@@ -442,6 +460,7 @@ claimButtonStyle =
         ]
 
 
+claimFormContainerStyle : Attribute a
 claimFormContainerStyle =
     style
         [ ( "margin", "10px 0px 0 0px" )
@@ -451,6 +470,7 @@ claimFormContainerStyle =
         ]
 
 
+imgSelectorContainer : String -> Attribute a
 imgSelectorContainer bgContents =
     style
         [ -- ( "background-image", "URL(" ++ bgContents ++ ") no-repeat center center fixed" )
@@ -461,6 +481,7 @@ imgSelectorContainer bgContents =
         ]
 
 
+imgIconContainerStyle : Attribute a
 imgIconContainerStyle =
     style
         [ ( "margin-top", "15px" )

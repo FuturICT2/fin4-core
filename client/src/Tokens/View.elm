@@ -64,6 +64,7 @@ renderTokens ctx model tokens =
         ]
 
 
+renderToken : Context -> Model -> Token -> Html Msg
 renderToken ctx model token =
     div
         [ style
@@ -80,6 +81,7 @@ renderToken ctx model token =
         ]
 
 
+renderTokenInfo : Context -> Model -> Token -> Html Msg
 renderTokenInfo ctx model token =
     let
         likeBackground =
@@ -155,6 +157,7 @@ renderTokenInfo ctx model token =
         ]
 
 
+renderTokenControls : Context -> Model -> Token -> Html Msg
 renderTokenControls ctx model token =
     let
         likeBackground =
@@ -207,6 +210,7 @@ renderTokenControls ctx model token =
         ]
 
 
+renderEmpty : Html Msg
 renderEmpty =
     div []
         [ div
@@ -219,6 +223,7 @@ renderEmpty =
         ]
 
 
+buttonStyle : Attribute a
 buttonStyle =
     style
         [ ( "width", "100%" )
@@ -232,12 +237,14 @@ buttonStyle =
         ]
 
 
+cardBtnsStyle : Attribute a
 cardBtnsStyle =
     style
         [ ( "border-top", "1px solid #dd" )
         ]
 
 
+cardBtnStyle : Attribute a
 cardBtnStyle =
     style
         [ ( "text-align", "center" )

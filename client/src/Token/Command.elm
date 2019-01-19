@@ -27,6 +27,7 @@ commands ctx tokenId =
             Cmd.none
 
 
+loadTokenCmd : Context -> Int -> Cmd Msg
 loadTokenCmd ctx tokenId =
     get ctx
         OnTokenLoadResponse
@@ -57,6 +58,7 @@ submitProposalCmd ctx model tokenId proposal =
         emptyResponseDecoder
 
 
+likeCmd : Context -> Int -> Bool -> Cmd Msg
 likeCmd ctx tokenId state =
     let
         url =
@@ -81,6 +83,7 @@ encodeApproveProposal claimId =
         ]
 
 
+encodeSubmitProposal : Int -> String -> String -> JE.Value
 encodeSubmitProposal tokenId claim base64 =
     JE.object
         [ ( "tokenId", JE.int tokenId )
