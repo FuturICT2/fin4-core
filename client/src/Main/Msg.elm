@@ -1,8 +1,6 @@
 module Main.Msg exposing (Msg(..))
 
-import Actions.Msg
 import Common.Json exposing (EmptyResponse)
-import CreateAction.Msg
 import CreateToken.Msg
 import Homepage.Homepage
 import Http
@@ -23,12 +21,10 @@ type Msg
     | Mdl (Material.Msg Msg)
     | OnWindowResize Window.Size
     | Homepage Homepage.Homepage.Msg
-    | Tokens Tokens.Msg.Msg
     | Token Token.Msg.Msg
     | Portfolio Portfolio.Msg.Msg
-    | Actions Actions.Msg.Msg
+    | Tokens Tokens.Msg.Msg
     | CreateToken CreateToken.Msg.Msg
-    | CreateAction CreateAction.Msg.Msg
     | UserLoginMsg UserLogin.Msg.Msg
     | UserLogout
     | OnLogoutResponse (Result Http.Error EmptyResponse)

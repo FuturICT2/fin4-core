@@ -49,7 +49,6 @@ type alias Tokens =
     , count : Int
     , page : Int
     , limit : Int
-    , people : List User
     }
 
 
@@ -59,7 +58,6 @@ init =
     , count = 0
     , page = 0
     , limit = 0
-    , people = []
     }
 
 
@@ -70,7 +68,6 @@ tokensDecoder =
         |> JP.required "Count" JD.int
         |> JP.required "Limit" JD.int
         |> JP.required "Page" JD.int
-        |> JP.required "People" (JD.list userDecoder)
 
 
 tokenDecoder : JD.Decoder Token
@@ -82,8 +79,8 @@ tokenDecoder =
         |> JP.required "Symbol" JD.string
         |> JP.required "TotalSupply" JD.string
         |> JP.required "Claims" (JD.list claimDecoder)
-        |> JP.required "Miners" (JD.list minerDecoder)
-        |> JP.required "Likers" (JD.list likerDecoder)
+        |> JP.optional "Miners" (JD.list minerDecoder) []
+        |> JP.optional "Likers" (JD.list likerDecoder) []
         |> JP.required "CreatorID" JD.int
         |> JP.required "CreatorName" JD.string
         |> JP.required "FavouriteCount" JD.int

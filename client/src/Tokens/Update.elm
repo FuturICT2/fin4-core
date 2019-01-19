@@ -1,10 +1,15 @@
 module Tokens.Update exposing (update)
 
 import Debug
+import Dict exposing (Dict)
 import Main.Context exposing (Context)
 import Material
 import Model.Tokens exposing (tokensDecoder)
-import Tokens.Command exposing (likeCmd, loadTokensCmd)
+import Tokens.Command
+    exposing
+        ( likeCmd
+        , loadTokensCmd
+        )
 import Tokens.Model exposing (Model)
 import Tokens.Msg exposing (Msg(..))
 
@@ -21,20 +26,18 @@ update ctx msg model =
                     Debug.log (toString error)
                         { model
                             | tokens = Nothing
+                            , error = Just "Error loading your tokens, please try again!"
                         }
                         ! []
+
+        TickerTimout ->
+            model ! [ loadTokensCmd ctx 1 ]
 
         OnDoLikeResponse resp ->
             model ! []
 
-        SelectTab tab ->
-            { model | selectedTab = tab } ! []
-
         DoLike tokenId state ->
             model ! [ likeCmd ctx tokenId state ]
-
-        TickerTimout ->
-            model ! [ loadTokensCmd ctx 1 ]
 
         Mdl msg_ ->
             Material.update Mdl msg_ model

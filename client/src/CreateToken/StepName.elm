@@ -59,7 +59,7 @@ render ctx model =
                     , ( "padding-left", "2px" )
                     ]
                 ]
-                [ text "Enter action purpose" ]
+                [ text "Enter token purpose" ]
             , textarea
                 [ textareaStyle
                 , value model.description

@@ -1,12 +1,10 @@
 module Main.Routing exposing
     ( Route(..)
-    , actionsPath
     , fastSignupPath
     , forgotPassPath
     , homepagePath
     , loginPath
     , matchers
-    , newActionPath
     , newTokenPath
     , parseLocation
     , portfolioPath
@@ -22,12 +20,10 @@ import UrlParser exposing ((</>), Parser, int, map, oneOf, parseHash, s, string,
 type Route
     = NotFoundRoute
     | HomepageRoute
-    | TokensRoute
     | TokenRoute Int
     | PortfolioRoute
-    | ActionsRoute
+    | TokensRoute
     | CreateTokenRoute
-    | CreateActionRoute
     | UserLoginRoute
     | UserForgotRoute
     | UserForgotResetPassRoute Int String
@@ -39,12 +35,10 @@ matchers : Parser (Route -> a) a
 matchers =
     oneOf
         [ map HomepageRoute top
-        , map TokensRoute (s "tokens")
         , map TokenRoute (s "token" </> int)
         , map PortfolioRoute (s "portfolio")
-        , map ActionsRoute (s "actions")
+        , map TokensRoute (s "tokens")
         , map CreateTokenRoute (s "new")
-        , map CreateActionRoute (s "new-action")
         , map UserLoginRoute (s "login")
         , map UserSignupRoute (s "signup")
         , map UserFastSignupRoute (s "fsignup")
@@ -83,19 +77,9 @@ newTokenPath =
     "#new"
 
 
-newActionPath : String
-newActionPath =
-    "#new-action"
-
-
 portfolioPath : String
 portfolioPath =
     "#portfolio"
-
-
-actionsPath : String
-actionsPath =
-    "#actions"
 
 
 loginPath : String

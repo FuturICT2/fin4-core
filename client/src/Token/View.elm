@@ -223,7 +223,7 @@ renderTokenClaims ctx model token =
                 List.map (renderClaim model showApproveBtn token.id) token.claims
 
 
-renderClaim model showApproveBtn actionId claim =
+renderClaim model showApproveBtn tokenId claim =
     let
         btn =
             case claim.isApproved of
@@ -372,14 +372,14 @@ imgInputStyle =
         ]
 
 
-actionControlsStyle =
+tokenControlsStyle =
     style
         [ ( "margin", "15px 0" )
         , ( "border", "1px solid #ddd" )
         ]
 
 
-actionControlStyle =
+tokenControlStyle =
     style
         [ ( "border-right", "1px solid #ddd" )
         , ( "width", "33%" )
@@ -388,7 +388,7 @@ actionControlStyle =
         ]
 
 
-actionButtonsStyle =
+tokenButtonsStyle =
     style
         [ ( "border-top", "1px solid #ddd" )
         , ( "background", "#f2f2f2" )

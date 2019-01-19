@@ -8,9 +8,7 @@ import Main.Msg exposing (Msg(..))
 import Main.Routing
     exposing
         ( Route(..)
-        , actionsPath
         , homepagePath
-        , newActionPath
         , newTokenPath
         , portfolioPath
         , tokensPath
@@ -23,9 +21,9 @@ render model =
     div [ bhStyle ]
         [ div []
             [ a
-                [ href actionsPath
+                [ href tokensPath
                 , bhNavItemStyle
-                , activeRouteStyle (model.context.route == ActionsRoute)
+                , activeRouteStyle (model.context.route == TokensRoute)
                 , style [ ( "width", "33%" ) ]
                 ]
                 [ Icon.view "group_work"

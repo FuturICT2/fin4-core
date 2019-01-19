@@ -65,7 +65,7 @@ update ctx msg model =
                         , signupError = Nothing
                         , isNewUser = True
                     }
-                        ! [ newUrl "#actions" ]
+                        ! [ newUrl "#tokens" ]
 
                 Err error ->
                     { model | isSigningUp = False, signupError = Just error } ! []

@@ -1,10 +1,5 @@
 module Main.Update exposing (mountRoute, update)
 
-import Actions.Command
-import Actions.Model
-import Actions.Update
-import CreateAction.Model
-import CreateAction.Update
 import CreateToken.Model
 import CreateToken.Update
 import Debug
@@ -28,6 +23,7 @@ import Token.Command
 import Token.Model
 import Token.Update
 import Tokens.Command
+import Tokens.Model
 import Tokens.Update
 import UserLogin.Update
 
@@ -35,9 +31,6 @@ import UserLogin.Update
 mountRoute : Model -> ( Model, Cmd Msg )
 mountRoute model =
     case model.context.route of
-        TokensRoute ->
-            model ! [ Cmd.map Tokens <| Tokens.Command.commands model.context ]
-
         TokenRoute tokenId ->
             let
                 token =
@@ -48,8 +41,8 @@ mountRoute model =
         PortfolioRoute ->
             model ! [ Cmd.map Portfolio <| Portfolio.Command.commands model.context ]
 
-        ActionsRoute ->
-            model ! [ Cmd.map Actions <| Actions.Command.commands model.context ]
+        TokensRoute ->
+            model ! [ Cmd.map Tokens <| Tokens.Command.commands model.context ]
 
         _ ->
             model ! []
@@ -75,7 +68,6 @@ update msg model =
                         }
                     , showMobileNav = False
                     , createToken = CreateToken.Model.init
-                    , createAction = CreateAction.Model.init
                 }
 
         OnCheckSessionResponse resp ->
@@ -93,13 +85,6 @@ update msg model =
         Homepage msg_ ->
             model ! []
 
-        Tokens msg_ ->
-            let
-                ( childModel, cmd ) =
-                    Tokens.Update.update model.context msg_ model.tokens
-            in
-            { model | tokens = childModel } ! [ Cmd.map Tokens cmd ]
-
         Token msg_ ->
             let
                 ( childModel, cmd ) =
@@ -114,12 +99,12 @@ update msg model =
             in
             { model | portfolio = childModel } ! [ Cmd.map Portfolio cmd ]
 
-        Actions msg_ ->
+        Tokens msg_ ->
             let
                 ( childModel, cmd ) =
-                    Actions.Update.update model.context msg_ model.actions
+                    Tokens.Update.update model.context msg_ model.tokens
             in
-            { model | actions = childModel } ! [ Cmd.map Actions cmd ]
+            { model | tokens = childModel } ! [ Cmd.map Tokens cmd ]
 
         CreateToken msg_ ->
             let
@@ -127,13 +112,6 @@ update msg model =
                     CreateToken.Update.update model.context msg_ model.createToken
             in
             { model | createToken = childModel } ! [ Cmd.map CreateToken cmd ]
-
-        CreateAction msg_ ->
-            let
-                ( childModel, cmd ) =
-                    CreateAction.Update.update model.context msg_ model.createAction
-            in
-            { model | createAction = childModel } ! [ Cmd.map CreateAction cmd ]
 
         UserLoginMsg msg_ ->
             let
@@ -155,10 +133,10 @@ update msg model =
                     case userlogin.user of
                         Just _ ->
                             if userlogin.isNewUser then
-                                [ newUrl "#actions" ]
+                                [ newUrl "#tokens" ]
 
                             else
-                                [ newUrl "#actions" ]
+                                [ newUrl "#tokens" ]
 
                         _ ->
                             [ Cmd.map UserLoginMsg userloginCmd ]

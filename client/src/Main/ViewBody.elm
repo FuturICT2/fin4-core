@@ -1,7 +1,5 @@
 module Main.ViewBody exposing (render)
 
-import Actions.View
-import CreateAction.View
 import CreateToken.View
 import Homepage.Homepage
 import Html exposing (..)
@@ -27,11 +25,6 @@ render model =
                 Html.map Main.Msg.Tokens <|
                     Tokens.View.render model.context model.tokens
 
-        TokensRoute ->
-            ifAuth model <|
-                Html.map Main.Msg.Tokens <|
-                    Tokens.View.render model.context model.tokens
-
         TokenRoute tokenId ->
             ifAuth model <|
                 Html.map Main.Msg.Token <|
@@ -41,20 +34,15 @@ render model =
             ifAuth model <|
                 Portfolio.View.render model.context model.portfolio
 
-        ActionsRoute ->
+        TokensRoute ->
             ifAuth model <|
-                Html.map Main.Msg.Actions <|
-                    Actions.View.render model.context model.actions
+                Html.map Main.Msg.Tokens <|
+                    Tokens.View.render model.context model.tokens
 
         CreateTokenRoute ->
             ifAuth model <|
                 Html.map Main.Msg.CreateToken <|
                     CreateToken.View.render model.context model.createToken
-
-        CreateActionRoute ->
-            ifAuth model <|
-                Html.map Main.Msg.CreateAction <|
-                    CreateAction.View.render model.context model.createAction
 
         UserLoginRoute ->
             ifNotAuth model <| renderLogin model

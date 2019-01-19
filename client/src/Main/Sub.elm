@@ -1,11 +1,10 @@
 module Main.Sub exposing (subscriptions)
 
-import Actions.Sub
+import Tokens.Sub
 import Main.Model exposing (Model)
 import Main.Msg exposing (Msg(..))
 import Main.Routing exposing (Route(..))
 import Token.Sub
-import Tokens.Sub
 import WebSocket
 import Window exposing (..)
 
@@ -19,12 +18,6 @@ subscriptions model =
                     Sub.batch
                         [ Sub.map Tokens <|
                             Tokens.Sub.subscriptions model.context
-                        ]
-
-                ActionsRoute ->
-                    Sub.batch
-                        [ Sub.map Actions <|
-                            Actions.Sub.subscriptions model.context
                         ]
 
                 TokenRoute tokenId ->

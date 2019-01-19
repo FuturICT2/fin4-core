@@ -45,7 +45,7 @@ approveProposalCmd ctx model claimId =
 
 
 submitProposalCmd : Context -> Model -> Int -> String -> Cmd Msg
-submitProposalCmd ctx model actionId proposal =
+submitProposalCmd ctx model tokenId proposal =
     let
         v =
             Maybe.withDefault { contents = "", filename = "" } model.img
@@ -53,7 +53,7 @@ submitProposalCmd ctx model actionId proposal =
     postWithCsrf ctx
         SubmitProposalResponse
         "/create-claim"
-        (encodeSubmitProposal actionId proposal v.contents)
+        (encodeSubmitProposal tokenId proposal v.contents)
         emptyResponseDecoder
 
 
