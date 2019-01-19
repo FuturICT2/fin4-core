@@ -10,7 +10,6 @@ const app = Elm.Main.embed(document.getElementById('app'), {
 });
 
 app.ports.fileSelected.subscribe(function (id) {
-      var [txt, tokenId] = id.split("-")
       var node = document.getElementById(id);
       if (node === null) {
         return;
@@ -30,7 +29,6 @@ app.ports.fileSelected.subscribe(function (id) {
         var portData = {
           contents: base64encoded,
           filename: file.name,
-          tokenId: parseInt(tokenId)
         };
         // We call the `fileContentRead` port with the file data
         // which will be sent to our Elm runtime via Subscriptions.

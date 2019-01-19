@@ -10,6 +10,7 @@ import Main.User exposing (User)
 import Material
 import Navigation exposing (Location)
 import Portfolio.Msg
+import Token.Msg
 import Tokens.Msg
 import UserLogin.Msg
 import Window
@@ -23,10 +24,11 @@ type Msg
     | OnWindowResize Window.Size
     | Homepage Homepage.Homepage.Msg
     | Tokens Tokens.Msg.Msg
+    | Token Token.Msg.Msg
     | Portfolio Portfolio.Msg.Msg
     | Actions Actions.Msg.Msg
     | CreateToken CreateToken.Msg.Msg
     | CreateAction CreateAction.Msg.Msg
-    | UserLogin UserLogin.Msg.Msg
+    | UserLoginMsg UserLogin.Msg.Msg
     | UserLogout
     | OnLogoutResponse (Result Http.Error EmptyResponse)

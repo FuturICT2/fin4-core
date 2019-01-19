@@ -28,7 +28,7 @@ update ctx msg model =
                         , createTokenError = Nothing
                         , step = model.step + 1
                     }
-                        ! [ newUrl "#tokens" ]
+                        ! [ newUrl "#actions" ]
 
                 Err error ->
                     Debug.log (toString error)

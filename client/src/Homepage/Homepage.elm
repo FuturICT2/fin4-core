@@ -16,5 +16,5 @@ render ctx =
     div [ style [ ( "margin-top", "15px" ) ] ]
         [ Options.styled p
             [ Typo.display2 ]
-            [ text "Finance 4.0" ]
+            [ text "Dignity Network" ]
         ]

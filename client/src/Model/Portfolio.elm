@@ -30,7 +30,7 @@ init =
 portfolioDecoder : JD.Decoder Portfolio
 portfolioDecoder =
     JP.decode Portfolio
-        |> JP.required "Positions" (JD.list positionDecoder)
+        |> JP.required "Entries" (JD.list positionDecoder)
 
 
 positionDecoder : JD.Decoder Position
