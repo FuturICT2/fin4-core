@@ -1,13 +1,13 @@
-module Portfolio.Command exposing (..)
+module Portfolio.Command exposing (commands, loadPortfolioCmd)
 
-import Main.Context exposing (Context)
-import Portfolio.Msg exposing (Msg(..))
-import Main.Routing exposing (Route(..))
 import Common.Api exposing (get)
+import Common.Json exposing (decodeAt, deocdeIntWithDefault)
 import Json.Decode as JD
 import Json.Encode as JE
-import Common.Json exposing (decodeAt, deocdeIntWithDefault)
+import Main.Context exposing (Context)
+import Main.Routing exposing (Route(..))
 import Model.Portfolio exposing (portfolioDecoder)
+import Portfolio.Msg exposing (Msg(..))
 
 
 commands : Context -> Cmd Msg
@@ -20,9 +20,10 @@ commands ctx =
             Cmd.none
 
 
+loadPortfolioCmd : Context -> Int -> Cmd Msg
 loadPortfolioCmd ctx page =
     get ctx
         OnLoadPortfolioResponse
-        "/portfolio/positions"
+        "/balances"
         []
         portfolioDecoder

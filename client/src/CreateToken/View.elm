@@ -55,6 +55,7 @@ render ctx model =
         ]
 
 
+renderActionButton : Model -> Html Msg
 renderActionButton model =
     let
         buttonContent =
@@ -84,6 +85,7 @@ renderActionButton model =
             div [] []
 
 
+mainStyle : Attribute a
 mainStyle =
     style
         [ ( "font-family", "Roboto" )
@@ -112,6 +114,7 @@ totalCost =
         ]
 
 
+titleStyle : Attribute a
 titleStyle =
     style
         [ ( "text-align", "center" )

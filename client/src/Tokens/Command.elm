@@ -1,13 +1,18 @@
-module Tokens.Command exposing (commands, likeCmd, loadTokensCmd)
+module Tokens.Command exposing
+    ( commands
+    , likeCmd
+    , loadTokensCmd
+    )
 
-import Common.Api exposing (get)
-import Common.Json exposing (decodeAt, deocdeIntWithDefault)
+import Common.Api exposing (get, postWithCsrf)
+import Common.Json exposing (decodeAt, deocdeIntWithDefault, emptyResponseDecoder)
+import Dict
 import Json.Decode as JD
 import Json.Encode as JE
 import Main.Context exposing (Context)
 import Main.Routing exposing (Route(..))
-import Main.User exposing (usersDecoder)
 import Model.Tokens exposing (tokensDecoder)
+import Tokens.Model exposing (Model)
 import Tokens.Msg exposing (Msg(..))
 
 
@@ -21,26 +26,22 @@ commands ctx =
             Cmd.none
 
 
+likeCmd : Context -> Int -> Bool -> Cmd Msg
+likeCmd ctx tokenId state =
+    postWithCsrf ctx
+        OnDoLikeResponse
+        "/toggle-token-like"
+        (JE.object
+            [ ( "tokenId", JE.int tokenId )
+            ]
+        )
+        emptyResponseDecoder
+
+
+loadTokensCmd : Context -> Int -> Cmd Msg
 loadTokensCmd ctx page =
     get ctx
         OnLoadTokensResponse
         "/tokens"
-        []
-        tokensDecoder
-
-
-likeCmd ctx tokenId state =
-    let
-        url =
-            case state of
-                True ->
-                    "/unlike/" ++ toString tokenId
-
-                False ->
-                    "/like/" ++ toString tokenId
-    in
-    get ctx
-        OnDoLikeResponse
-        url
         []
         tokensDecoder

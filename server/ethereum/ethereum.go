@@ -4,7 +4,7 @@ import (
 	"errors"
 	"math/big"
 
-	"github.com/FuturICT2/fin4-core/server/util"
+	"github.com/FuturICT2/fin4-core/server/env"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind/backends"
 	"github.com/ethereum/go-ethereum/accounts/keystore"
@@ -31,13 +31,13 @@ func MustNewEthereum() *Ethereum {
 		logrus.Fatal("Failed to connect to the Ethereum client: %v", err)
 	}
 	// server key
-	rawKey := util.MustGetenv("ETH_KEY_RAW")
+	rawKey := env.MustGetenv("ETH_KEY_RAW")
 	rawKeyECDSA, err := crypto.HexToECDSA(rawKey)
 	if err != nil {
 		logrus.Fatal("Something wrong with server private key.", err)
 	}
 	ks := keystore.NewKeyStore(
-		util.MustGetenv("ETH_KEY_STORE_DIR"),
+		env.MustGetenv("ETH_KEY_STORE_DIR"),
 		keystore.LightScryptN,
 		keystore.LightScryptP)
 	ks.ImportECDSA(rawKeyECDSA, "passphrase")
@@ -50,7 +50,7 @@ func MustNewEthereum() *Ethereum {
 	gAlloc := map[common.Address]core.GenesisAccount{
 		auth.From: {Balance: big.NewInt(10000000000)},
 	}
-	sim := backends.NewSimulatedBackend(gAlloc, 10393939)
+	sim := backends.NewSimulatedBackend(gAlloc, 21000)
 	return &Ethereum{
 		rpc:      conn,
 		sim:      sim,
@@ -59,9 +59,9 @@ func MustNewEthereum() *Ethereum {
 	}
 }
 
-// GetBlockNumber returns best blocknumber in the blockchain
+// CreateNewAddress returns best blocknumber in the blockchain
 func (b *Ethereum) CreateNewAddress() (string, error) {
-	acc, err := b.keystore.NewAccount("whatever")
+	acc, err := b.keystore.NewAccount("demo")
 	return acc.Address.String(), err
 }
 
@@ -74,7 +74,7 @@ func (b *Ethereum) DeployMintable(
 ) (common.Address, *types.Transaction, error) {
 	address, tx, _, err := DeployMintable(
 		b.auth,
-		b.rpc,
+		b.sim,
 		name_,
 		symbol_,
 		decimals_,
@@ -95,7 +95,7 @@ func (b *Ethereum) Mint(
 	toAddress common.Address,
 	amount int64,
 ) (*types.Transaction, error) {
-	mintable, err := NewMintable(tokenAddress, b.rpc)
+	mintable, err := NewMintable(tokenAddress, b.sim)
 	if err != nil {
 		logrus.WithFields(logrus.Fields{
 			"error": err.Error(),

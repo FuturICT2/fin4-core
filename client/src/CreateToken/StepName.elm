@@ -2,12 +2,14 @@ module CreateToken.StepName exposing (render)
 
 import Common.Error exposing (renderHttpError)
 import Common.Spinner as Spinner
+import CreateToken.Model exposing (Model)
 import CreateToken.Msg exposing (Msg(..))
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onInput)
 import Identicon exposing (identicon)
 import Json.Decode as JD
+import Main.Context exposing (Context)
 import Material
 import Material.Card as Card
 import Material.Chip as Chip
@@ -15,6 +17,7 @@ import Material.Options as Options exposing (css)
 import Material.Textfield as Textfield
 
 
+render : Context -> Model -> Html Msg
 render ctx model =
     div
         []
@@ -59,7 +62,7 @@ render ctx model =
                     , ( "padding-left", "2px" )
                     ]
                 ]
-                [ text "Enter action purpose" ]
+                [ text "Enter token purpose" ]
             , textarea
                 [ textareaStyle
                 , value model.description
@@ -73,6 +76,7 @@ render ctx model =
         ]
 
 
+margin : String -> String -> Attribute a
 margin upper sides =
     style [ ( "margin", upper ++ " " ++ sides ) ]
 

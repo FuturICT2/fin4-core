@@ -1,10 +1,5 @@
 module Main.Update exposing (mountRoute, update)
 
-import Actions.Command
-import Actions.Model
-import Actions.Update
-import CreateAction.Model
-import CreateAction.Update
 import CreateToken.Model
 import CreateToken.Update
 import Debug
@@ -21,10 +16,17 @@ import Main.Routing
         )
 import Material
 import Navigation exposing (newUrl)
+import Person.Command
+import Person.Model
+import Person.Update
 import Portfolio.Command
 import Portfolio.Model
 import Portfolio.Update
+import Token.Command
+import Token.Model
+import Token.Update
 import Tokens.Command
+import Tokens.Model
 import Tokens.Update
 import UserLogin.Update
 
@@ -32,14 +34,25 @@ import UserLogin.Update
 mountRoute : Model -> ( Model, Cmd Msg )
 mountRoute model =
     case model.context.route of
-        TokensRoute ->
-            model ! [ Cmd.map Tokens <| Tokens.Command.commands model.context ]
+        TokenRoute tokenId ->
+            let
+                token =
+                    Token.Model.init
+            in
+            { model | token = token } ! [ Cmd.map Token <| Token.Command.commands model.context tokenId ]
+
+        PersonRoute personId ->
+            let
+                person =
+                    Person.Model.init
+            in
+            { model | person = person } ! [ Cmd.map Person <| Person.Command.commands model.context personId ]
 
         PortfolioRoute ->
             model ! [ Cmd.map Portfolio <| Portfolio.Command.commands model.context ]
 
-        ActionsRoute ->
-            model ! [ Cmd.map Actions <| Actions.Command.commands model.context ]
+        TokensRoute ->
+            model ! [ Cmd.map Tokens <| Tokens.Command.commands model.context ]
 
         _ ->
             model ! []
@@ -47,6 +60,10 @@ mountRoute model =
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
+    let
+        _ =
+            Debug.log "" msg
+    in
     case msg of
         OnRouteChange location ->
             let
@@ -61,7 +78,6 @@ update msg model =
                         }
                     , showMobileNav = False
                     , createToken = CreateToken.Model.init
-                    , createAction = CreateAction.Model.init
                 }
 
         OnCheckSessionResponse resp ->
@@ -79,12 +95,19 @@ update msg model =
         Homepage msg_ ->
             model ! []
 
-        Tokens msg_ ->
+        Token msg_ ->
             let
                 ( childModel, cmd ) =
-                    Tokens.Update.update model.context msg_ model.tokens
+                    Token.Update.update model.context msg_ model.token
             in
-            { model | tokens = childModel } ! [ Cmd.map Tokens cmd ]
+            { model | token = childModel } ! [ Cmd.map Token cmd ]
+
+        Person msg_ ->
+            let
+                ( childModel, cmd ) =
+                    Person.Update.update model.context msg_ model.person
+            in
+            { model | person = childModel } ! [ Cmd.map Person cmd ]
 
         Portfolio msg_ ->
             let
@@ -93,12 +116,12 @@ update msg model =
             in
             { model | portfolio = childModel } ! [ Cmd.map Portfolio cmd ]
 
-        Actions msg_ ->
+        Tokens msg_ ->
             let
                 ( childModel, cmd ) =
-                    Actions.Update.update model.context msg_ model.actions
+                    Tokens.Update.update model.context msg_ model.tokens
             in
-            { model | actions = childModel } ! [ Cmd.map Actions cmd ]
+            { model | tokens = childModel } ! [ Cmd.map Tokens cmd ]
 
         CreateToken msg_ ->
             let
@@ -107,14 +130,7 @@ update msg model =
             in
             { model | createToken = childModel } ! [ Cmd.map CreateToken cmd ]
 
-        CreateAction msg_ ->
-            let
-                ( childModel, cmd ) =
-                    CreateAction.Update.update model.context msg_ model.createAction
-            in
-            { model | createAction = childModel } ! [ Cmd.map CreateAction cmd ]
-
-        UserLogin msg_ ->
+        UserLoginMsg msg_ ->
             let
                 ( userlogin, userloginCmd ) =
                     UserLogin.Update.update model.context msg_ model.userlogin
@@ -134,13 +150,13 @@ update msg model =
                     case userlogin.user of
                         Just _ ->
                             if userlogin.isNewUser then
-                                [ newUrl "#actions" ]
+                                [ newUrl "#tokens" ]
 
                             else
-                                [ newUrl "#actions" ]
+                                [ newUrl "#tokens" ]
 
                         _ ->
-                            [ Cmd.map UserLogin userloginCmd ]
+                            [ Cmd.map UserLoginMsg userloginCmd ]
             in
             { model | userlogin = userlogin, context = { context | user = user } } ! cmd
 

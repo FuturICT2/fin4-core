@@ -1,104 +1,168 @@
-module Tokens.View exposing (render, renderData, renderRow)
+module Tokens.View exposing (render)
 
-import Common.Decimal exposing (renderDecimal)
+import Common.Decimal exposing (renderDecimal, renderDecimalWithPrecision)
 import Common.Error as Error
 import Common.Styles exposing (padding, textLeft, textRight, toMdlCss)
+import Dict exposing (Dict)
 import Html exposing (..)
-import Html.Attributes exposing (href, src, style)
-import Html.Events exposing (onClick)
+import Html.Attributes exposing (href, id, placeholder, rows, src, style, type_, value)
+import Html.Events exposing (on, onClick, onInput)
 import Identicon exposing (identicon)
-import List exposing (reverse, sortBy)
+import Json.Decode as JD
 import Main.Context exposing (Context)
-import Main.User exposing (User)
+import Main.Routing exposing (personPath)
 import Material.Button as Button
-import Material.Card as Card
-import Material.Color as Color
+import Material.Chip as Chip
 import Material.Icon as Icon
-import Material.List as Lists
 import Material.Options as Options exposing (css)
 import Material.Table as Table
-import Material.Tabs as Tabs
+import Material.Tooltip as Tooltip
 import Material.Typography as Typo
 import Model.Tokens exposing (Token, Tokens)
-import Random
 import Tokens.Model exposing (Model)
 import Tokens.Msg exposing (Msg(..))
 
 
-white : Options.Property c m
-white =
-    Color.text Color.white
-
-
 render : Context -> Model -> Html Msg
 render ctx model =
-    div [ style [ ( "padding-top", "15px" ), ( "width", "100%" ) ] ]
-        [ header [ style [ ( "text-align", "center" ) ] ] [ text "Demo tokens" ]
-        , case model.error of
-            Just _ ->
-                Error.renderMaybeError model.error
-
-            Nothing ->
-                case model.tokens of
-                    Nothing ->
-                        div [] [ text "We are not able to fetch tokens. Please try again" ]
-
-                    Just tokens ->
-                        renderData ctx model tokens
-        ]
-
-
-renderUser : Model -> User -> Html Msg
-renderUser model user =
-    Card.view
-        [ css "border" "1px solid #ddd"
-        , css "width" "100%"
-        , css "margin-top" "15px"
-        ]
-        [ Card.title []
-            [ Card.head []
-                [ Lists.content []
-                    [ text user.name ]
-                ]
-            ]
-        ]
-
-
-renderData : Context -> Model -> Tokens -> Html Msg
-renderData ctx model tokens =
     let
-        sorted =
-            tokens.entries
+        content =
+            case model.tokens of
+                Just tokens ->
+                    case List.length tokens.entries of
+                        0 ->
+                            renderEmpty
 
-        userId =
-            case ctx.user of
-                Just user ->
-                    user.id
+                        _ ->
+                            renderTokens ctx model tokens
 
                 Nothing ->
-                    0
+                    renderEmpty
     in
-    case List.length sorted > 0 of
-        False ->
-            div
+    content
+
+
+renderTokens : Context -> Model -> Tokens -> Html Msg
+renderTokens ctx model tokens =
+    div
+        []
+        [ div
+            [ style
+                [ ( "margin", "30px 0" )
+                , ( "text-align", "center" )
+                ]
+            ]
+            [ text "stats: "
+            , a [] [ text "344 users " ]
+            , text " | "
+            , a [] [ text "233 oracles" ]
+            , text " | "
+            , a [] [ text "33 miners" ]
+            , br [] []
+            , text "Finfour tokens are socially mined. Click mine to participate!"
+            ]
+        , div [] <| List.map (renderToken ctx model) tokens.entries
+        ]
+
+
+renderToken : Context -> Model -> Token -> Html Msg
+renderToken ctx model token =
+    div
+        [ style
+            [ ( "border", "1px solid #ddd" )
+            , ( "border-radius", "8px" )
+            , ( "margin-bottom", "15px" )
+            ]
+        ]
+        [ renderTokenInfo ctx model token
+
+        -- , renderTokenClaims ctx model token
+        -- , renderClaimForm ctx model token
+        -- , renderTokenControls ctx model token
+        ]
+
+
+renderTokenInfo : Context -> Model -> Token -> Html Msg
+renderTokenInfo ctx model token =
+    let
+        likeBackground =
+            case token.didUserLike of
+                True ->
+                    "red"
+
+                False ->
+                    "inherit"
+    in
+    div
+        []
+        [ div
+            [ style
+                [ ( "display", "flex" )
+                , ( "padding", "5px 0 0 5px" )
+                ]
+            ]
+            [ div
                 [ style
-                    [ ( "margin", "auto" )
-                    , ( "padding-top", "60px" )
+                    [ ( "padding", "10px" )
                     , ( "text-align", "center" )
+                    , ( "width", "40px" )
+                    , ( "height", "40px" )
+                    , ( "border", "1px solid #ddd" )
+                    , ( "border-radius", "50%" )
                     ]
                 ]
-                [ Options.styled p
-                    [ Typo.caption
-                    ]
-                    [ text "No tokens has been created yet!" ]
+                [ identicon "20px" token.name
                 ]
+            , div []
+                [ header
+                    [ style
+                        [ ( "margin", "0 0 10px 0" )
+                        , ( "padding", "10px" )
+                        , ( "font-size", "26px" )
+                        ]
+                    ]
+                    [ text token.name
+                    ]
+                ]
+            ]
+        , div
+            [ style
+                [ ( "padding", "7px" )
+                , ( "line-height", "1" )
+                , ( "font-size", "18px" )
+                , ( "border-bottom", "1px solid #ddd" )
+                ]
+            ]
+            [ text token.purpose
+            ]
+        , div
+            [ style
+                [ ( "padding", "15px 5px" )
+                ]
+            ]
+            [ b []
+                [ text <|
+                    toString
+                        (List.length <|
+                            List.filter (\v -> v.isApproved == True) token.claims
+                        )
+                , small [] [ text <| "" ++ token.symbol ]
+                ]
+            , text " have been mined"
+            , div [ style [ ( "float", "right" ) ] ]
+                [ text "oracle: "
+                , a
+                    [ href (personPath token.creatorId)
+                    ]
+                    [ text token.creatorName ]
+                ]
+            ]
+        , renderTokenControls ctx model token
+        ]
 
-        True ->
-            div [] <| List.map (renderRow model) sorted
 
-
-renderRow : Model -> Token -> Html Msg
-renderRow model token =
+renderTokenControls : Context -> Model -> Token -> Html Msg
+renderTokenControls ctx model token =
     let
         likeBackground =
             case token.didUserLike of
@@ -111,83 +175,59 @@ renderRow model token =
     div
         [ style
             [ ( "border", "1px solid #ddd" )
-            , ( "margin-bottom", "30px" )
-            , ( "border-radius", "8px" )
+            , ( "border-top", "none" )
+            , ( "border-radius", "0 0 8px 8px" )
+            , ( "background", "#eee" )
             ]
         ]
+        [ div [ cardBtnsStyle ]
+            [ div
+                [ cardBtnStyle
+                ]
+                [ Button.render Mdl
+                    [ token.id ]
+                    model.mdl
+                    [ Button.raised
+                    , Button.ripple
+                    , Options.onClick (DoLike token.id token.didUserLike)
+                    , toMdlCss buttonStyle
+                    , css "width" "25%"
+                    , css "border-right" "1px solid rgb(199, 199, 199)"
+                    ]
+                    [ Icon.view "favorite" [ Icon.size24, css "color" likeBackground ]
+                    , text <| " " ++ toString token.favouriteCount
+                    ]
+                , Button.render Mdl
+                    [ token.id, 2 ]
+                    model.mdl
+                    [ Button.raised
+                    , Button.ripple
+                    , Button.link <| "#token/" ++ toString token.id
+                    , toMdlCss buttonStyle
+                    , css "width" "75%"
+                    , css "padding" "5px"
+                    ]
+                    [ text "mine"
+                    ]
+                ]
+            ]
+        ]
+
+
+renderEmpty : Html Msg
+renderEmpty =
+    div []
         [ div
             [ style
-                [ ( "display", "flex" )
-                , ( "padding", "5px 0 0 5px" )
+                [ ( "text-align", "center" )
+                , ( "padding-top", "80px" )
                 ]
             ]
-            [ div
-                [ style
-                    [ ( "padding", "15px" )
-                    , ( "text-align", "center" )
-                    , ( "width", "60px" )
-                    , ( "height", "60px" )
-                    , ( "border", "1px solid #ddd" )
-                    , ( "border-radius", "50%" )
-                    ]
-                ]
-                [ identicon "30px" token.name
-                ]
-            , div
-                [ style
-                    [ ( "padding", "8px" )
-                    ]
-                ]
-                [ header
-                    [ style
-                        [ ( "margin", "0 0 10px 0" )
-                        ]
-                    ]
-                    [ text token.name
-                    ]
-                , div
-                    [ style
-                        [ ( "margin-bottom", "15px" ) ]
-                    ]
-                    [ text <| "total supply: " ++ token.totalSupply
-                    ]
-                ]
-            ]
-        , div
-            [ actionButtonsStyle
-            ]
-            [ Button.render Mdl
-                [ token.id ]
-                model.mdl
-                [ Button.raised
-                , Button.ripple
-                , Options.onClick (DoLike token.id token.didUserLike)
-                , toMdlCss buttonStyle
-                ]
-                [ Icon.view "favorite" [ Icon.size24, css "color" likeBackground ]
-                , text <| " " ++ toString token.favouriteCount
-                ]
-            ]
+            [ text "There are no tokens yet" ]
         ]
 
 
-tokenStyle =
-    style
-        [ ( "border", "1px solid #ddd" )
-        , ( "margin-top", "15px" )
-        , ( "padding", "5px" )
-        ]
-
-
-actionButtonsStyle =
-    style
-        [ ( "border-top", "1px solid #ddd" )
-        , ( "background", "#f2f2f2" )
-        , ( "font-weight", "bold" )
-        , ( "display", "block" )
-        ]
-
-
+buttonStyle : Attribute a
 buttonStyle =
     style
         [ ( "width", "100%" )
@@ -198,4 +238,18 @@ buttonStyle =
         , ( "display", "inline-block" )
         , ( "box-shadow", "none" )
         , ( "font-size", "20px" )
+        ]
+
+
+cardBtnsStyle : Attribute a
+cardBtnsStyle =
+    style
+        [ ( "border-top", "1px solid #dd" )
+        ]
+
+
+cardBtnStyle : Attribute a
+cardBtnStyle =
+    style
+        [ ( "text-align", "center" )
         ]
