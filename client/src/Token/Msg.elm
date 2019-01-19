@@ -21,3 +21,4 @@ type Msg
     | DoLike Bool
     | SelectTab Int
     | ToggleClaimButton
+    | TickerTimout

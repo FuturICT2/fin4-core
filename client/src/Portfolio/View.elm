@@ -4,11 +4,12 @@ import Common.Decimal exposing (renderDecimal)
 import Common.Error as Error
 import Common.Styles exposing (padding, textLeft, textRight, toMdlCss)
 import Html exposing (..)
-import Html.Attributes exposing (src, style)
+import Html.Attributes exposing (href, src, style)
 import Html.Events exposing (onClick)
 import Identicon exposing (identicon)
 import Main.Context exposing (Context)
 import Main.Msg exposing (Msg(..))
+import Main.Routing exposing (tokenPath)
 import Material.Options as Options
 import Material.Table as Table
 import Material.Typography as Typo
@@ -75,6 +76,7 @@ renderRow model balance =
             , ( "border-radius", "8px" )
             , ( "margin-bottom", "15px" )
             ]
+        , href <| tokenPath balance.tokenId
         ]
         [ div
             [ style

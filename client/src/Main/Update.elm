@@ -16,6 +16,9 @@ import Main.Routing
         )
 import Material
 import Navigation exposing (newUrl)
+import Person.Command
+import Person.Model
+import Person.Update
 import Portfolio.Command
 import Portfolio.Model
 import Portfolio.Update
@@ -37,6 +40,13 @@ mountRoute model =
                     Token.Model.init
             in
             { model | token = token } ! [ Cmd.map Token <| Token.Command.commands model.context tokenId ]
+
+        PersonRoute personId ->
+            let
+                person =
+                    Person.Model.init
+            in
+            { model | person = person } ! [ Cmd.map Person <| Person.Command.commands model.context personId ]
 
         PortfolioRoute ->
             model ! [ Cmd.map Portfolio <| Portfolio.Command.commands model.context ]
@@ -91,6 +101,13 @@ update msg model =
                     Token.Update.update model.context msg_ model.token
             in
             { model | token = childModel } ! [ Cmd.map Token cmd ]
+
+        Person msg_ ->
+            let
+                ( childModel, cmd ) =
+                    Person.Update.update model.context msg_ model.person
+            in
+            { model | person = childModel } ! [ Cmd.map Person cmd ]
 
         Portfolio msg_ ->
             let

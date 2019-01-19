@@ -7,6 +7,7 @@ import Main.Model exposing (Model)
 import Main.Msg exposing (Msg)
 import Main.NotFound
 import Main.Routing exposing (Route(..))
+import Person.View
 import Portfolio.View
 import Token.View
 import Tokens.View
@@ -29,6 +30,11 @@ render model =
             ifAuth model <|
                 Html.map Main.Msg.Token <|
                     Token.View.render model.context model.token tokenId
+
+        PersonRoute personId ->
+            ifAuth model <|
+                Html.map Main.Msg.Person <|
+                    Person.View.render model.context model.person personId
 
         PortfolioRoute ->
             ifAuth model <|

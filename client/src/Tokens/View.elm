@@ -5,11 +5,12 @@ import Common.Error as Error
 import Common.Styles exposing (padding, textLeft, textRight, toMdlCss)
 import Dict exposing (Dict)
 import Html exposing (..)
-import Html.Attributes exposing (id, placeholder, rows, src, style, type_, value)
+import Html.Attributes exposing (href, id, placeholder, rows, src, style, type_, value)
 import Html.Events exposing (on, onClick, onInput)
 import Identicon exposing (identicon)
 import Json.Decode as JD
 import Main.Context exposing (Context)
+import Main.Routing exposing (personPath)
 import Material.Button as Button
 import Material.Chip as Chip
 import Material.Icon as Icon
@@ -150,7 +151,10 @@ renderTokenInfo ctx model token =
             , text " have been mined"
             , div [ style [ ( "float", "right" ) ] ]
                 [ text "oracle: "
-                , a [] [ text token.creatorName ]
+                , a
+                    [ href (personPath token.creatorId)
+                    ]
+                    [ text token.creatorName ]
                 ]
             ]
         , renderTokenControls ctx model token

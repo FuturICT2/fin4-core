@@ -5,6 +5,7 @@ import Main.Context exposing (Context, initContext)
 import Main.Flags exposing (Flags)
 import Main.Routing exposing (Route(..))
 import Material
+import Person.Model
 import Portfolio.Model
 import Token.Model
 import Tokens.Model
@@ -21,6 +22,7 @@ type alias Model =
     , tokens : Tokens.Model.Model
     , createToken : CreateToken.Model.Model
     , userlogin : UserLogin.Model.Model
+    , person : Person.Model.Model
     }
 
 
@@ -35,4 +37,5 @@ initModel flags route =
     , tokens = Tokens.Model.init
     , createToken = CreateToken.Model.init
     , userlogin = UserLogin.Model.init
+    , person = Person.Model.init
     }

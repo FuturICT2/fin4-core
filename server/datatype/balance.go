@@ -8,6 +8,7 @@ type Balance struct {
 	TokenID           ID
 	Balance           decimaldt.Decimal
 	Reserved          decimaldt.Decimal
+	Mined             decimaldt.Decimal
 	TokenName         string
 	TokenSymbol       string
 	LogoFile          string

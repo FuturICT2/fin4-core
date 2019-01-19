@@ -10,6 +10,7 @@ import Html.Events exposing (on, onClick, onInput)
 import Identicon exposing (identicon)
 import Json.Decode as JD
 import Main.Context exposing (Context)
+import Main.Routing exposing (personPath)
 import Material
 import Material.Button as Button
 import Material.Icon as Icon
@@ -258,7 +259,7 @@ renderClaim model showApproveBtn tokenId claim =
             , ( "margin", "10px 0" )
             ]
         ]
-        [ b []
+        [ a [ href <| personPath claim.userId ]
             [ text <|
                 claim.userName
             ]

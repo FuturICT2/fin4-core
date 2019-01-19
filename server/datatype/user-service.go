@@ -1,6 +1,8 @@
 package datatype
 
-import "github.com/FuturICT2/fin4-core/server/decimaldt"
+import (
+	"github.com/FuturICT2/fin4-core/server/decimaldt"
+)
 
 //UserService defines user service interface
 type UserService interface {
@@ -27,4 +29,5 @@ type UserService interface {
 	CreateChangeEmailConfirmation(*User, string, string) (*EmailChangeConfirmation, error)
 	ConfirmUserEmailChange(ID, string) bool
 	GetBalances(userID ID) ([]Balance, error)
+	GetPerson(userID ID) (*Person, error)
 }

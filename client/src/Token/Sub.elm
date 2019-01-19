@@ -8,7 +8,10 @@ import Token.Ports exposing (fileContentRead)
 
 subscriptions : Context -> Sub Msg
 subscriptions ctx =
-    fileContentRead ImageRead
+    Sub.batch
+        [ Time.every 500 (always TickerTimout)
+        , fileContentRead ImageRead
+        ]
 
 
 

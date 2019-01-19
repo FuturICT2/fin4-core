@@ -7,6 +7,7 @@ import Http
 import Main.User exposing (User)
 import Material
 import Navigation exposing (Location)
+import Person.Msg
 import Portfolio.Msg
 import Token.Msg
 import Tokens.Msg
@@ -22,6 +23,7 @@ type Msg
     | OnWindowResize Window.Size
     | Homepage Homepage.Homepage.Msg
     | Token Token.Msg.Msg
+    | Person Person.Msg.Msg
     | Portfolio Portfolio.Msg.Msg
     | Tokens Tokens.Msg.Msg
     | CreateToken CreateToken.Msg.Msg

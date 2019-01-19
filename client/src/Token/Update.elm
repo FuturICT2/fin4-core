@@ -98,5 +98,13 @@ update ctx msg model =
         DoLike state ->
             model ! []
 
+        TickerTimout ->
+            case model.data of
+                Just t ->
+                    model ! [ loadTokenCmd ctx t.id ]
+
+                Nothing ->
+                    model ! []
+
         Mdl msg_ ->
             Material.update Mdl msg_ model

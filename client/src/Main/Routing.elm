@@ -7,9 +7,11 @@ module Main.Routing exposing
     , matchers
     , newTokenPath
     , parseLocation
+    , personPath
     , portfolioPath
     , signupPath
     , termsPath
+    , tokenPath
     , tokensPath
     )
 
@@ -21,6 +23,7 @@ type Route
     = NotFoundRoute
     | HomepageRoute
     | TokenRoute Int
+    | PersonRoute Int
     | PortfolioRoute
     | TokensRoute
     | CreateTokenRoute
@@ -36,6 +39,7 @@ matchers =
     oneOf
         [ map HomepageRoute top
         , map TokenRoute (s "token" </> int)
+        , map PersonRoute (s "person" </> int)
         , map PortfolioRoute (s "portfolio")
         , map TokensRoute (s "tokens")
         , map CreateTokenRoute (s "new")
@@ -65,6 +69,16 @@ homepagePath =
 tokensPath : String
 tokensPath =
     "#tokens"
+
+
+tokenPath : Int -> String
+tokenPath id =
+    "#token/" ++ toString id
+
+
+personPath : Int -> String
+personPath id =
+    "#person/" ++ toString id
 
 
 trendingPath : String

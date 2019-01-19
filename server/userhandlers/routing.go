@@ -20,4 +20,5 @@ func InjectHandlers(sc datatype.ServiceContainer, rg *gin.RouterGroup) {
 	rg.POST("/user/email", authenticator, ChangeEmail(sc))
 	rg.GET("/user/email/confirm", ConfirmChangeEmail(sc))
 	rg.GET("/balances", authenticator, Balances(sc))
+	rg.GET("/person/:personID", GetPerson(sc))
 }
