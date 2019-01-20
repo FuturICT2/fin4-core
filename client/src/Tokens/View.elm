@@ -52,14 +52,7 @@ renderTokens ctx model tokens =
                 , ( "text-align", "center" )
                 ]
             ]
-            [ text "stats: "
-            , a [] [ text "344 users " ]
-            , text " | "
-            , a [] [ text "233 oracles" ]
-            , text " | "
-            , a [] [ text "33 miners" ]
-            , br [] []
-            , text "Finfour tokens are socially mined. Click mine to participate!"
+            [ text "Finfour tokens are socially mined. Click on MINE to participate!"
             ]
         , div [] <| List.map (renderToken ctx model) tokens.entries
         ]
@@ -92,6 +85,18 @@ renderTokenInfo ctx model token =
 
                 False ->
                     "inherit"
+
+        minedCount =
+            List.length <|
+                List.filter (\v -> v.isApproved == True) token.claims
+
+        verb =
+            case minedCount > 1 of
+                True ->
+                    "has"
+
+                False ->
+                    "have"
     in
     div
         []
@@ -141,14 +146,10 @@ renderTokenInfo ctx model token =
                 ]
             ]
             [ b []
-                [ text <|
-                    toString
-                        (List.length <|
-                            List.filter (\v -> v.isApproved == True) token.claims
-                        )
+                [ text <| toString minedCount
                 , small [] [ text <| "" ++ token.symbol ]
                 ]
-            , text " have been mined"
+            , text <| " " ++ verb ++ " been mined"
             , div [ style [ ( "float", "right" ) ] ]
                 [ text "oracle: "
                 , a
