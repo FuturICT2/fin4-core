@@ -104,7 +104,7 @@ renderTabs ctx model token =
         ]
         [ case model.tab of
             0 ->
-                renderTokenClaims ctx model token
+                renderClaims ctx model token
 
             1 ->
                 renderMiners ctx model token
@@ -187,8 +187,8 @@ renderMiner token miner =
         ]
 
 
-renderTokenClaims : Context -> Model -> Token -> Html Msg
-renderTokenClaims ctx model token =
+renderClaims : Context -> Model -> Token -> Html Msg
+renderClaims ctx model token =
     let
         likeColor =
             case token.didUserLike of
@@ -237,23 +237,36 @@ renderClaim model showApproveBtn tokenId claim =
         btn =
             case claim.isApproved of
                 True ->
-                    i [] [ text " - approved" ]
+                    div
+                        [ approvalStatusStyle True
+                        ]
+                        [ text "APPROVED" ]
 
                 False ->
-                    case showApproveBtn of
-                        True ->
-                            a
-                                [ onClick (ApproveClaim claim.id)
-                                ]
-                                [ text " (approve)"
-                                ]
+                    div []
+                        [ div
+                            [ approvalStatusStyle False
+                            ]
+                            [ text "PENDING APPROVAL" ]
+                        , case showApproveBtn of
+                            True ->
+                                Button.render Mdl
+                                    [ claim.id ]
+                                    model.mdl
+                                    [ Button.raised
+                                    , Button.ripple
+                                    , Options.onClick (ApproveClaim claim.id)
+                                    , toMdlCss claimButtonStyle
+                                    ]
+                                    [ text "approve" ]
 
-                        False ->
-                            i [] []
+                            False ->
+                                i [] []
+                        ]
     in
     div
         [ style
-            [ ( "padding", "10px" )
+            [ ( "padding", "10px 10px 0 10px" )
             , ( "border", "1px solid #ddd" )
             , ( "border-radius", "8px" )
             , ( "margin", "10px 0" )
@@ -263,7 +276,6 @@ renderClaim model showApproveBtn tokenId claim =
             [ text <|
                 claim.userName
             ]
-        , btn
         , text ": "
         , text claim.text
         , case claim.logoFile == "" of
@@ -281,6 +293,7 @@ renderClaim model showApproveBtn tokenId claim =
                         ]
                     ]
                     []
+        , btn
         ]
 
 
@@ -486,4 +499,24 @@ imgIconContainerStyle : Attribute a
 imgIconContainerStyle =
     style
         [ ( "margin-top", "15px" )
+        ]
+
+
+approvalStatusStyle : Bool -> Attribute a
+approvalStatusStyle bool =
+    let
+        bg =
+            case bool of
+                True ->
+                    "#91ea91"
+
+                False ->
+                    "rgb(236, 221, 144)"
+    in
+    style
+        [ ( "border-radius", "4px" )
+        , ( "background", bg )
+        , ( "padding", "8px" )
+        , ( "text-align", "center" )
+        , ( "margin", "10px 0" )
         ]
