@@ -1,6 +1,6 @@
 package datatype
 
-import "github.com/kjda/exchange/server/decimaldt"
+import "github.com/FuturICT2/fin4-core/server/decimaldt"
 
 // Balance balance type
 type Balance struct {
