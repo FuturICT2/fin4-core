@@ -14,12 +14,14 @@ import Material.Options exposing (css)
 
 view : Model -> Html Msg
 view model =
-    case model.context.sessionDidLoad of
-        False ->
-            renderBeforeSessionLoaded
+    div [ mainStyle model.context.window.isMobile ]
+        [ case model.context.sessionDidLoad of
+            False ->
+                renderBeforeSessionLoaded
 
-        True ->
-            renderAfterSessionLoaded model
+            True ->
+                renderAfterSessionLoaded model
+        ]
 
 
 renderBeforeSessionLoaded : Html Msg
@@ -55,6 +57,21 @@ renderAfterSessionLoaded model =
                 text ""
         , div [ bodyStyle ] [ ViewBody.render model ]
         ]
+
+
+mainStyle : Bool -> Attribute a
+mainStyle isMobile =
+    case isMobile of
+        True ->
+            style <|
+                []
+
+        False ->
+            style <|
+                [ ( "padding-bottom", "50px" )
+                , ( "margin", "50px auto" )
+                , ( "width", "600px" )
+                ]
 
 
 containerStyle : Bool -> Attribute a
