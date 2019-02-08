@@ -49,7 +49,7 @@ export GOBIN=$GOPATH/bin
 ```
 
 - Ganache-cli (https://github.com/trufflesuite/ganache-cli): npm install -g ganache-cli
-* gin is a simple command line utility for live-reloading Go web applications.
+-- gin is a simple command line utility for live-reloading Go web applications.
 - gin (https://github.com/codegangsta/gin): go get github.com/codegangsta/gin
 - Elmlang 0.18.0 (you must not use a newer version): npm install -g elm@elm0.18.0
 - MySql server: apt-get insall mysql-server
