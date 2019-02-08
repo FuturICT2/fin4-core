@@ -15,8 +15,22 @@ Slack: todo
 1. [ Description. ](#desc)
 2. [ Usage tips. ](#usage)
 
-# Finance 4.0 demonstrator | This repository
-This repository contains a backend server (written in Golang) and a web front-end (written in Elm) of the Finance 4.0 demonstrator. The smart contracts are written in Solidity for the Ethereum platform.
+# Demonstrator | This repository
+This repository contains a backend server (written in Golang) and a web front-end (written in Elm) of the Finance 4.0 demonstrator. The ELM web app enables a user to 
+
+* Create a new Type of cryptoeconomic Token
+* Obtain units of created tokens via performing an action
+* Performing Oracle tasks 
+
+The server provides
+* APIs for clients, such as the ELM app
+* Communication functionalities with the Ethereum Blockchain
+* Smart contract deployer
+* Functionality to store actions
+
+The smart contracts are written in Solidity for the Ethereum platform.
+
+In the following Section we explain how the web app and server can be set up.
 
 # Installation
 We assume a fresh Ubuntu 18.10 system for the following guide.
