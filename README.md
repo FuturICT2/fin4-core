@@ -12,6 +12,8 @@ Concept paper: [Finance4.0](https://futurict2.eu/finance-4-0-concept-wp3-interim
 
 Slack: todo
 
+# Content
+
 1. [ Description. ](#desc)
 2. [ Usage tips. ](#usage)
 
@@ -33,7 +35,7 @@ The smart contracts are written in Solidity for the Ethereum platform.
 In the following Section we explain how the web app and server can be set up.
 
 # Installation
-We assume a fresh Ubuntu 18.10 system for the following guide.
+We assume a fresh Ubuntu 18.10 system for the following.
 
 ## Dependencies
 - Golang 1.10 (https://golang.org/doc/install): install via package manager
@@ -47,6 +49,7 @@ export GOBIN=$GOPATH/bin
 ```
 
 - Ganache-cli (https://github.com/trufflesuite/ganache-cli): npm install -g ganache-cli
+* gin is a simple command line utility for live-reloading Go web applications.
 - gin (https://github.com/codegangsta/gin): go get github.com/codegangsta/gin
 - Elmlang 0.18.0 (you must not use a newer version): npm install -g elm@elm0.18.0
 - MySql server: apt-get insall mysql-server
