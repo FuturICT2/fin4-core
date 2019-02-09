@@ -19,6 +19,7 @@ Slack: todo
 
 1. [ Fin4 Demonstrator. ](#desc)
 2. [ Installation. ](#usage)
+3. [ Contribution. ](#contribution)
 
 <a name="desc"></a>
 # Fin4 Demonstrator | This repository
@@ -37,6 +38,7 @@ The server provides
 The smart contracts are written in Solidity for the Ethereum platform.
 
 In the following Section we explain how the web app and server can be set up.
+
 <a name="desc"></a>
 # Install Finance 4.0 demonstrator
 We assume a fresh Ubuntu 18.10 system for the following.
@@ -130,7 +132,7 @@ In particular, main.go is executed which
 ## fin4 webapp
 
 
-
+<a name="contribution"></a>
 # Contribute!
 We are looking for collaboration from the Open Source community. The project needs enhancements regarding code quality, documentation, and testing. To contribute to the project please take a look at [open issues](https://github.com/FuturICT2/fin4-core/issues). [Here](CONTRIBUTIONS.md) you can find more details on the architecture of the code and how to run the development environment on your local machine.
 
