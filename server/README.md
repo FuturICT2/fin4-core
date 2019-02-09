@@ -1,6 +1,10 @@
 
 
 # Fin4 Server
+This repo contains all files of the finance 4.0 server.
+
+
+## High level overview
 
 
 
