@@ -17,9 +17,11 @@ Slack: todo
 
 # Content
 
-1. [ Fin4 Demonstrator. ](#demonstrator)
-2. [ Installation. ](#installation)
-3. [ Contribution. ](#contribution)
+- [ Fin4 Demonstrator. ](#demonstrator)
+- [ Installation. ](#installation)
+- [ Documentation.](#documentation)
+- [ Contribution. ](#contribution)
+
 
 <a name="demonstrator"></a>
 # Fin4 Demonstrator | This repository
@@ -110,6 +112,8 @@ $ make test
 $ make test-cover
 $ make cover-view
 ```
+
+<a name="documentation"></a>
 # Documentation
 In the following we document the basic execution of the server and the elm app are explained. Detailed information can/ will be found in the respective packages.
 
