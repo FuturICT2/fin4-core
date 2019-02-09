@@ -83,10 +83,13 @@ cp `fin4-core/.env_sample` `fin4-core/.env`
 ```
 Open the .env file and add the following information:
 
-modify DATA_SOURCE_NAME by adding USERNAME, PASSWORD and DB_NAME
+modify DATA_SOURCE_NAME by adding USERNAME, PASSWORD and DB_NAME. Assuming a root user for the fin4 database and the password "password1" the expression should look as follow:
+
+$ export DATA_SOURCE_NAME="root:password1@/fin4?charset=utf8mb4,utf8&parseTime=true"
 
 ## Running the development-server
 ```bash
+$ export .env
 $ ganache-cli # alternatively, you can use the Ganache application
 $ make server-dev
 ```
