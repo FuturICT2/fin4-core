@@ -2,7 +2,10 @@
 
 
 # Finance 4.0
-Finance 4.0 aims for a multi-dimensional incentive system to motivate sustainable behavior. Communities can creat cryptographic tokens to incentivize certain behavior, e.g. collecting waste, avoiding C02, helping others, etc. Users can obtain these tokens by proving that they performed such actions. The number of different token types is unlimited, leading over time to a multi-dimensional system of different incentives -- smart coordination through "sustainable money". In the same spirit, the system uses tokens for democratic governance. To learn more:
+Finance 4.0 aims for a multi-dimensional incentive system to motivate sustainable behavior. Communities can creat cryptographic tokens to incentivize certain behavior, e.g. collecting waste, avoiding C02, helping others, etc. Users can obtain these tokens by proving that they performed such actions. The number of different token types is unlimited, leading over time to a multi-dimensional system of different incentives -- smart coordination through "sustainable money". In the same spirit, the system uses tokens for democratic governance. 
+A live instance can be found here: www.finfour.net 
+
+To learn more:
 
 Short video: [YouTube](https://www.youtube.com/watch?v=DSmF2donfBQ)
 
@@ -20,9 +23,9 @@ Slack: todo
 # Demonstrator | This repository
 This repository contains a backend server (written in Golang) and a web front-end (written in Elm) of the Finance 4.0 demonstrator. The ELM web app enables a user to 
 
-* Create a new Type of cryptoeconomic Token
-* Obtain units of created tokens via performing an action
-* Performing Oracle tasks 
+* Create a new Type of cryptoeconomic Token, which is deployed on the server and Ethereum Blockchain
+* Obtain units of created tokens via performing an action, such as planting a tree
+* Performing Oracle tasks in order to approve actions
 
 The server provides
 * APIs for clients, such as the ELM app
@@ -84,19 +87,20 @@ cp `fin4-core/.env_sample` `fin4-core/.env`
 Open the .env file and add the following information:
 
 modify DATA_SOURCE_NAME by adding USERNAME, PASSWORD and DB_NAME. Assuming a root user for the fin4 database and the password "password1" the expression should look as follow:
-
+```bash
 $ export DATA_SOURCE_NAME="root:password1@/fin4?charset=utf8mb4,utf8&parseTime=true"
-
+```
 ## Running the development-server
 ```bash
-$ export .env
-$ ganache-cli # alternatively, you can use the Ganache application
-$ make server-dev
+$ export .env # load the environment variables - Do not forget this whenever you open a new terminal
+$ ganache-cli # simulates the ethereum blockchain. Alternatively, you can use the Ganache application
+$ make server-dev # deploy the server
 ```
 ## Running the development-client (web front-end)
 ```bash
 $ make client-dev
 ```
+After the build, open https://localhost:8888/ inside of your favourite browser. 
 ## Testing
 ```bash
 $ make test
@@ -104,7 +108,23 @@ $ make test-cover
 $ make cover-view
 ```
 # Documentation
+In the following we document the basic execution of the server and the elm app are explained. Detailed information can/ will be found in the respective packages.
 
+## fin4 Server
+When executing
+```bash
+make server-dev
+```
+A new server instance is exportet to the port 8181, which listens to port 3000 (hence all http request will need to be send to this port). You dont know what ports are? Find brief example explanation [ here ](https://www.quora.com/What-are-ports-in-computer-programming-the-source-and-destination-ports-why-do-we-need-them ).
+In particular, main.go is executed which
+- loads the necessary environment variables into the program
+- connects to the local database (which you specified in the .env file)
+- initiates the token and user services
+- connects with AWS (is used in our live instance, which is deployed to www.finfour.net)
+- connects with a instance of Ethereum
+- start listening to http request (which uses the gin library)
+
+## fin4 webapp
 
 
 
