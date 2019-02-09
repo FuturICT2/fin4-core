@@ -17,10 +17,11 @@ Slack: todo
 
 # Content
 
-1. [ Description. ](#desc)
-2. [ Usage tips. ](#usage)
+1. [ Fin4 Demonstrator. ](#desc)
+2. [ Installation. ](#usage)
 
-# Demonstrator | This repository
+<a name="desc"></a>
+# Fin4 Demonstrator | This repository
 This repository contains a backend server (written in Golang) and a web front-end (written in Elm) of the Finance 4.0 demonstrator. The ELM web app enables a user to 
 
 * Create a new Type of cryptoeconomic Token, which is deployed on the server and Ethereum Blockchain
@@ -36,8 +37,8 @@ The server provides
 The smart contracts are written in Solidity for the Ethereum platform.
 
 In the following Section we explain how the web app and server can be set up.
-
-# Installation
+<a name="desc"></a>
+# Install Finance 4.0 demonstrator
 We assume a fresh Ubuntu 18.10 system for the following.
 
 ## Dependencies
@@ -57,7 +58,7 @@ export GOBIN=$GOPATH/bin
 - Elmlang 0.18.0 (you must not use a newer version): npm install -g elm@elm0.18.0
 - MySql server: apt-get insall mysql-server
 
-## Install Finance 4.0 demonstrator
+## Set up
 ```bash
 $ git clone https://github.com/FuturICT2/fin4-core.git
 $ cd fin4-core
