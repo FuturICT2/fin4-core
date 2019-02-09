@@ -111,6 +111,8 @@ $ make cover-view
 In the following we document the basic execution of the server and the elm app are explained. Detailed information can/ will be found in the respective packages.
 
 ## fin4 Server
+
+### Entry point - main.go
 When executing
 ```bash
 make server-dev
@@ -121,8 +123,8 @@ In particular, main.go is executed which
 - connects to the local database (which you specified in the .env file)
 - initiates the token and user services
 - connects with AWS (is used in our live instance, which is deployed to www.finfour.net)
-- connects with a instance of Ethereum
-- start listening to http request (which uses the gin library)
+- connects with an instance of Ethereum
+- start listening to http request (which internally uses the gin library)
 
 ## fin4 webapp
 
