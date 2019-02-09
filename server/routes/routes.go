@@ -32,6 +32,11 @@ func SetupRouting(sc datatype.ServiceContainer) *gin.Engine {
 	wapi.Use(routermiddleware.Session())
 	wapi.Use(routermiddleware.SessionSetUser(sc.UserService))
 	wapi.Use(routermiddleware.CheckCsrfToken())
+
+	logrus.WithFields(
+		logrus.Fields{"e": err.Error()},
+	).Error("userservice:register:2")
+
 	{
 		wapi.GET("/csrf", routermiddleware.SetCsrfToken())
 		userhandlers.InjectHandlers(sc, wapi)

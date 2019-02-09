@@ -3,9 +3,9 @@ package userhandlers
 import (
 	"net/http"
 
-	"github.com/gin-gonic/gin"
 	"github.com/FuturICT2/fin4-core/server/auth"
 	"github.com/FuturICT2/fin4-core/server/datatype"
+	"github.com/gin-gonic/gin"
 )
 
 // SessionGet get session route

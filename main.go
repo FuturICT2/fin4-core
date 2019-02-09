@@ -19,8 +19,11 @@ func main() {
 	environment := strings.ToLower(env.MustGetenv("ENVIRONMENT"))
 
 	//TODO this should be changed ASAP
-	baseDir := "$GOPATH/src/github.com/FuturICT2/fin4-core"
-	env.Load(baseDir, environment == "test")
+	//baseDir := "$GOPATH/src/github.com/FuturICT/fin4-core"
+	baseDir := "$GOPATH/fin4-core"
+
+	//env.Load(baseDir,true);
+	env.Load(baseDir, false)
 
 	cfg := datatype.Config{
 		Environment:        environment,
@@ -38,14 +41,17 @@ func main() {
 
 	emailer.Setup(cfg)
 
+	// connect to database
 	db := dbservice.MustConnect(cfg.DataSourceName)
 	userService := userservice.NewService(db)
 	tokenService := tokenservice.NewService(db)
 
+	// connect with Amazon AWS (used in our live instance)
 	fs := filestorage.GetStorage(
 		env.Getenv("AWS_SES_KEY"),
 		env.Getenv("AWS_SES_SECRET"),
 	)
+	// connect with an instance of ethereum
 	ethereum := ethereum.MustNewEthereum()
 	sc := datatype.ServiceContainer{
 		Config:       cfg,
@@ -54,7 +60,7 @@ func main() {
 		FileStorage:  fs,
 		Ethereum:     ethereum,
 	}
-
+	// start listening to api calls
 	routes.SetupRouting(sc).Run(":" + cfg.ServerPort)
 }
 
