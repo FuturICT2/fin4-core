@@ -17,11 +17,11 @@ Slack: todo
 
 # Content
 
-1. [ Fin4 Demonstrator. ](#desc)
-2. [ Installation. ](#usage)
+1. [ Fin4 Demonstrator. ](#demonstrator)
+2. [ Installation. ](#installation)
 3. [ Contribution. ](#contribution)
 
-<a name="desc"></a>
+<a name="demonstrator"></a>
 # Fin4 Demonstrator | This repository
 This repository contains a backend server (written in Golang) and a web front-end (written in Elm) of the Finance 4.0 demonstrator. The ELM web app enables a user to 
 
@@ -39,7 +39,7 @@ The smart contracts are written in Solidity for the Ethereum platform.
 
 In the following Section we explain how the web app and server can be set up.
 
-<a name="desc"></a>
+<a name="installation"></a>
 # Install Finance 4.0 demonstrator
 We assume a fresh Ubuntu 18.10 system for the following.
 
