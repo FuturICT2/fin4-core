@@ -4,7 +4,7 @@ import (
 	"database/sql"
 
 	"github.com/FuturICT2/fin4-core/server/datatype"
-	"github.com/kjda/exchange/server/helpers"
+	"github.com/FuturICT2/fin4-core/server/helpers"
 )
 
 // FindBySymbol find asset by symbol

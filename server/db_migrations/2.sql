@@ -2,16 +2,6 @@
 
 SET FOREIGN_KEY_CHECKS=0;
 
-DROP TABLE IF EXISTS `user_balance`;
-CREATE TABLE `user_balance` (
-  `userId` int(10) unsigned NOT NULL,
-  `tokenId` int(10) unsigned NOT NULL,
-  `balance` decimal(30,8) NOT NULL DEFAULT '0.00000000',
-  `reserved` decimal(30,8) NOT NULL DEFAULT '0.00000000',
-  PRIMARY KEY (`userId`,`tokenId`),
-  CONSTRAINT `userID_FKK` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
 DROP TABLE IF EXISTS `asset`;
 CREATE TABLE `asset` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,

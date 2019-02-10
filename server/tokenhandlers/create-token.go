@@ -35,12 +35,6 @@ func CreateToken(sc datatype.ServiceContainer) gin.HandlerFunc {
 				return
 			}
 		}
-		sc.Ethereum.DeployMintable(
-			body.Name,
-			body.Symbol,
-			3,
-			sc.ethereumAddress,
-		)
 		add, tx, err := sc.Ethereum.DeployMintable(
 			body.Name,
 			body.Symbol,

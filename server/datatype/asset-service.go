@@ -2,7 +2,7 @@ package datatype
 
 // AssetService defines asset service interface
 type AssetService interface {
-	FindAll() ([]Asset, error)
+	FindAll(*User) ([]Asset, error)
 	FindByID(id ID) (*Asset, error)
 	FindBySymbol(symbol string) (*Asset, error)
 	FindByName(name string) (*Asset, error)
@@ -12,6 +12,8 @@ type AssetService interface {
 		name string,
 		symbol string,
 		description string,
+		ethereumAddress string,
+		ethereumTransactionAddress string,
 	) (*Asset, error)
 	ToggleFavorite(user *User, assetID ID) error
 	ToggleFavoriteBlock(user *User, blockID ID) error

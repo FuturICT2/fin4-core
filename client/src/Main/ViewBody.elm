@@ -1,14 +1,17 @@
 module Main.ViewBody exposing (render)
 
+import Asset.View
+import CreateAsset.View
 import CreateToken.View
-import Homepage.Homepage
+import Homepage.View
 import Html exposing (..)
 import Main.Model exposing (Model)
-import Main.Msg exposing (Msg)
+import Main.Msg exposing (Msg(..))
 import Main.NotFound
 import Main.Routing exposing (Route(..))
 import Person.View
 import Portfolio.View
+import Profile.View
 import Token.View
 import Tokens.View
 import UserLogin.ViewFastSignup
@@ -22,9 +25,22 @@ render : Model -> Html Msg
 render model =
     case model.context.route of
         HomepageRoute ->
+            Html.map HomepageMsg <| Homepage.View.render model.context model.homepage
+
+        CreateAssetRoute ->
             ifAuth model <|
-                Html.map Main.Msg.Tokens <|
-                    Tokens.View.render model.context model.tokens
+                Html.map CreateAssetMsg <|
+                    CreateAsset.View.render model.context model.createAsset
+
+        AssetRoute assetId ->
+            ifAuth model <|
+                Html.map AssetMsg <|
+                    Asset.View.render model.context model.asset assetId
+
+        ProfileRoute profileId ->
+            ifAuth model <|
+                Html.map ProfileMsg <|
+                    Profile.View.render model.context model.profile profileId
 
         TokenRoute tokenId ->
             ifAuth model <|

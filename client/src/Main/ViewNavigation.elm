@@ -21,12 +21,12 @@ render model =
     div [ bhStyle ]
         [ div []
             [ a
-                [ href tokensPath
+                [ href homepagePath
                 , bhNavItemStyle
-                , activeRouteStyle (model.context.route == TokensRoute)
+                , activeRouteStyle (model.context.route == HomepageRoute)
                 , style [ ( "width", "33%" ) ]
                 ]
-                [ Icon.view "group_work"
+                [ Icon.view "timeline"
                     [ Icon.size36
                     ]
                 ]

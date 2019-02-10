@@ -1,10 +1,12 @@
 package routes
 
 import (
+	"github.com/FuturICT2/fin4-core/server/assethandlers"
 	"github.com/FuturICT2/fin4-core/server/datatype"
 	"github.com/FuturICT2/fin4-core/server/routermiddleware"
+	"github.com/FuturICT2/fin4-core/server/timelinehandlers"
+	"github.com/FuturICT2/fin4-core/server/tokenhandlers"
 	"github.com/gin-gonic/gin"
-	"github.com/kjda/exchange/server/tokenhandlers"
 
 	"github.com/FuturICT2/fin4-core/server/commonhandlers"
 	"github.com/FuturICT2/fin4-core/server/userhandlers"
@@ -37,7 +39,8 @@ func SetupRouting(sc datatype.ServiceContainer) *gin.Engine {
 		userhandlers.InjectHandlers(sc, wapi)
 		tokenhandlers.InjectHandlers(sc, wapi)
 		// V0.2 for assets
-		assethanndlers.InjetHandelrs(sc, wapi)
+		assethandlers.InjectHandlers(sc, wapi)
+		timelinehandlers.InjectHandlers(sc, wapi)
 	}
 
 	// API

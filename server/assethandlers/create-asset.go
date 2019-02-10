@@ -24,6 +24,8 @@ func CreateAsset(sc datatype.ServiceContainer) gin.HandlerFunc {
 			body.Name,
 			body.Symbol,
 			body.Purpose,
+			"PLACE_HOLDER_ETH_ADDRESS",
+			"PLACE_HOLDER_ETH_TX_ADDRESS",
 		)
 		if err != nil {
 			c.String(http.StatusBadRequest, err.Error())

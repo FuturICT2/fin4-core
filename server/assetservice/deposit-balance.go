@@ -1,11 +1,12 @@
-package assethandlers
+package assetservice
 
 import (
-	"github.com/kjda/exchange/server/datatype"
-	"github.com/kjda/exchange/server/decimaldt"
+	"github.com/FuturICT2/fin4-core/server/datatype"
+	"github.com/FuturICT2/fin4-core/server/decimaldt"
 	"github.com/lytics/logrus"
 )
 
+// DepositBalance cache user balance in the SQL db
 func (db *Service) DepositBalance(
 	userID datatype.ID,
 	assetID datatype.ID,
