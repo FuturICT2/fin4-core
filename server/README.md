@@ -20,11 +20,11 @@ The following methods currently exist
 
 | http Method       | URL           | body  | purpose |
 | ------------- |:-------------:| :-----| ------|
-| GET | /api/status | - | returns the status of the server| 
-| POST      | /wapi/register | "name":String,<br />"email":String, <br />"password":String,<br /> "agreeToTerms":boolean,<br />"isFastSignup":boolean | Registers a user in the fin4 system|
-|POST      | /wapi/login      |   "name":String,<br />"email":String, <br />"password":String, | Logs a user in. The returned session cookie needs to be used for all /wapi/... methods, except for the register method|
-| GET |  /wapi/session     |  -   | Gets the current seesion|
-| GET | /wapi/tokens | - | Fetches all fin4 tokens |
+| GET | /api/status | - | Returns the status of the server.| 
+| POST      | /wapi/register | "name":String,<br />"email":String, <br />"password":String,<br /> "agreeToTerms":boolean,<br />"isFastSignup":boolean | Registers a user in the fin4 system.|
+|POST      | /wapi/login      |   "name":String,<br />"email":String, <br />"password":String, | Logs a user in. The returned session cookie needs to be used for all /wapi/... methods, except for the register method.|
+| GET |  /wapi/session     |  -   | Gets the current session.|
+| GET | /wapi/tokens | - | Fetches all fin4 tokens. |
 
 
 In order to start communicating with the server one needs to perform the following API requests
