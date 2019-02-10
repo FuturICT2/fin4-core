@@ -62,6 +62,7 @@ export GOPATH=$HOME/Projects/goprojects -> folder where fin-4 will be installed 
 export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
 export GOBIN=$GOPATH/bin
 ```
+Best is to store this in ~/.bashrc, so that this automatically set whenever you start a new terminal session.
 
 - Ganache-cli (https://github.com/trufflesuite/ganache-cli): npm install -g ganache-cli
 -- gin is a simple command line utility for live-reloading Go web applications.
