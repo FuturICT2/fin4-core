@@ -3,6 +3,7 @@ package ethereum
 import (
 	"errors"
 	"math/big"
+	"log"
 
 	"github.com/FuturICT2/fin4-core/server/env"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
@@ -26,9 +27,13 @@ type Ethereum struct {
 
 // MustNewEthereum create new Ethereum interface, panic if no connection
 func MustNewEthereum() *Ethereum {
-	conn, err := ethclient.Dial("https://rinkeby.infura.io/")
+	//conn, err := ethclient.Dial("https://rinkeby.infura.io/")
+	conn, err := ethclient.Dial(env.MustGetenv("SIM_ETH_HOST"))
+
+
 	if err != nil {
 		logrus.Fatal("Failed to connect to the Ethereum client: %v", err)
+		log.Println("Failed to connect to the Ethereum client: %v")
 	}
 	// server key
 	rawKey := env.MustGetenv("ETH_KEY_RAW")
@@ -61,7 +66,8 @@ func MustNewEthereum() *Ethereum {
 
 // CreateNewAddress returns best blocknumber in the blockchain
 func (b *Ethereum) CreateNewAddress() (string, error) {
-	acc, err := b.keystore.NewAccount("demo")
+	acc, err := b.keystore.NewAccount("demo1")
+	log.Println("---------------- LOADDDDED")
 	return acc.Address.String(), err
 }
 
@@ -74,7 +80,8 @@ func (b *Ethereum) DeployMintable(
 ) (common.Address, *types.Transaction, error) {
 	address, tx, _, err := DeployMintable(
 		b.auth,
-		b.sim,
+		// change here to rpc and it will deploy to rpc
+		b.rpc,
 		name_,
 		symbol_,
 		decimals_,
@@ -95,7 +102,8 @@ func (b *Ethereum) Mint(
 	toAddress common.Address,
 	amount int64,
 ) (*types.Transaction, error) {
-	mintable, err := NewMintable(tokenAddress, b.sim)
+	// here change b.sim to rpc and it will communicate with the rpc
+	mintable, err := NewMintable(tokenAddress, b.rpc)
 	if err != nil {
 		logrus.WithFields(logrus.Fields{
 			"error": err.Error(),

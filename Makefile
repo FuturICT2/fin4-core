@@ -1,8 +1,4 @@
 server-dev:
-	export FORCE_ENV_CHECKING=0 ;
-	export FORCE_SSL=1 ;
-	export EMAIL_FROM=fin4@ethz.ch ;
-	export BASE_URL=http://localhost:3000 ;
 	gin --port 3000 --appPort 8181 go run main.go
 
 client-dev:
