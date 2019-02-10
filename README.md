@@ -125,7 +125,7 @@ $ make cover-view
 In the following we document the basic execution of the server and the elm app are explained. Detailed information can/ will be found in the respective packages.
 
 ## fin4 Server
-
+The main functioning of the server is explained in the [server](https://github.com/FuturICT2/fin4-core/tree/master/server) package.
 ### Entry point - main.go
 When executing
 ```bash
