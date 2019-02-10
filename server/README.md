@@ -17,7 +17,7 @@ Communication with the server is done via http. The entry point for all http req
 
 The following methods currently exist
 
-| http Method       | URL           | body  | purpose |
+| http Method       | URL           | Body  | Purpose |
 | ------------- |:-------------:| :-----| ------|
 | GET | /api/status | - | Returns the status of the server.| 
 | POST      | /wapi/register | "name":String,<br />"email":String, <br />"password":String,<br /> "agreeToTerms":boolean,<br />"isFastSignup":boolean | Registers a user in the fin4 system.|
@@ -25,6 +25,7 @@ The following methods currently exist
 | GET |  /wapi/session     |  -   | Gets the current session.|
 | GET | /wapi/tokens | - | Fetches all fin4 tokens. |
 
+All /wapi/ requests need to provide the session cookie to the server, which was returned with the /wapi/login, in order to be correctly authenticated.
 
 In order to start communicating with the server one needs to perform the following API requests
 - 
