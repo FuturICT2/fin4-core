@@ -13,10 +13,9 @@ The server currently has three main purposes
 - Communication with the blockchain
 
 ### APIs
-Communication with the server is done via http. The entry point for all http requests is the routes/routes.go file.
+Communication with the server is done via http. The entry point for all http requests is the [routes/routes.go](https://github.com/FuturICT2/fin4-core/blob/master/server/routes/routes.go) code. All /wapi/ requests are forwarded to [userhandlers/routing.go](https://github.com/FuturICT2/fin4-core/blob/master/server/userhandlers/routing.go) and [tokenhandlers/routing.go](https://github.com/FuturICT2/fin4-core/blob/master/server/tokenhandlers/routing.go).
 
 The following methods currently exist
-
 
 | http Method       | URL           | body  | purpose |
 | ------------- |:-------------:| :-----| ------|
