@@ -2,9 +2,10 @@ package datatype
 
 import "github.com/FuturICT2/fin4-core/server/decimaldt"
 
-// Miner Miner data type
+// Miner user type
 type Miner struct {
-	UserID   ID
-	UserName string
-	Mined    decimaldt.Decimal
+	ID               ID
+	UserName         string
+	Mined            decimaldt.Decimal
+	MiningPercentage string
 }
