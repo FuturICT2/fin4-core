@@ -8,9 +8,11 @@ This repo contains all files of the finance 4.0 server.
 The server currently has three main purposes
 - routing API requests from clients to the right destination
 - Business logic
-  - storing/ caching tokens in a mysql database
-  - handling user information
+  - Creating new fin4 tokens
+  - Storing/ caching tokens in a mysql database
+  - Handling user information
 - Communication with the blockchain
+  - Deploying fin4 tokens to Ethereum (ganache/ rinkeby/ mainnet)
 
 ### APIs
 Communication with the server is done via http. The entry point for all http requests is the [routes/routes.go](https://github.com/FuturICT2/fin4-core/blob/master/server/routes/routes.go) code. All /wapi/ requests are forwarded to [userhandlers/routing.go](https://github.com/FuturICT2/fin4-core/blob/master/server/userhandlers/routing.go) and [tokenhandlers/routing.go](https://github.com/FuturICT2/fin4-core/blob/master/server/tokenhandlers/routing.go).
@@ -32,8 +34,7 @@ All /wapi/ requests need to provide the session cookie to the server, which was 
 
 
 # Documentation
-
-check out: https://godoc.org/github.com/FuturICT2/fin4-core/server/
+For a detailed documentation of all functions, check out: https://godoc.org/github.com/FuturICT2/fin4-core/server/
 
 <!--
 markdown syntax https://help.github.com/articles/page-build-failed-markdown-errors/
