@@ -6,6 +6,7 @@ import (
 
 	"github.com/FuturICT2/fin4-core/server/auth"
 	"github.com/FuturICT2/fin4-core/server/datatype"
+	"github.com/ethereum/go-ethereum/common"
 	"github.com/gin-gonic/gin"
 )
 
@@ -40,14 +41,25 @@ func CreateToken(sc datatype.ServiceContainer) gin.HandlerFunc {
 			3,
 			sc.ethereumAddress,
 		)
+		add, tx, err := sc.Ethereum.DeployMintable(
+			body.Name,
+			body.Symbol,
+			8,
+			common.HexToAddress(user.EthereumAddress),
+		)
+		if err != nil {
+			c.String(http.StatusBadRequest, err.Error())
+			return
+		}
+
 		token, err := sc.TokenService.InsertToken(
 			user.ID, // creator ID
 			body.Name,
 			body.Symbol,
 			body.Purpose,
 			"0.0", // hard cap
-			"PLACE_HOLDER_TOKEN_ADDRESS",
-			"PLACE_HOLDER_TOKEN_TX_ADDRESS",
+			add.Hex(),
+			tx.Hash().Hex(),
 		)
 		if err != nil {
 			c.String(http.StatusBadRequest, err.Error())
