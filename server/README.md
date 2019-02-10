@@ -27,8 +27,7 @@ The following methods currently exist
 
 All /wapi/ requests need to provide the session cookie to the server, which was returned with the /wapi/login, in order to be correctly authenticated.
 
-In order to start communicating with the server one needs to perform the following API requests
-- 
+
 
 
 
