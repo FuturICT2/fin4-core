@@ -44,7 +44,7 @@ func (db *Service) ToggleFavoriteBlock(user *datatype.User, blockID datatype.ID)
 			return datatype.ErrServerError
 		}
 		_, err = db.Exec(`UPDATE asset_block
-			SET favoritesCount = favoritesCount - 1
+			SET favoritesCounter = favoritesCounter - 1
 			WHERE id = ? `,
 			blockID,
 		)

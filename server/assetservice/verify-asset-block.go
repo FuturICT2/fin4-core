@@ -25,7 +25,7 @@ func (db *Service) VerifyAssetBlock(
       b.assetId,
       b.userId
     FROM asset_block b
-    LEFT JOIN trade_asset ta ON ta.id=b.assetId
+    LEFT JOIN asset ta ON ta.id=b.assetId
     WHERE b.id=? AND ta.creatorId=? AND b.status = ?`,
 		blockID,
 		user.ID,
@@ -66,7 +66,7 @@ func (db *Service) acceptAssetBlock(
 		minerIncrement = 0
 	}
 	_, err = tx.Exec(
-		`UPDATE trade_asset SET
+		`UPDATE asset SET
 	   	totalSupply = totalSupply + 1,
 			minersCounter = minersCounter + ?
 	   WHERE id=?`,
@@ -77,7 +77,7 @@ func (db *Service) acceptAssetBlock(
 		apperrors.Critical("assetservice:acceptAssetBlock:2", err)
 		return datatype.ErrServerError
 	}
-	err = sc.UserService.DepositBalance(doerID, assetID, decimaldt.NewFromFloat(1))
+	err = db.DepositBalance(doerID, assetID, decimaldt.NewFromFloat(1))
 	if err != nil {
 		apperrors.Critical("assetservice:acceptAssetBlock:3", err)
 		return datatype.ErrServerError

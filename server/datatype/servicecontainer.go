@@ -6,6 +6,7 @@ import "github.com/FuturICT2/fin4-core/server/ethereum"
 type ServiceContainer struct {
 	Config       Config
 	AssetService AssetService
+	TokenService TokenService
 	UserService  UserService
 	FileStorage  FileStorage
 	Ethereum     *ethereum.Ethereum

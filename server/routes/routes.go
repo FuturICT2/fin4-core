@@ -1,10 +1,10 @@
 package routes
 
 import (
-	"github.com/FuturICT2/fin4-core/server/assethandlers"
 	"github.com/FuturICT2/fin4-core/server/datatype"
 	"github.com/FuturICT2/fin4-core/server/routermiddleware"
 	"github.com/gin-gonic/gin"
+	"github.com/kjda/exchange/server/tokenhandlers"
 
 	"github.com/FuturICT2/fin4-core/server/commonhandlers"
 	"github.com/FuturICT2/fin4-core/server/userhandlers"
@@ -35,7 +35,9 @@ func SetupRouting(sc datatype.ServiceContainer) *gin.Engine {
 	{
 		wapi.GET("/csrf", routermiddleware.SetCsrfToken())
 		userhandlers.InjectHandlers(sc, wapi)
-		assethandlers.InjectHandlers(sc, wapi)
+		tokenhandlers.InjectHandlers(sc, wapi)
+		// V0.2 for assets
+		assethanndlers.InjetHandelrs(sc, wapi)
 	}
 
 	// API

@@ -13,13 +13,16 @@ const (
 
 // Block asset block data type
 type Block struct {
-	ID             ID
-	UserID         ID
-	UserName       string
-	AssetID        ID
-	Text           string
-	Images         []string
-	Status         int
-	CreatedAt      time.Time
-	CreatedAtHuman string
+	ID                         ID
+	UserID                     ID
+	UserName                   string
+	AssetID                    ID
+	Text                       string
+	Images                     []string
+	Status                     int
+	YtVideoID                  string
+	FavoritesCounter           int
+	EthereumTransactionAddress string
+	CreatedAt                  time.Time
+	CreatedAtHuman             string
 }

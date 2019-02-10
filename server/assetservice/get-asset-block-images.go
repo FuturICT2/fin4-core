@@ -13,8 +13,8 @@ func (db *Service) GetAssetBlockImages(
 	rows, err := db.Query(
 		`SELECT
       filepath
-    FROM asset_claim_image
-    WHERE claimId = ?`,
+    FROM asset_block_image
+    WHERE blockId = ?`,
 		blockID,
 	)
 	if err != nil {

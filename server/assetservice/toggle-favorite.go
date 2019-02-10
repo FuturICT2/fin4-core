@@ -14,7 +14,7 @@ func (db *Service) ToggleFavorite(user *datatype.User, assetID datatype.ID) erro
 	}
 	count := 0
 	err := db.QueryRow(
-		"SELECT count(*) FROM trade_asset WHERE id = ?",
+		"SELECT count(*) FROM asset WHERE id = ?",
 		assetID,
 	).Scan(&count)
 	if err != nil {
@@ -24,7 +24,7 @@ func (db *Service) ToggleFavorite(user *datatype.User, assetID datatype.ID) erro
 		return errors.New("Invalid asset")
 	}
 	err = db.QueryRow(
-		"SELECT count(*) FROM trade_asset_favorites WHERE userId = ? AND assetId = ?",
+		"SELECT count(*) FROM asset_favorites WHERE userId = ? AND assetId = ?",
 		user.ID,
 		assetID,
 	).Scan(&count)
@@ -33,13 +33,13 @@ func (db *Service) ToggleFavorite(user *datatype.User, assetID datatype.ID) erro
 	}
 	if count > 0 {
 		db.Exec(
-			"DELETE FROM trade_asset_favorites WHERE userId = ? AND assetId = ?",
+			"DELETE FROM asset_favorites WHERE userId = ? AND assetId = ?",
 			user.ID,
 			assetID,
 		)
 	} else {
 		_, err := db.Exec(
-			"INSERT INTO trade_asset_favorites SET userId = ?, assetId = ?, addedAt = ?",
+			"INSERT INTO asset_favorites SET userId = ?, assetId = ?, addedAt = ?",
 			user.ID,
 			assetID,
 			time.Now(),

@@ -13,16 +13,19 @@ func (db *Service) GetAssetBlocks(
 	result := []datatype.Block{}
 	rows, err := db.Query(
 		`SELECT
-      b.id,
-      b.userId,
-      b.text,
-      b.status,
-			b.videoID,
-			b.createdAt,
-      u.username
-    FROM asset_block b
-    LEFT JOIN user u ON b.userId = u.id
-    WHERE b.assetId = ? AND b.status <> ?
+      block.id,
+      block.assetId,
+      block.userId,
+			user.username,
+      block.text,
+			block.videoID,
+			block.status,
+			block.favoritesCounter,
+			block.ethereumTransactionAddress,
+      block.createdAt
+    FROM asset_block block
+    LEFT JOIN user user ON block.userId = user.id
+    WHERE block.assetId = ? AND block.status <> ?
     ORDER BY id DESC`,
 		assetID,
 		datatype.BlockRejected,
@@ -36,12 +39,15 @@ func (db *Service) GetAssetBlocks(
 		var c datatype.Block
 		err := rows.Scan(
 			&c.ID,
+			&c.AssetID,
 			&c.UserID,
-			&c.Text,
-			&c.Status,
-			&c.YtVideoID,
-			&c.CreatedAt,
 			&c.UserName,
+			&c.Text,
+			&c.YtVideoID,
+			&c.Status,
+			&c.FavoritesCounter,
+			&c.EthereumTransactionAddress,
+			&c.CreatedAt,
 		)
 		c.CreatedAtHuman = helpers.DateToHuman(c.CreatedAt)
 		if err != nil {

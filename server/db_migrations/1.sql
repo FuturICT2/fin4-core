@@ -2,30 +2,6 @@
 
 SET FOREIGN_KEY_CHECKS=0;
 
-DROP TABLE IF EXISTS `gorp_migrations`;
-CREATE TABLE `gorp_migrations` (
-  `id` varchar(255) NOT NULL,
-  `applied_at` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-DROP TABLE IF EXISTS `user`;
-CREATE TABLE `user` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `email` varchar(255) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `salt` varchar(32) NOT NULL,
-  `ethereumAddress` VARCHAR(512) NOT NULL,
-  `createdAt` datetime NOT NULL,
-  `updatedAt` datetime NOT NULL,
-  `agreeToTerms` tinyint(1) unsigned NOT NULL DEFAULT '1',
-  `isDeleted` tinyint(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `id_UNIQUE` (`id`),
-  UNIQUE KEY `email_UNIQUE` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=10001 DEFAULT CHARSET=utf8mb4;
-
 DROP TABLE IF EXISTS `user_balance`;
 CREATE TABLE `user_balance` (
   `userId` int(10) unsigned NOT NULL,
@@ -34,26 +10,6 @@ CREATE TABLE `user_balance` (
   `reserved` decimal(30,8) NOT NULL DEFAULT '0.00000000',
   PRIMARY KEY (`userId`,`tokenId`),
   CONSTRAINT `userID_FKK` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-DROP TABLE IF EXISTS `user_change_email_confirm`;
-CREATE TABLE `user_change_email_confirm` (
-  `userId` int(10) unsigned NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `token` varchar(255) NOT NULL,
-  `createdAt` datetime NOT NULL,
-  PRIMARY KEY (`userId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-DROP TABLE IF EXISTS `user_password_reset`;
-CREATE TABLE `user_password_reset` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `userId` int(10) unsigned NOT NULL,
-  `token` varchar(255) DEFAULT NULL,
-  `createdAt` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `userId` (`userId`),
-  CONSTRAINT `userId` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS `asset`;
@@ -87,8 +43,8 @@ CREATE TABLE `asset_favorites` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
-DROP TABLE IF EXISTS `asset_claim`;
-CREATE TABLE `asset_claim` (
+DROP TABLE IF EXISTS `asset_block`;
+CREATE TABLE `asset_block` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `assetId` int(10) unsigned NOT NULL,
   `userId` int(10) unsigned NOT NULL,
@@ -103,11 +59,10 @@ CREATE TABLE `asset_claim` (
   KEY `user_fkk` (`userId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8mb4;
 
-
-DROP TABLE IF EXISTS `asset_claim_favorites`;
-CREATE TABLE `asset_claim_favorites` (
+DROP TABLE IF EXISTS `asset_block_favorites`;
+CREATE TABLE `asset_block_favorites` (
   `userId` int(10) unsigned NOT NULL,
-  `claimId` int(10) unsigned NOT NULL,
+  `blockId` int(10) unsigned NOT NULL,
   `createdAt` datetime NOT NULL,
   UNIQUE KEY `pk_userid_assetid` (`assetId`,`userId`),
   KEY `userid_idx` (`userId`),
@@ -116,10 +71,10 @@ CREATE TABLE `asset_claim_favorites` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
-DROP TABLE IF EXISTS `asset_claim_image`;
-CREATE TABLE `asset_claim_image` (
+DROP TABLE IF EXISTS `asset_block_image`;
+CREATE TABLE `asset_block_image` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `claimId` int(10) unsigned NOT NULL,
+  `blockId` int(10) unsigned NOT NULL,
   `filepath` VARCHAR(512) NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8mb4;

@@ -16,7 +16,6 @@ func toAssetsResponse(entries []datatype.Asset) []interface{} {
 			Description string
 			TotalSupply int64
 			MinersCount int
-			Change24    string
 		}{
 			ID:          entry.ID,
 			Symbol:      entry.Symbol,
@@ -25,7 +24,7 @@ func toAssetsResponse(entries []datatype.Asset) []interface{} {
 			CreatorName: entry.CreatorName,
 			Description: entry.Description,
 			TotalSupply: entry.Supply,
-			MinersCount: entry.MinersCount,
+			MinersCount: entry.MinersCounter,
 		})
 	}
 	return res

@@ -70,7 +70,7 @@ func (db *Service) GetAssetMiners(
 	clean := []datatype.Miner{}
 	for _, v := range minersMap {
 		minedFloat, _ := v.Mined.Float64()
-		percentage := minedFloat / float64(asset.TotalSupply)
+		percentage := minedFloat / float64(asset.Supply)
 		v.MiningPercentage = fmt.Sprintf("%f", percentage*100.0)
 		clean = append(clean, v)
 	}
