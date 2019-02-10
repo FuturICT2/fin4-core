@@ -3,11 +3,18 @@
 
 # Finance 4.0
 Finance 4.0 aims for a multi-dimensional incentive system to motivate sustainable behavior. Communities can creat cryptographic tokens to incentivize certain behavior, e.g. collecting waste, avoiding C02, helping others, etc. Users can obtain these tokens by proving that they performed such actions. The number of different token types is unlimited, leading over time to a multi-dimensional system of different incentives -- smart coordination through "sustainable money". In the same spirit, the system uses tokens for democratic governance. 
-A live instance can be found here: www.finfour.net 
+A live instance can be found here: www.finfour.net .
+Main concepts of the Finance 4.0 system are explained in [Decrypting Distributed Ledger Systems](https://arxiv.org/abs/1811.03419). This document is a good starter for everyone 
+- What is a cryptoeconomic token?
+- What is the difference between Ethereum, Bitcoin and Hyperledger?
+- What are actions in a distributed ledger technology (DLT) system?
+- What are claims?
+- How do cryptoeconomic tokens have value?
 
-To learn more:
 
-Short video: [YouTube](https://www.youtube.com/watch?v=DSmF2donfBQ)
+To learn more about the finance 4.0 system:
+
+Short video: [Youtube - Distributed Sustainability](https://www.youtube.com/watch?v=oNlKdHjvExo)
 
 Social media: [Twitter](https://twitter.com/futurict2)
 
