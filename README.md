@@ -145,8 +145,10 @@ In particular, main.go is executed which
 
 <a name="contribution"></a>
 # Contribute!
-We are looking for collaboration from the Open Source community. The project needs enhancements regarding code quality, documentation, and testing. To contribute to the project please take a look at [open issues](https://github.com/FuturICT2/fin4-core/issues). [Here](CONTRIBUTIONS.md) you can find more details on the architecture of the code and how to run the development environment on your local machine.
-
+We are looking for collaboration from the Open Source community. The project needs enhancements regarding code quality, documentation, and testing. To contribute to the project please take a look at [open issues](https://github.com/FuturICT2/fin4-core/issues).
+<!--
+[Here](CONTRIBUTIONS.md) you can find more details on the architecture of the code and how to run the development environment on your local machine.
+-->
 <!--
 markdown syntax https://help.github.com/articles/page-build-failed-markdown-errors/
 -->
