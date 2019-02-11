@@ -228,10 +228,10 @@ update msg model =
                     case userlogin.user of
                         Just _ ->
                             if userlogin.isNewUser then
-                                [ newUrl "#tokens" ]
+                                [ newUrl "#" ]
 
                             else
-                                [ newUrl "#tokens" ]
+                                [ newUrl "#" ]
 
                         _ ->
                             [ Cmd.map UserLoginMsg userloginCmd ]

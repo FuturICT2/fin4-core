@@ -39,6 +39,7 @@ type alias Asset =
     , minersCount : Int
     , favoritesCount : Int
     , didUserLike : Bool
+    , miners : List Miner
     }
 
 
@@ -88,6 +89,7 @@ assetDecoder =
         |> JP.required "MinersCounter" JD.int
         |> JP.required "FavoritesCounter" JD.int
         |> JP.required "DidUserLike" JD.bool
+        |> JP.optional "Miners" (JD.list minerDecoder) []
 
 
 assetListDecoder : JD.Decoder (List Asset)

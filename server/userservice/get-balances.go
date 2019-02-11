@@ -9,15 +9,15 @@ import (
 func (db *Service) GetBalances(userID datatype.ID) ([]datatype.Balance, error) {
 	result := []datatype.Balance{}
 	rows, err := db.Query(`SELECT
-			b.tokenId,
+			b.assetId,
 			b.balance,
 			b.reserved,
 			t.name,
 			t.symbol,
-			t.blockchainAddress
-		FROM user_balance b
+			t.ethereumAddress
+		FROM asset_user_balance b
 		LEFT JOIN
-			token t ON t.id = b.tokenId
+			asset t ON t.id = b.assetId
 		WHERE b.userId=?`,
 		userID,
 	)

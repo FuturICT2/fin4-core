@@ -1,7 +1,7 @@
 module ExploreAssets.View exposing (render, renderAsset)
 
 import Asset.Model exposing (Asset)
-import Common.Styles exposing (paddingLeft, toMdlCss)
+import Common.Styles exposing (padding, paddingLeft, textCenter, toMdlCss)
 import ExploreAssets.Model exposing (Model)
 import ExploreAssets.Msg exposing (Msg(..))
 import Html exposing (..)
@@ -10,6 +10,7 @@ import Html.Events exposing (onClick)
 import Identicon exposing (identicon)
 import Main.Context exposing (Context)
 import Main.Routing exposing (assetPath, profilePath)
+import Material.Button as Button
 import Material.Icon as Icon
 import Material.List as Lists
 import Material.Options as Options exposing (css)
@@ -24,8 +25,24 @@ render ctx model =
                 div [] [ text "There are no tokens yet!" ]
 
             False ->
-                div [ entriesListStyle ] <|
-                    List.map (renderAsset ctx model) model.assets
+                div [ entriesListStyle ]
+                    [ header [ textCenter ]
+                        [ text "Topics"
+                        ]
+                    , div [ textCenter ]
+                        [ Button.render Mdl
+                            [ 1 ]
+                            model.mdl
+                            [ Button.raised
+                            , Button.ripple
+                            , Button.colored
+                            , Button.link "#create-asset"
+                            ]
+                            [ text "Create new topic"
+                            ]
+                        ]
+                    , div [] <| List.map (renderAsset ctx model) model.assets
+                    ]
         ]
 
 
@@ -41,9 +58,9 @@ renderAsset ctx model asset =
                         [ text <| asset.name ]
                     , Options.styled span [ Typography.body1 ] [ text <| " - " ++ asset.symbol ]
                     , Lists.subtitle []
-                        [ text <| "Total supply= " ++ toString asset.totalSupply
-                        , text <| " | Miners: " ++ toString asset.minersCount
-                        , text <| " | Oracle: "
+                        [ text <| "Supply= " ++ toString asset.totalSupply
+                        , text <| " | Contributors: " ++ toString asset.minersCount
+                        , text <| " | Moderator: "
                         , a [ href (profilePath asset.creatorId) ] [ text asset.creatorName ]
                         ]
                     ]

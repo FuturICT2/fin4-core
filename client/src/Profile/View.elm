@@ -63,17 +63,6 @@ renderProfile ctx model profile =
             [ div [ coverInfoStyle ]
                 [ div [ coverNameStyle ]
                     [ text profile.username
-                    , case profile.isOwnder of
-                        True ->
-                            div [ style [ ( "color", "black" ) ] ]
-                                [ Options.styled span
-                                    [ Typography.caption ]
-                                    [ text "Value of your profile is 0 FILS"
-                                    ]
-                                ]
-
-                        False ->
-                            span [] []
                     ]
                 ]
             , div [ coverProfileImageStyle imgUrl ]
@@ -90,7 +79,8 @@ renderProfile ctx model profile =
                 Nothing ->
                     span [] []
             ]
-        , renderTabs ctx model profile
+        , Html.map TimelineMsg <|
+            Timeline.View.render ctx model.timeline
         ]
 
 

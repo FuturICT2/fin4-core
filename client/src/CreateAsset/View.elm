@@ -38,7 +38,7 @@ renderInformation ctx model =
         [ div [ informationHelpStyle ]
             [ Options.styled p
                 [ Typography.body1 ]
-                [ text """Once you create a topic, a social cryptocurrency will
+                [ text """Once you create a topic, a token will
                       be created for that topic with 0 currency supply. The feedback from people on
                       this topic initiates and generates the cryptocurrency
                       supply. Therefore, the more content and posts are added to
@@ -112,6 +112,16 @@ renderForm ctx model =
 
                     False ->
                         text "Confirm"
+                ]
+            ]
+        , div [ informationHelpStyle ]
+            [ Options.styled p
+                [ Typography.body1 ]
+                [ text """Once you create a topic, a token will
+                      be created for that topic with 0 currency supply. The feedback from people on
+                      this topic initiates and generates the cryptocurrency
+                      supply. Therefore, the more content and posts are added to
+                      the topic, the more cryptocurrency is mined "socially"."""
                 ]
             ]
         ]

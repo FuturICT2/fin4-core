@@ -110,20 +110,13 @@ renderTabs ctx model asset =
         , Tabs.label opts
             [ text <| "Contributors "
             ]
-        , Tabs.label opts
-            [ text <| "Trade"
-            ]
         ]
         [ case model.tab of
             0 ->
                 renderBlocksTab ctx model asset
 
-            1 ->
-                div [] [ text "miners" ]
-
-            -- renderMiners ctx model asset
             _ ->
-                renderTrade ctx model asset
+                renderMiners ctx model asset
         ]
 
 
@@ -236,51 +229,41 @@ renderImage context model asset idx image =
                 ]
 
 
+renderMiners : Context -> Model -> Asset -> Html Msg
+renderMiners context model asset =
+    case List.length asset.miners < 1 of
+        True ->
+            div [ paddingTop 15 ] [ text "No mining happened yet" ]
 
--- renderMiners : Context -> Model -> Asset -> Html Msg
--- renderMiners context model asset =
---     case List.length asset.miners < 1 of
---         True ->
---             div [ paddingTop 15 ] [ text "No mining happened yet" ]
---
---         False ->
---             div [ minersTableStyle ]
---                 [ Table.table
---                     []
---                     [ Table.thead []
---                         [ Table.tr []
---                             [ Table.th [] [ text "User" ]
---                             , Table.th []
---                                 [ text <| "Mined (" ++ asset.symbol ++ ")" ]
---                             , Table.th [] [ text "Mining Percentage" ]
---                             ]
---                         ]
---                     , Table.tbody [] <|
---                         List.map (renderMiner context model asset) asset.miners
---                     ]
---                 ]
---
---
--- renderMiner : Context -> Model -> Asset -> Miner -> Html Msg
--- renderMiner context model asset miner =
---     Table.tr []
---         [ Table.td []
---             [ a [ href <| profilePath miner.id ] [ text miner.userName ]
---             ]
---         , Table.td [] [ renderDecimalWithPrecision miner.mined 2 ]
---         , Table.td []
---             [ renderDecimalWithPrecision miner.miningPercentage 2
---             , text "%"
---             ]
---         ]
+        False ->
+            div [ minersTableStyle ]
+                [ Table.table
+                    []
+                    [ Table.thead []
+                        [ Table.tr []
+                            [ Table.th [] [ text "User" ]
+                            , Table.th []
+                                [ text <| "Mined (" ++ asset.symbol ++ ")" ]
+                            , Table.th [] [ text "Mining Percentage" ]
+                            ]
+                        ]
+                    , Table.tbody [] <|
+                        List.map (renderMiner context model asset) asset.miners
+                    ]
+                ]
 
 
-renderTrade : Context -> Model -> Asset -> Html Msg
-renderTrade context model asset =
-    div [ padding 50, textCenter ]
-        [ Options.styled p
-            [ Typography.caption ]
-            [ text "Coming soon..." ]
+renderMiner : Context -> Model -> Asset -> Miner -> Html Msg
+renderMiner context model asset miner =
+    Table.tr []
+        [ Table.td []
+            [ a [ href <| profilePath miner.id ] [ text miner.userName ]
+            ]
+        , Table.td [] [ renderDecimalWithPrecision miner.mined 2 ]
+        , Table.td []
+            [ renderDecimalWithPrecision miner.miningPercentage 2
+            , text "%"
+            ]
         ]
 
 
@@ -506,6 +489,7 @@ assetPurposeStyle : Attribute a
 assetPurposeStyle =
     style
         [ ( "margin", "15px 10px" )
+        , ( "text-align", "left" )
         ]
 
 

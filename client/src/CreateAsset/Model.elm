@@ -22,7 +22,7 @@ type alias Model =
 init : Model
 init =
     { mdl = Material.model
-    , step = InformationView
+    , step = FormView
     , name = ""
     , symbol = ""
     , purpose = ""
