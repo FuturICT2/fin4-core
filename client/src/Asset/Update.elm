@@ -91,16 +91,7 @@ update ctx msg model =
             model ! [ assetBlockImageSelected <| "block-img" ]
 
         ImageRead data ->
-            let
-                newImage =
-                    { contents = data.contents
-                    , filename = data.filename
-                    }
-            in
-            { model
-                | imgs = List.append model.imgs [ newImage ]
-            }
-                ! []
+            { model | imgs = List.append model.imgs [ data ] } ! []
 
         DeleteImage idx ->
             let

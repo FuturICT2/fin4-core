@@ -1,8 +1,8 @@
 package assetservice
 
 import (
-	"github.com/FuturICT2/fin4-core/server/datatype"
 	"github.com/FuturICT2/fin4-core/server/apperrors"
+	"github.com/FuturICT2/fin4-core/server/datatype"
 	"github.com/FuturICT2/fin4-core/server/helpers"
 )
 
@@ -17,17 +17,17 @@ func (db *Service) FindAll(user *datatype.User) ([]datatype.Asset, error) {
 			asset.description,
 			asset.supply,
 			asset.creatorId,
-			user.usernname,
+			user.name,
 			asset.minersCounter,
 			asset.favoritesCounter,
 			asset.ethereumAddress,
 			asset.ethereumTransactionAddress,
 			asset.createdAt,
-			IF(favorites.blockId, TRUE, FALSE),
-		FROM asset asset
-		LEFT JOIN user user ON asset.creatorId = user.id
+			IF(favorites.assetId, TRUE, FALSE)
+		FROM asset
+		LEFT JOIN user ON asset.creatorId=user.id
 		LEFT JOIN asset_favorites favorites ON asset.id=favorites.assetId AND favorites.userId=?
-		ORDER BY id DESC`,
+		ORDER BY asset.id DESC`,
 		user.ID,
 	)
 	if err != nil {
@@ -49,7 +49,6 @@ func (db *Service) FindAll(user *datatype.User) ([]datatype.Asset, error) {
 			&c.EthereumAddress,
 			&c.EthereumTransactionAddress,
 			&c.CreatedAt,
-			&c.CreatedAtHuman,
 			&c.DidUserLike,
 		)
 		if err != nil {

@@ -13,7 +13,7 @@ func (db *Service) DepositBalance(
 	amount decimaldt.Decimal,
 ) error {
 	stmt, err := db.Prepare(
-		`INSERT INTO user_balance
+		`INSERT INTO asset_user_balance
       SET
         userId = ?, assetId = ?, balance = ?, reserved = 0
       ON DUPLICATE KEY UPDATE

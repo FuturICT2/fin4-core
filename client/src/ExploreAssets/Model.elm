@@ -1,7 +1,10 @@
 module ExploreAssets.Model exposing (Model, init)
 
+import Asset.Model exposing (Asset)
+import Common.Json exposing (decodeAt)
+import Common.Log exposing (log)
+import ExploreAssets.Msg exposing (Msg(..))
 import Material
-import Model.Asset exposing (Asset)
 
 
 type alias Model =

@@ -77,7 +77,5 @@ containerStyle isMobile =
 bodyStyle : Attribute a
 bodyStyle =
     style
-        [ ( "padding-left", "10px" )
-        , ( "padding-right", "15px" )
-        , ( "width", "100%" )
+        [ ( "width", "100%" )
         ]

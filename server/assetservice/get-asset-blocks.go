@@ -16,7 +16,7 @@ func (db *Service) GetAssetBlocks(
       block.id,
       block.assetId,
       block.userId,
-			user.username,
+			user.name,
       block.text,
 			block.videoID,
 			block.status,

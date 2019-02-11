@@ -9,7 +9,7 @@ const app = Elm.Main.embed(document.getElementById('app'), {
   apiBase: apiBase
 });
 
-app.ports.assetBlockImageSelected.subscribe(filerReader(app.ports.fileContentRead))
+app.ports.assetBlockImageSelected.subscribe(filerReader(app.ports.assetBlockImageRead))
 app.ports.profileImageSelected.subscribe(filerReader(app.ports.proileImageContentRead))
 
 
@@ -36,7 +36,7 @@ function filerReader (port) {
             filename: file.name
           };
           // We call the `fileContentRead` port with the file data
-          // which will be sent to our Elm runtime via Subscriptions.
+          // which will be sent to our Elm runtime via Subscriptions
           port.send(portData);
         });
         // Connect our FileReader with the file that was selected in our `input` node.

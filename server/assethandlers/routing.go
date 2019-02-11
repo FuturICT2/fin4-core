@@ -16,7 +16,7 @@ func InjectHandlers(sc datatype.ServiceContainer, rg *gin.RouterGroup) {
 	rg.POST("/v2/assets/:assetId/toggle-favorite", authenticator, ToggleFavoriteAsset(sc))
 
 	// Claims APIs
-	rg.POST("/v2/asset-claims", authenticator, CreateAssetBlock(sc))
-	rg.POST("/v2/claim-verify", authenticator, VerifyAssetBlock(sc))
-	rg.POST("/v2/claim/:claimId/toggle-favorite", authenticator, ToggleFavoriteBlock(sc))
+	rg.POST("/v2/asset-blocks", authenticator, CreateAssetBlock(sc))
+	rg.POST("/v2/asset-block/:blockId/verify", authenticator, VerifyAssetBlock(sc))
+	rg.POST("/v2/asset-block/:blockId/toggle-favorite", authenticator, ToggleFavoriteBlock(sc))
 }

@@ -23,7 +23,7 @@ func (db *Service) GetAssetMiners(
 	result := []datatype.Miner{}
 	rows, err := db.Query(`SELECT
 			c.userId,
-			u.username
+			u.name
 		FROM asset_block c
 		LEFT JOIN
 			user u ON u.id = c.userId

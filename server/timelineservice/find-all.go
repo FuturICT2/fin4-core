@@ -19,16 +19,16 @@ func (db *Service) FindAll(
 	result := []datatype.TimelineEntry{}
 	var clause string
 	if timelineFilter.Type == datatype.HOMETIMELINE {
-		clause = "WHERE b.status=1 AND asset.isListed = 1"
+		clause = "WHERE b.status=1 "
 	} else if timelineFilter.Type == datatype.ASSETTIMELINE {
 		clause = fmt.Sprintf(
-			" WHERE b.status<>%d AND asset.isListed = 1 AND asset.id = %d",
+			" WHERE b.status<>%d AND asset.id = %d",
 			datatype.BlockRejected,
 			timelineFilter.AssetID,
 		)
 	} else if timelineFilter.Type == datatype.USERTIMELINE {
 		clause = fmt.Sprintf(
-			" WHERE b.status<>%d AND asset.isListed = 1 AND doer.id = %d",
+			" WHERE b.status<>%d AND doer.id = %d",
 			datatype.BlockRejected,
 			timelineFilter.UserID,
 		)
@@ -37,21 +37,21 @@ func (db *Service) FindAll(
 			SELECT
 				b.id,
 				b.userId,
-				doer.username,
+				doer.name,
 				doer.profileImageUrl,
 				asset.id,
 				asset.name,
 				asset.symbol,
 				oracle.id,
-				oracle.username,
+				oracle.name,
 				b.text,
 				b.status,
 				b.videoID,
-				b.favoritesCount,
+				b.favoritesCounter,
 				b.createdAt,
 				IF(favorites.blockId, TRUE, FALSE)
 			FROM asset_block b
-			LEFT JOIN trade_asset asset ON b.assetId=asset.Id
+			LEFT JOIN asset asset ON b.assetId=asset.Id
 			LEFT JOIN user doer ON doer.id=b.userId
 			LEFT JOIN user oracle ON oracle.id=asset.creatorId
 			LEFT JOIN asset_block_favorites favorites ON b.id=favorites.blockId AND favorites.userId=?

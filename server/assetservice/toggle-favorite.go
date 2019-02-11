@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/FuturICT2/fin4-core/server/datatype"
+	"github.com/kjda/exchange/server/apperrors"
 )
 
 //ToggleFavorite toggles asset as fav/not fav
@@ -37,6 +38,18 @@ func (db *Service) ToggleFavorite(user *datatype.User, assetID datatype.ID) erro
 			user.ID,
 			assetID,
 		)
+		if err != nil {
+			return datatype.ErrServerError
+		}
+		_, err = db.Exec(`UPDATE asset
+			SET favoritesCounter = favoritesCounter - 1
+			WHERE id = ? `,
+			assetID,
+		)
+		if err != nil {
+			apperrors.Critical("assetservice:toggle-favorite:3", err)
+			return datatype.ErrServerError
+		}
 	} else {
 		_, err := db.Exec(
 			"INSERT INTO asset_favorites SET userId = ?, assetId = ?, addedAt = ?",
@@ -45,6 +58,15 @@ func (db *Service) ToggleFavorite(user *datatype.User, assetID datatype.ID) erro
 			time.Now(),
 		)
 		if err != nil {
+			return datatype.ErrServerError
+		}
+		_, err = db.Exec(`UPDATE asset
+			SET favoritesCounter = favoritesCounter + 1
+			WHERE id = ? `,
+			assetID,
+		)
+		if err != nil {
+			apperrors.Critical("assetservice:toggle-favorite:3", err)
 			return datatype.ErrServerError
 		}
 	}

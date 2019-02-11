@@ -1,5 +1,7 @@
 package datatype
 
+import "github.com/FuturICT2/fin4-core/server/decimaldt"
+
 // AssetService defines asset service interface
 type AssetService interface {
 	FindAll(*User) ([]Asset, error)
@@ -30,4 +32,9 @@ type AssetService interface {
 	GetAssetMiners(assetID ID) ([]Miner, error)
 	IsOracle(userID ID, assetID ID) bool
 	GetAssetBlockImages(blockID ID) ([]string, error)
+	FindUserBalance(userID ID, assetID ID) (
+		decimaldt.Decimal,
+		decimaldt.Decimal,
+		error,
+	)
 }

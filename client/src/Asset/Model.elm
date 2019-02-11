@@ -1,4 +1,4 @@
-module Asset.Model exposing (Asset, Block, Image, Miner, Model, assetDecoder, init)
+module Asset.Model exposing (Asset, Block, Image, Miner, Model, assetDecoder, assetListDecoder, init)
 
 import Http
 import Json.Decode as JD
@@ -36,10 +36,9 @@ type alias Asset =
     , creatorName : String
     , description : String
     , totalSupply : Int
-    , change24 : String
-    , userBalance : String
-    , blocks : List Block
-    , miners : List Miner
+    , minersCount : Int
+    , favoritesCount : Int
+    , didUserLike : Bool
     }
 
 
@@ -85,11 +84,15 @@ assetDecoder =
         |> JP.required "CreatorID" JD.int
         |> JP.required "CreatorName" JD.string
         |> JP.required "Description" JD.string
-        |> JP.required "TotalSupply" JD.int
-        |> JP.required "Change24" JD.string
-        |> JP.required "UserBalance" JD.string
-        |> JP.required "Blocks" (JD.list blockDecoder)
-        |> JP.required "Miners" (JD.list minerDecoder)
+        |> JP.required "Supply" JD.int
+        |> JP.required "MinersCounter" JD.int
+        |> JP.required "FavoritesCounter" JD.int
+        |> JP.required "DidUserLike" JD.bool
+
+
+assetListDecoder : JD.Decoder (List Asset)
+assetListDecoder =
+    JD.list assetDecoder
 
 
 blockDecoder : JD.Decoder Block

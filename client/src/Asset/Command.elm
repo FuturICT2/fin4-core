@@ -48,7 +48,7 @@ submitBlockCmd : Context -> Int -> String -> List Image -> Cmd Msg
 submitBlockCmd ctx assetId blockText imgs =
     postWithCsrf ctx
         SubmitBlockResponse
-        "/v2/create-asset-block"
+        "/v2/asset-blocks"
         (encodeBlockSubmition assetId blockText imgs)
         emptyResponseDecoder
 
@@ -57,10 +57,9 @@ verifyBlockCmd : Context -> Bool -> Int -> Cmd Msg
 verifyBlockCmd ctx isAccepted blockId =
     postWithCsrf ctx
         VerifyBlockResponse
-        "/v2/verify-asset-block"
+        ("/v2/asset-block/" ++ toString blockId ++ "/verify")
         (JE.object
-            [ ( "blockId", JE.int blockId )
-            , ( "isAccepted", JE.bool isAccepted )
+            [ ( "isAccepted", JE.bool isAccepted )
             ]
         )
         emptyResponseDecoder

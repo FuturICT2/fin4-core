@@ -1,6 +1,6 @@
 module ExploreAssets.Update exposing (update)
 
-import ExploreAssets.Command exposing (loadFavoritesCmd, toggleFavoriteCmd)
+import ExploreAssets.Command exposing (loadAssetsCmd, toggleFavoriteCmd)
 import ExploreAssets.Model exposing (Model)
 import ExploreAssets.Msg exposing (Msg(..))
 import Main.Context exposing (Context)
@@ -32,7 +32,7 @@ update ctx msg model =
         OnToggleFavoriteResponse resp ->
             case resp of
                 Ok _ ->
-                    model ! [ loadFavoritesCmd ctx ]
+                    model ! [ loadAssetsCmd ctx 1 ]
 
                 Err _ ->
                     model ! []

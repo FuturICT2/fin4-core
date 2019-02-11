@@ -2,8 +2,8 @@ package ethereum
 
 import (
 	"errors"
-	"math/big"
 	"log"
+	"math/big"
 
 	"github.com/FuturICT2/fin4-core/server/env"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
@@ -14,6 +14,7 @@ import (
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
+	"github.com/FuturICT2/fin4-core/server/apperrors"
 	"github.com/lytics/logrus"
 )
 
@@ -27,9 +28,8 @@ type Ethereum struct {
 
 // MustNewEthereum create new Ethereum interface, panic if no connection
 func MustNewEthereum() *Ethereum {
-	//conn, err := ethclient.Dial("https://rinkeby.infura.io/")
-	conn, err := ethclient.Dial(env.MustGetenv("SIM_ETH_HOST"))
-
+	conn, err := ethclient.Dial("https://rinkeby.infura.io/")
+	// conn, err := ethclient.Dial(env.MustGetenv("SIM_ETH_HOST"))
 
 	if err != nil {
 		logrus.Fatal("Failed to connect to the Ethereum client: %v", err)
@@ -55,7 +55,7 @@ func MustNewEthereum() *Ethereum {
 	gAlloc := map[common.Address]core.GenesisAccount{
 		auth.From: {Balance: big.NewInt(10000000000)},
 	}
-	sim := backends.NewSimulatedBackend(gAlloc, 21000)
+	sim := backends.NewSimulatedBackend(gAlloc, 40000)
 	return &Ethereum{
 		rpc:      conn,
 		sim:      sim,
@@ -81,29 +81,27 @@ func (b *Ethereum) DeployMintable(
 	address, tx, _, err := DeployMintable(
 		b.auth,
 		// change here to rpc and it will deploy to rpc
-		b.rpc,
+		b.sim,
 		name_,
 		symbol_,
 		decimals_,
 		minter,
 	)
 	if err != nil {
-		logrus.WithFields(logrus.Fields{
-			"error": err.Error(),
-		}).Error("ethereum:DeployMintable:e1")
+		apperrors.Critical("ethereum:DeployMintable:e1", err)
 		return address, nil, errors.New("Error deploying token contract to Ethereum")
 	}
 	return address, tx, nil
 }
 
-// DeployMintable deployes new Mintable token to Ethereum from server account
+// DeployMintable mints a new currency units to the passed token and toAddress
 func (b *Ethereum) Mint(
 	tokenAddress common.Address,
 	toAddress common.Address,
 	amount int64,
 ) (*types.Transaction, error) {
 	// here change b.sim to rpc and it will communicate with the rpc
-	mintable, err := NewMintable(tokenAddress, b.rpc)
+	mintable, err := NewMintable(tokenAddress, b.sim)
 	if err != nil {
 		logrus.WithFields(logrus.Fields{
 			"error": err.Error(),

@@ -30,4 +30,5 @@ type UserService interface {
 	ConfirmUserEmailChange(ID, string) bool
 	GetBalances(userID ID) ([]Balance, error)
 	GetPerson(userID ID) (*Person, error)
+	UpdateProfileImage(user *User, imageURL string) error
 }

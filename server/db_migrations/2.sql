@@ -54,10 +54,10 @@ CREATE TABLE `asset_block_favorites` (
   `userId` int(10) unsigned NOT NULL,
   `blockId` int(10) unsigned NOT NULL,
   `createdAt` datetime NOT NULL,
-  UNIQUE KEY `pk_userid_assetid` (`assetId`,`userId`),
+  UNIQUE KEY `pk_userid_assetid` (`blockId`,`userId`),
   KEY `userid_idx` (`userId`),
-  CONSTRAINT `asset_favorites_fk_assetid` FOREIGN KEY (`assetId`) REFERENCES `asset` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `asset_favorites_fk_userid` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `asset_block_favorites_fk_blockid` FOREIGN KEY (`blockId`) REFERENCES `asset_block` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `asset_block_favorites_fk_userid` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
@@ -68,5 +68,17 @@ CREATE TABLE `asset_block_image` (
   `filepath` VARCHAR(512) NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8mb4;
+
+ALTER table user ADD column profileImageUrl varchar(256) NOT NULL DEFAULT '' AFTER name;
+
+DROP TABLE IF EXISTS `asset_user_balance`;
+CREATE TABLE `asset_user_balance` (
+  `userId` int(10) unsigned NOT NULL,
+  `assetId` int(10) unsigned NOT NULL,
+  `balance` decimal(30,8) NOT NULL DEFAULT '0.00000000',
+  `reserved` decimal(30,8) NOT NULL DEFAULT '0.00000000',
+  PRIMARY KEY (`userId`,`assetId`),
+  CONSTRAINT `user_asset_balance_userID_FKK` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 SET FOREIGN_KEY_CHECKS=1;

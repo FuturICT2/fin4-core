@@ -4,6 +4,7 @@ import Asset.Msg
 import Common.Json exposing (EmptyResponse)
 import CreateAsset.Msg
 import CreateToken.Msg
+import ExploreAssets.Msg
 import Homepage.Homepage
 import Homepage.Msg
 import Http
@@ -26,6 +27,7 @@ type Msg
     | Mdl (Material.Msg Msg)
     | OnWindowResize Window.Size
     | HomepageMsg Homepage.Msg.Msg
+    | ExploreAssetsMsg ExploreAssets.Msg.Msg
     | Token Token.Msg.Msg
     | Person Person.Msg.Msg
     | Portfolio Portfolio.Msg.Msg

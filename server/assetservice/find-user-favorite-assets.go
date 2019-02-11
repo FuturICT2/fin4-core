@@ -17,7 +17,7 @@ func (db *Service) FindUserFavoriteAssets(user *datatype.User) ([]datatype.Asset
 			asset.description,
 			asset.supply,
 			asset.creatorId,
-			user.usernname,
+			user.name,
 			asset.minersCounter,
 			asset.favoritesCounter,
 			asset.ethereumAddress,

@@ -25,6 +25,7 @@ import UrlParser exposing ((</>), Parser, int, map, oneOf, parseHash, s, string,
 type Route
     = NotFoundRoute
     | HomepageRoute
+    | ExploreAssetsRoute
     | TokenRoute Int
     | PersonRoute Int
     | PortfolioRoute
@@ -44,6 +45,7 @@ matchers : Parser (Route -> a) a
 matchers =
     oneOf
         [ map HomepageRoute top
+        , map ExploreAssetsRoute (s "explore-assets")
         , map TokenRoute (s "token" </> int)
         , map PersonRoute (s "person" </> int)
         , map PortfolioRoute (s "portfolio")

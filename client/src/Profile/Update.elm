@@ -158,6 +158,10 @@ update ctx msg model =
             model ! [ profileImageSelected "profile-img-input" ]
 
         ImageRead data ->
+            let
+                _ =
+                    Debug.log "----- IMAGE READ --  ---- " msg
+            in
             { model | imgInput = Just data } ! []
 
         TimelineMsg msg_ ->

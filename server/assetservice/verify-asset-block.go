@@ -67,7 +67,7 @@ func (db *Service) acceptAssetBlock(
 	}
 	_, err = tx.Exec(
 		`UPDATE asset SET
-	   	totalSupply = totalSupply + 1,
+	   	supply = supply + 1,
 			minersCounter = minersCounter + ?
 	   WHERE id=?`,
 		minerIncrement,

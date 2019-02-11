@@ -3,6 +3,7 @@ module Main.ViewBody exposing (render)
 import Asset.View
 import CreateAsset.View
 import CreateToken.View
+import ExploreAssets.View
 import Homepage.View
 import Html exposing (..)
 import Main.Model exposing (Model)
@@ -26,6 +27,11 @@ render model =
     case model.context.route of
         HomepageRoute ->
             Html.map HomepageMsg <| Homepage.View.render model.context model.homepage
+
+        ExploreAssetsRoute ->
+            ifAuth model <|
+                Html.map ExploreAssetsMsg <|
+                    ExploreAssets.View.render model.context model.exploreAssets
 
         CreateAssetRoute ->
             ifAuth model <|

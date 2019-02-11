@@ -18,7 +18,7 @@ func (db *Service) FindByID(id datatype.ID) (*datatype.Asset, error) {
 			asset.description,
 			asset.supply,
 			asset.creatorId,
-			user.usernname,
+			user.name,
 			asset.minersCounter,
 			asset.favoritesCounter,
 			asset.ethereumAddress,

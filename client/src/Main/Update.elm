@@ -8,6 +8,8 @@ import CreateAsset.Update
 import CreateToken.Model
 import CreateToken.Update
 import Debug
+import ExploreAssets.Command
+import ExploreAssets.Update
 import Homepage.Command
 import Homepage.Update
 import Main.Command exposing (checkSessionCmd, logoutCmd)
@@ -80,6 +82,11 @@ mountRoute model =
                 ! [ Cmd.map HomepageMsg <| Homepage.Command.commands model.context model.homepage
                   ]
 
+        ExploreAssetsRoute ->
+            model
+                ! [ Cmd.map ExploreAssetsMsg <| ExploreAssets.Command.commands model.context
+                  ]
+
         _ ->
             model ! []
 
@@ -124,6 +131,13 @@ update msg model =
                     Homepage.Update.update model.context msg_ model.homepage
             in
             { model | homepage = childModel } ! [ Cmd.map HomepageMsg cmd ]
+
+        ExploreAssetsMsg msg_ ->
+            let
+                ( childModel, cmd ) =
+                    ExploreAssets.Update.update model.context msg_ model.exploreAssets
+            in
+            { model | exploreAssets = childModel } ! [ Cmd.map ExploreAssetsMsg cmd ]
 
         CreateAssetMsg msg_ ->
             let

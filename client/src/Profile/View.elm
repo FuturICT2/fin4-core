@@ -326,7 +326,7 @@ coverProfileImageStyle data =
         url =
             case data == "" of
                 True ->
-                    "img/default-user-icon.jpg"
+                    "images/default-user-icon.jpg"
 
                 False ->
                     data

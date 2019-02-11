@@ -1,66 +1,100 @@
 module ExploreAssets.View exposing (render, renderAsset)
 
-import Common.Change24 as Change24
-import Common.Styles
-    exposing
-        ( marginBottom
-        , marginTop
-        , paddingBottom
-        , textCenter
-        , textLeft
-        , toMdlCss
-        )
+import Asset.Model exposing (Asset)
+import Common.Styles exposing (paddingLeft, toMdlCss)
 import ExploreAssets.Model exposing (Model)
 import ExploreAssets.Msg exposing (Msg(..))
 import Html exposing (..)
 import Html.Attributes exposing (class, href, src, style)
+import Html.Events exposing (onClick)
 import Identicon exposing (identicon)
 import Main.Context exposing (Context)
-import Main.Routing exposing (assetPath, createAssetPath)
+import Main.Routing exposing (assetPath, profilePath)
+import Material.Icon as Icon
 import Material.List as Lists
-import Material.Options exposing (css)
-import Model.Asset exposing (Asset)
+import Material.Options as Options exposing (css)
+import Material.Typography as Typography
 
 
 render : Context -> Model -> Html Msg
 render ctx model =
-    div []
+    div [ cardsWrapStyle ]
         [ case List.length model.assets == 0 of
             True ->
                 div [] [ text "There are no tokens yet!" ]
 
             False ->
-                div [ marginBottom 10 ]
-                    [ Lists.ul [] <| List.map renderAsset model.assets
-                    ]
+                div [ entriesListStyle ] <|
+                    List.map (renderAsset ctx model) model.assets
         ]
 
 
-renderAsset : Asset -> Html Msg
-renderAsset asset =
-    let
-        liStyle =
-            toMdlCss <|
-                style
-                    [ ( "border-bottom", "1px solid #ddd" )
-                    ]
-    in
-    Lists.li [ Lists.withBody, liStyle ]
-        [ Lists.content []
-            [ a [ href <| assetPath asset.id ]
-                [ span
-                    []
+renderAsset : Context -> Model -> Asset -> Html Msg
+renderAsset ctx model asset =
+    div [ entryStyle ]
+        [ div []
+            [ Lists.li [ Lists.withSubtitle, css "padding-left" "8px" ]
+                [ Lists.content []
                     [ identicon "16px" asset.name
-                    , text <| " " ++ asset.name
+                    , text " "
+                    , a [ href <| assetPath asset.id ]
+                        [ text <| asset.name ]
+                    , Options.styled span [ Typography.body1 ] [ text <| " - " ++ asset.symbol ]
+                    , Lists.subtitle []
+                        [ text <| "Total supply= " ++ toString asset.totalSupply
+                        , text <| " | Miners: " ++ toString asset.minersCount
+                        , text <| " | Oracle: "
+                        , a [ href (profilePath asset.creatorId) ] [ text asset.creatorName ]
+                        ]
                     ]
                 ]
-            , Lists.body [ css "padding-top" "15px" ]
-                [ text <| "Supply= " ++ toString asset.totalSupply ++ " " ++ asset.symbol
-                , text <| " | Market Cap= 0FILS"
-                ]
             ]
-        , Lists.content2 []
-            [ Lists.info2 [] [ text "24h" ]
-            , Change24.render asset.change24
+        , Options.styled p
+            [ Typography.body1, toMdlCss (paddingLeft 10) ]
+            [ text asset.description ]
+        , div [ toggleFavoriteStyle, onClick (ToggleFavorite asset.id) ]
+            [ case asset.didUserLike of
+                True ->
+                    Icon.view "favorite"
+                        [ Icon.size24
+                        , css "color" "red"
+                        ]
+
+                False ->
+                    Icon.view "favorite_border"
+                        [ Icon.size24
+                        ]
+            , span [] [ text <| toString asset.favoritesCount ]
             ]
+        ]
+
+
+cardsWrapStyle : Attribute a
+cardsWrapStyle =
+    style
+        []
+
+
+entriesListStyle : Attribute a
+entriesListStyle =
+    style [ ( "text-align", "left" ) ]
+
+
+entryStyle : Attribute a
+entryStyle =
+    style
+        [ ( "margin", "10px 5px" )
+        , ( "border", "1px solid #ddd" )
+        , ( "border-radius", "8px" )
+        , ( "position", "relative" )
+        , ( "padding-bottom", "10px" )
+        ]
+
+
+toggleFavoriteStyle : Attribute a
+toggleFavoriteStyle =
+    style
+        [ ( "padding", "15px 10px 0 10px" )
+        , ( "display", "inline-block" )
+        , ( "cursor", "pointer" )
         ]

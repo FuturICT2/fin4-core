@@ -49,7 +49,7 @@ func validatePassword(password string, forEmail string) error {
 }
 
 func getUserCols() string {
-	return "id, email, name, ethereumAddress, password, salt, createdAt, updatedAt"
+	return "id, email, name, profileImageURL, ethereumAddress, password, salt, createdAt, updatedAt"
 }
 
 func scanUser(row *sql.Row) (*datatype.User, error) {
@@ -58,6 +58,7 @@ func scanUser(row *sql.Row) (*datatype.User, error) {
 		&user.ID,
 		&user.Email,
 		&user.Name,
+		&user.ProfileImageURL,
 		&user.EthereumAddress,
 		&user.Password,
 		&user.Salt,

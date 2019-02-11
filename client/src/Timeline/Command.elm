@@ -41,11 +41,8 @@ toggleFavoriteCmd : Context -> Int -> Cmd Msg
 toggleFavoriteCmd ctx blockId =
     postWithCsrf ctx
         OnToggleFavoriteResponse
-        "/v2/asset-block-favorites/toggle"
-        (JE.object
-            [ ( "blockId", JE.int blockId )
-            ]
-        )
+        ("/v2/asset-block/" ++ toString blockId ++ "/toggle-favorite")
+        (JE.object [])
         (JP.decode {})
 
 
@@ -74,10 +71,9 @@ verifyBlockCmd : Context -> Bool -> Int -> Cmd Msg
 verifyBlockCmd ctx isAccepted blockId =
     postWithCsrf ctx
         VerifyBlockResponse
-        "/v2/verify-asset-block"
+        ("/v2/asset-block/" ++ toString blockId ++ "/verify")
         (JE.object
-            [ ( "blockId", JE.int blockId )
-            , ( "isAccepted", JE.bool isAccepted )
+            [ ( "isAccepted", JE.bool isAccepted )
             ]
         )
         emptyResponseDecoder

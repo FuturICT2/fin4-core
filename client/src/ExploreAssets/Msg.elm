@@ -1,8 +1,8 @@
 module ExploreAssets.Msg exposing (Msg(..))
 
+import Asset.Model exposing (Asset)
 import Http
 import Material
-import Model.Asset exposing (Asset)
 
 
 type Msg

@@ -80,7 +80,7 @@ renderEntry ctx model entry =
         profileImageUrl =
             case entry.userProfileImageURL == "" of
                 True ->
-                    "img/default-user-icon.jpg"
+                    "images/default-user-icon.jpg"
 
                 False ->
                     entry.userProfileImageURL
