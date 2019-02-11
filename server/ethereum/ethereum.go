@@ -4,7 +4,6 @@ import (
 	"log"
 	"math/big"
 
-	"github.com/FuturICT2/fin4-core/server/apperrors"
 	"github.com/FuturICT2/fin4-core/server/env"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind/backends"
@@ -86,7 +85,6 @@ func (b *Ethereum) DeployMintable(
 		minter,
 	)
 	if err != nil {
-		apperrors.Critical("ethereum:DeployMintable:e1", err)
 		return address, nil, err
 	}
 	return address, tx, nil
