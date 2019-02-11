@@ -223,7 +223,7 @@ renderEntry ctx model entry =
                                 ++ entry.ethereumTransactionAddress
                         , Html.Attributes.target "_blank"
                         ]
-                        [ img [ txIconStyle, src "images/ethereum.png" ] [] ]
+                        [ img [ txIconStyle, src "static/images/ethereum.png" ] [] ]
                     ]
         ]
 
