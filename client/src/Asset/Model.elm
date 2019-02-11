@@ -40,6 +40,8 @@ type alias Asset =
     , favoritesCount : Int
     , didUserLike : Bool
     , miners : List Miner
+    , ethereumAddress : String
+    , ethereumTransactionAddress : String
     }
 
 
@@ -90,6 +92,8 @@ assetDecoder =
         |> JP.required "FavoritesCounter" JD.int
         |> JP.required "DidUserLike" JD.bool
         |> JP.optional "Miners" (JD.list minerDecoder) []
+        |> JP.required "EthereumAddress" JD.string
+        |> JP.required "EthereumTransactionAddress" JD.string
 
 
 assetListDecoder : JD.Decoder (List Asset)

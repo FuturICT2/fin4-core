@@ -74,6 +74,15 @@ renderAsset ctx model asset =
                             ]
                         ]
                     ]
+                , div [ txLinkStyle ]
+                    [ a
+                        [ href <|
+                            "https://rinkeby.etherscan.io/address/"
+                                ++ asset.ethereumAddress
+                        , Html.Attributes.target "_blank"
+                        ]
+                        [ img [ txIconStyle, src "images/ethereum.png" ] [] ]
+                    ]
                 ]
             , div [ assetQRStyle ]
                 [ identicon "60px" asset.name
@@ -493,11 +502,19 @@ assetPurposeStyle =
         ]
 
 
-change24Style : Attribute a
-change24Style =
+txLinkStyle : Attribute a
+txLinkStyle =
     style
-        [ ( "float", "right" )
-        , ( "display", "inline-block" )
-        , ( "margin-right", "10px" )
-        , ( "padding-top", "5px" )
+        [ ( "display", "inline-block" )
+        , ( "float", "right" )
+        , ( "margin-top", "-10px" )
+        ]
+
+
+txIconStyle : Attribute a
+txIconStyle =
+    style
+        [ ( "display", "inline-block" )
+        , ( "width", "30px" )
+        , ( "hight", "30px" )
         ]

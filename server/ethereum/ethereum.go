@@ -76,7 +76,7 @@ func (b *Ethereum) DeployMintable(
 	address, tx, _, err := DeployMintable(
 		b.auth,
 		// change here to rpc and it will deploy to rpc
-		b.sim,
+		b.rpc,
 		name_,
 		symbol_,
 		decimals_,
@@ -88,14 +88,14 @@ func (b *Ethereum) DeployMintable(
 	return address, tx, nil
 }
 
-// DeployMintable mints a new currency units to the passed token and toAddress
+// Mint mints a new currency units to the passed token and toAddress
 func (b *Ethereum) Mint(
 	tokenAddress common.Address,
 	toAddress common.Address,
 	amount int64,
 ) (*types.Transaction, error) {
 	// here change b.sim to rpc and it will communicate with the rpc
-	mintable, err := NewMintable(tokenAddress, b.sim)
+	mintable, err := NewMintable(tokenAddress, b.rpc)
 	if err != nil {
 		logrus.WithFields(logrus.Fields{
 			"error": err.Error(),

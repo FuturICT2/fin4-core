@@ -7,6 +7,7 @@ import (
 	"github.com/FuturICT2/fin4-core/server/apperrors"
 	"github.com/FuturICT2/fin4-core/server/datatype"
 	"github.com/FuturICT2/fin4-core/server/decimaldt"
+	"github.com/ethereum/go-ethereum/common"
 )
 
 // VerifyAssetBlock insert asset block
@@ -53,11 +54,30 @@ func (db *Service) acceptAssetBlock(
 	doerID datatype.ID,
 ) error {
 	isMiner := db.IsMiner(doerID, assetID)
+	asset, err := db.FindByID(assetID)
+	if err != nil {
+		apperrors.Critical("assetservice:acceptAssetBlock:1", err)
+		return err
+	}
+	user, err := sc.UserService.FindByID(doerID)
+	if err != nil {
+		apperrors.Critical("assetservice:acceptAssetBlock:2", err)
+		return err
+	}
+	bcTx, err := sc.Ethereum.Mint(
+		common.HexToAddress(asset.EthereumAddress),
+		common.HexToAddress(user.EthereumAddress),
+		1,
+	)
+	if err != nil {
+		apperrors.Critical("assetservice:acceptAssetBlock:3", err)
+		return err
+	}
 	// increase total supply, add balance to block doer
 	// Start db transaction
 	tx, err := db.Begin()
 	if err != nil {
-		apperrors.Critical("assetservice:acceptAssetBlock:1", err)
+		apperrors.Critical("assetservice:acceptAssetBlock:4", err)
 		return err
 	}
 	defer tx.Rollback()
@@ -74,25 +94,27 @@ func (db *Service) acceptAssetBlock(
 		assetID,
 	)
 	if err != nil {
-		apperrors.Critical("assetservice:acceptAssetBlock:2", err)
+		apperrors.Critical("assetservice:acceptAssetBlock:5", err)
 		return datatype.ErrServerError
 	}
 	err = db.DepositBalance(doerID, assetID, decimaldt.NewFromFloat(1))
 	if err != nil {
-		apperrors.Critical("assetservice:acceptAssetBlock:3", err)
+		apperrors.Critical("assetservice:acceptAssetBlock:6", err)
 		return datatype.ErrServerError
 	}
-	_, err = tx.Exec(`UPDATE asset_block SET status = ? WHERE id = ?`,
+	_, err = tx.Exec(`UPDATE asset_block SET
+		status = ?, ethereumTransactionAddress = ? WHERE id = ?`,
 		datatype.BlockAccepted,
+		bcTx.Hash().Hex(),
 		blockID)
 	if err != nil {
-		apperrors.Critical("assetservice:acceptAssetBlock:4", err)
+		apperrors.Critical("assetservice:acceptAssetBlock:7", err)
 		return datatype.ErrServerError
 	}
 	/*** Commit db transaction ***/
 	err = tx.Commit()
 	if err != nil {
-		apperrors.Critical("assetservice:acceptAssetBlock:5", err)
+		apperrors.Critical("assetservice:acceptAssetBlock:8", err)
 		return datatype.ErrServerError
 	}
 	return nil

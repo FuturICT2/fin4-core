@@ -83,6 +83,33 @@ renderAsset ctx model asset =
                         ]
             , span [] [ text <| toString asset.favoritesCount ]
             ]
+        , div [ txLinkStyle ]
+            [ a
+                [ href <|
+                    "https://rinkeby.etherscan.io/address/"
+                        ++ asset.ethereumAddress
+                , Html.Attributes.target "_blank"
+                ]
+                [ img [ txIconStyle, src "images/ethereum.png" ] [] ]
+            ]
+        ]
+
+
+txLinkStyle : Attribute a
+txLinkStyle =
+    style
+        [ ( "display", "inline-block" )
+        , ( "float", "right" )
+        , ( "padding", "15px 5px" )
+        ]
+
+
+txIconStyle : Attribute a
+txIconStyle =
+    style
+        [ ( "display", "inline-block" )
+        , ( "width", "30px" )
+        , ( "hight", "30px" )
         ]
 
 

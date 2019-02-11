@@ -33,6 +33,7 @@ type alias TimelineEntry =
     , oracleName : String
     , text : String
     , status : Int
+    , ethereumTransactionAddress : String
     , ytVideoId : String
     , favoritesCount : Int
     , didUserLike : Bool
@@ -94,6 +95,7 @@ timelineEntryDecoder =
         |> JP.required "OracleName" JD.string
         |> JP.required "Text" JD.string
         |> JP.required "Status" JD.int
+        |> JP.required "EthereumTransactionAddress" JD.string
         |> JP.required "YtVideoID" JD.string
         |> JP.required "FavoritesCount" JD.int
         |> JP.required "DidUserLike" JD.bool

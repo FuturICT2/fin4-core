@@ -211,6 +211,38 @@ renderEntry ctx model entry =
                                 ]
                     , span [] [ text <| toString entry.favoritesCount ]
                     ]
+        , case entry.ethereumTransactionAddress == "" of
+            True ->
+                span [] []
+
+            False ->
+                div [ txLinkStyle ]
+                    [ a
+                        [ href <|
+                            "https://rinkeby.etherscan.io/tx/"
+                                ++ entry.ethereumTransactionAddress
+                        , Html.Attributes.target "_blank"
+                        ]
+                        [ img [ txIconStyle, src "images/ethereum.png" ] [] ]
+                    ]
+        ]
+
+
+txLinkStyle : Attribute a
+txLinkStyle =
+    style
+        [ ( "display", "inline-block" )
+        , ( "float", "right" )
+        , ( "padding", "15px 5px" )
+        ]
+
+
+txIconStyle : Attribute a
+txIconStyle =
+    style
+        [ ( "display", "inline-block" )
+        , ( "width", "30px" )
+        , ( "hight", "30px" )
         ]
 
 

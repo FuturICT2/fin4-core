@@ -52,19 +52,21 @@ func GetAsset(sc datatype.ServiceContainer) gin.HandlerFunc {
 			return
 		}
 		c.JSON(http.StatusOK, struct {
-			ID               datatype.ID
-			Name             string
-			Symbol           string
-			CreatorID        datatype.ID
-			CreatorName      string
-			Description      string
-			Supply           int64
-			MinersCounter    int
-			FavoritesCounter int
-			DidUserLike      bool
-			UserBalance      decimaldt.Decimal
-			IsUserOracle     bool
-			Miners           []datatype.Miner
+			ID                         datatype.ID
+			Name                       string
+			Symbol                     string
+			CreatorID                  datatype.ID
+			CreatorName                string
+			Description                string
+			Supply                     int64
+			MinersCounter              int
+			FavoritesCounter           int
+			DidUserLike                bool
+			UserBalance                decimaldt.Decimal
+			IsUserOracle               bool
+			Miners                     []datatype.Miner
+			EthereumAddress            string
+			EthereumTransactionAddress string
 		}{
 			asset.ID,
 			asset.Name,
@@ -79,6 +81,8 @@ func GetAsset(sc datatype.ServiceContainer) gin.HandlerFunc {
 			balance,
 			isOracle,
 			miners,
+			asset.EthereumAddress,
+			asset.EthereumTransactionAddress,
 		})
 	}
 }
