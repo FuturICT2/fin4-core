@@ -6,7 +6,7 @@ import (
 	"github.com/FuturICT2/fin4-core/server/tokenhandlers"
 	"github.com/gin-gonic/gin"
 
-	"github.com/sirupsen/logrus"
+
 
 	"github.com/FuturICT2/fin4-core/server/commonhandlers"
 	"github.com/FuturICT2/fin4-core/server/userhandlers"
@@ -35,9 +35,7 @@ func SetupRouting(sc datatype.ServiceContainer) *gin.Engine {
 	wapi.Use(routermiddleware.SessionSetUser(sc.UserService))
 	wapi.Use(routermiddleware.CheckCsrfToken())
 
-	logrus.WithFields(
-		logrus.Fields{"e": err.Error()},
-	).Error("userservice:register:2")
+
 
 	{
 		wapi.GET("/csrf", routermiddleware.SetCsrfToken())
