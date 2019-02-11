@@ -285,8 +285,8 @@ renderClaim model showApproveBtn tokenId claim =
             False ->
                 div
                     [ style
-                        [ ( "width", "100px" )
-                        , ( "height", "100px" )
+                        [ ( "width", "100%" )
+                        , ( "height", "300px" )
                         , ( "margin-bottom", "15px" )
                         , ( "background", "url(" ++ claim.logoFile ++ ") no-repeat center center" )
                         , ( "background-size", "contain" )

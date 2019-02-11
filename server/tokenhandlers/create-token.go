@@ -45,7 +45,6 @@ func CreateToken(sc datatype.ServiceContainer) gin.HandlerFunc {
 			c.String(http.StatusBadRequest, err.Error())
 			return
 		}
-
 		token, err := sc.TokenService.InsertToken(
 			user.ID, // creator ID
 			body.Name,

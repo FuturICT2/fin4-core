@@ -92,10 +92,10 @@ renderTokenInfo ctx model token =
 
         verb =
             case minedCount > 1 of
-                True ->
+                False ->
                     "has"
 
-                False ->
+                True ->
                     "have"
     in
     div

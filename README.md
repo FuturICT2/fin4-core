@@ -3,11 +3,18 @@
 
 # Finance 4.0
 Finance 4.0 aims for a multi-dimensional incentive system to motivate sustainable behavior. Communities can creat cryptographic tokens to incentivize certain behavior, e.g. collecting waste, avoiding C02, helping others, etc. Users can obtain these tokens by proving that they performed such actions. The number of different token types is unlimited, leading over time to a multi-dimensional system of different incentives -- smart coordination through "sustainable money". In the same spirit, the system uses tokens for democratic governance. 
-A live instance can be found here: www.finfour.net 
+A live instance can be found here: www.finfour.net .
+Main concepts of the Finance 4.0 system are explained in [Decrypting Distributed Ledger Systems](https://arxiv.org/abs/1811.03419). This document is a good starter for everyone who wants to know
+- What is a cryptoeconomic token?
+- What is the difference between Ethereum, Bitcoin and Hyperledger?
+- What are actions in a distributed ledger technology (DLT) system?
+- What are claims?
+- How do cryptoeconomic tokens have value?
 
-To learn more:
 
-Short video: [YouTube](https://www.youtube.com/watch?v=DSmF2donfBQ)
+To learn more about the finance 4.0 system:
+
+Short video: [Youtube - Distributed Sustainability](https://www.youtube.com/watch?v=oNlKdHjvExo)
 
 Social media: [Twitter](https://twitter.com/futurict2)
 
@@ -55,6 +62,7 @@ export GOPATH=$HOME/Projects/goprojects -> folder where fin-4 will be installed 
 export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
 export GOBIN=$GOPATH/bin
 ```
+Best is to store this in ~/.bashrc, so that this automatically set whenever you start a new terminal session.
 
 - Ganache-cli (https://github.com/trufflesuite/ganache-cli): npm install -g ganache-cli
 -- gin is a simple command line utility for live-reloading Go web applications.
@@ -118,7 +126,7 @@ $ make cover-view
 In the following we document the basic execution of the server and the elm app are explained. Detailed information can/ will be found in the respective packages.
 
 ## fin4 Server
-
+The main functioning of the server is explained in the [server](https://github.com/FuturICT2/fin4-core/tree/master/server) package.
 ### Entry point - main.go
 When executing
 ```bash
@@ -138,8 +146,10 @@ In particular, main.go is executed which
 
 <a name="contribution"></a>
 # Contribute!
-We are looking for collaboration from the Open Source community. The project needs enhancements regarding code quality, documentation, and testing. To contribute to the project please take a look at [open issues](https://github.com/FuturICT2/fin4-core/issues). [Here](CONTRIBUTIONS.md) you can find more details on the architecture of the code and how to run the development environment on your local machine.
-
+We are looking for collaboration from the Open Source community. The project needs enhancements regarding code quality, documentation, and testing. To contribute to the project please take a look at [open issues](https://github.com/FuturICT2/fin4-core/issues).
+<!--
+[Here](CONTRIBUTIONS.md) you can find more details on the architecture of the code and how to run the development environment on your local machine.
+-->
 <!--
 markdown syntax https://help.github.com/articles/page-build-failed-markdown-errors/
 -->

@@ -1,7 +1,6 @@
 package ethereum
 
 import (
-	"log"
 	"math/big"
 
 	"github.com/FuturICT2/fin4-core/server/env"
@@ -27,11 +26,10 @@ type Ethereum struct {
 // MustNewEthereum create new Ethereum interface, panic if no connection
 func MustNewEthereum() *Ethereum {
 	conn, err := ethclient.Dial("https://rinkeby.infura.io/")
-	// conn, err := ethclient.Dial(env.MustGetenv("SIM_ETH_HOST"))
 
 	if err != nil {
 		logrus.Fatal("Failed to connect to the Ethereum client: %v", err)
-		log.Println("Failed to connect to the Ethereum client: %v")
+		return nil
 	}
 	// server key
 	rawKey := env.MustGetenv("ETH_KEY_RAW")
