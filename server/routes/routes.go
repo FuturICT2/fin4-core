@@ -6,6 +6,8 @@ import (
 	"github.com/FuturICT2/fin4-core/server/tokenhandlers"
 	"github.com/gin-gonic/gin"
 
+	"github.com/sirupsen/logrus"
+
 	"github.com/FuturICT2/fin4-core/server/commonhandlers"
 	"github.com/FuturICT2/fin4-core/server/userhandlers"
 	api "gopkg.in/appleboy/gin-status-api.v1"

@@ -33,7 +33,6 @@ func MustNewEthereum() *Ethereum {
 	if err != nil {
 		logrus.Fatal("Failed to connect to the Ethereum client: %v", err)
 		log.Println("Failed to connect to the Ethereum client: %v")
-		return
 	}
 	// server key
 	rawKey := env.MustGetenv("ETH_KEY_RAW")
