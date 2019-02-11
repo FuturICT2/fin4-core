@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/FuturICT2/fin4-core/server/datatype"
-	"github.com/kjda/exchange/server/apperrors"
+	"github.com/FuturICT2/fin4-core/server/apperrors"
 )
 
 //ToggleFavorite toggles asset as fav/not fav
