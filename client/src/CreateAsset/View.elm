@@ -67,7 +67,7 @@ renderForm ctx model =
             [ p [ hintStle ] [ text "Topic name" ]
             , input
                 [ inputStyle
-                , placeholder "e.g Moon"
+                , placeholder "e.g Trees"
                 , value model.name
                 , onInput SetName
                 ]
@@ -77,7 +77,7 @@ renderForm ctx model =
             [ p [ hintStle ] [ text "Topic currency symbol" ]
             , input
                 [ inputStyle
-                , placeholder "e.g MNN"
+                , placeholder "e.g TRR"
                 , value model.symbol
                 , onInput SetSymbol
                 ]
@@ -89,7 +89,7 @@ renderForm ctx model =
             , textarea
                 [ textareaStyle
                 , value model.purpose
-                , placeholder "e.g Let us go to the moon!"
+                , placeholder "e.g Plant a tree and get TRR coins!"
                 , onInput SetDescription
                 , rows 5
                 ]

@@ -1,10 +1,10 @@
 package ethereum
 
 import (
-	"errors"
 	"log"
 	"math/big"
 
+	"github.com/FuturICT2/fin4-core/server/apperrors"
 	"github.com/FuturICT2/fin4-core/server/env"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind/backends"
@@ -14,7 +14,6 @@ import (
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
-	"github.com/FuturICT2/fin4-core/server/apperrors"
 	"github.com/lytics/logrus"
 )
 
@@ -67,7 +66,6 @@ func MustNewEthereum() *Ethereum {
 // CreateNewAddress returns best blocknumber in the blockchain
 func (b *Ethereum) CreateNewAddress() (string, error) {
 	acc, err := b.keystore.NewAccount("demo1")
-	log.Println("---------------- LOADDDDED")
 	return acc.Address.String(), err
 }
 
@@ -89,7 +87,7 @@ func (b *Ethereum) DeployMintable(
 	)
 	if err != nil {
 		apperrors.Critical("ethereum:DeployMintable:e1", err)
-		return address, nil, errors.New("Error deploying token contract to Ethereum")
+		return address, nil, err
 	}
 	return address, tx, nil
 }

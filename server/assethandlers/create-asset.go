@@ -5,6 +5,7 @@ import (
 
 	"github.com/FuturICT2/fin4-core/server/auth"
 	"github.com/FuturICT2/fin4-core/server/datatype"
+	"github.com/ethereum/go-ethereum/common"
 	"github.com/gin-gonic/gin"
 )
 
@@ -18,14 +19,24 @@ func CreateAsset(sc datatype.ServiceContainer) gin.HandlerFunc {
 			Symbol  string `json:"symbol"`
 		}{}
 		c.BindJSON(&body)
+		add, tx, err := sc.Ethereum.DeployMintable(
+			body.Name,
+			body.Symbol,
+			8,
+			common.HexToAddress(user.EthereumAddress),
+		)
+		if err != nil {
+			c.String(http.StatusServiceUnavailable, err.Error())
+			return
+		}
 		asset, err := sc.AssetService.Create(
 			sc,
 			user.ID,
 			body.Name,
 			body.Symbol,
 			body.Purpose,
-			"PLACE_HOLDER_ETH_ADDRESS",
-			"PLACE_HOLDER_ETH_TX_ADDRESS",
+			add.Hex(),
+			tx.Hash().Hex(),
 		)
 		if err != nil {
 			c.String(http.StatusBadRequest, err.Error())
