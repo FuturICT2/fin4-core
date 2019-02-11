@@ -1,7 +1,7 @@
 package apperrors
 
 import (
-	"github.com/dignitynetwork/core/server/datatype"
+	"github.com/FuturICT2/fin4-core/server/datatype"
 	"github.com/lytics/logrus"
 )
 
