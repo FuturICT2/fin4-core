@@ -1,5 +1,7 @@
 module Main.Routing exposing
     ( Route(..)
+    , assetPath
+    , exploreAssetsPath
     , fastSignupPath
     , forgotPassPath
     , homepagePath
@@ -9,6 +11,7 @@ module Main.Routing exposing
     , parseLocation
     , personPath
     , portfolioPath
+    , profilePath
     , signupPath
     , termsPath
     , tokenPath
@@ -22,6 +25,7 @@ import UrlParser exposing ((</>), Parser, int, map, oneOf, parseHash, s, string,
 type Route
     = NotFoundRoute
     | HomepageRoute
+    | ExploreAssetsRoute
     | TokenRoute Int
     | PersonRoute Int
     | PortfolioRoute
@@ -32,12 +36,16 @@ type Route
     | UserForgotResetPassRoute Int String
     | UserSignupRoute
     | UserFastSignupRoute
+    | AssetRoute Int
+    | ProfileRoute Int
+    | CreateAssetRoute
 
 
 matchers : Parser (Route -> a) a
 matchers =
     oneOf
         [ map HomepageRoute top
+        , map ExploreAssetsRoute (s "explore-assets")
         , map TokenRoute (s "token" </> int)
         , map PersonRoute (s "person" </> int)
         , map PortfolioRoute (s "portfolio")
@@ -48,6 +56,9 @@ matchers =
         , map UserFastSignupRoute (s "fsignup")
         , map UserForgotRoute (s "forgot")
         , map UserForgotResetPassRoute (s "forgot-reset-password" </> int </> string)
+        , map AssetRoute (s "asset" </> int)
+        , map ProfileRoute (s "profile" </> int)
+        , map CreateAssetRoute (s "create-asset")
         ]
 
 
@@ -64,6 +75,21 @@ parseLocation location =
 homepagePath : String
 homepagePath =
     "#"
+
+
+assetPath : Int -> String
+assetPath assetId =
+    "#asset/" ++ toString assetId
+
+
+exploreAssetsPath : String
+exploreAssetsPath =
+    "#explore-assets"
+
+
+profilePath : Int -> String
+profilePath userId =
+    "#profile/" ++ toString userId
 
 
 tokensPath : String

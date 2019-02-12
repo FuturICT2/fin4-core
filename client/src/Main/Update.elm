@@ -1,9 +1,18 @@
 module Main.Update exposing (mountRoute, update)
 
+import Asset.Command
+import Asset.Model
+import Asset.Msg
+import Asset.Update
+import CreateAsset.Update
 import CreateToken.Model
 import CreateToken.Update
 import Debug
-import Main.Command exposing (logoutCmd)
+import ExploreAssets.Command
+import ExploreAssets.Update
+import Homepage.Command
+import Homepage.Update
+import Main.Command exposing (checkSessionCmd, logoutCmd)
 import Main.Context exposing (DeviceSize(..))
 import Main.Model exposing (Model)
 import Main.Msg exposing (Msg(..))
@@ -22,6 +31,10 @@ import Person.Update
 import Portfolio.Command
 import Portfolio.Model
 import Portfolio.Update
+import Profile.Command
+import Profile.Model
+import Profile.Msg
+import Profile.Update
 import Token.Command
 import Token.Model
 import Token.Update
@@ -53,6 +66,26 @@ mountRoute model =
 
         TokensRoute ->
             model ! [ Cmd.map Tokens <| Tokens.Command.commands model.context ]
+
+        AssetRoute _ ->
+            { model | asset = Asset.Model.init }
+                ! [ Cmd.map AssetMsg <| Asset.Command.commands model.context
+                  ]
+
+        ProfileRoute _ ->
+            { model | profile = Profile.Model.init }
+                ! [ Cmd.map ProfileMsg <| Profile.Command.commands model.context
+                  ]
+
+        HomepageRoute ->
+            model
+                ! [ Cmd.map HomepageMsg <| Homepage.Command.commands model.context model.homepage
+                  ]
+
+        ExploreAssetsRoute ->
+            model
+                ! [ Cmd.map ExploreAssetsMsg <| ExploreAssets.Command.commands model.context
+                  ]
 
         _ ->
             model ! []
@@ -92,8 +125,53 @@ update msg model =
                 Err _ ->
                     { model | context = { context | sessionDidLoad = True } } ! []
 
-        Homepage msg_ ->
-            model ! []
+        HomepageMsg msg_ ->
+            let
+                ( childModel, cmd ) =
+                    Homepage.Update.update model.context msg_ model.homepage
+            in
+            { model | homepage = childModel } ! [ Cmd.map HomepageMsg cmd ]
+
+        ExploreAssetsMsg msg_ ->
+            let
+                ( childModel, cmd ) =
+                    ExploreAssets.Update.update model.context msg_ model.exploreAssets
+            in
+            { model | exploreAssets = childModel } ! [ Cmd.map ExploreAssetsMsg cmd ]
+
+        CreateAssetMsg msg_ ->
+            let
+                ( childModel, cmd ) =
+                    CreateAsset.Update.update model.context msg_ model.createAsset
+            in
+            { model | createAsset = childModel } ! [ Cmd.map CreateAssetMsg cmd ]
+
+        AssetMsg msg_ ->
+            let
+                ( childModel, cmd ) =
+                    Asset.Update.update model.context msg_ model.asset
+            in
+            { model | asset = childModel } ! [ Cmd.map AssetMsg cmd ]
+
+        ProfileMsg msg_ ->
+            let
+                loadSession =
+                    case msg_ of
+                        Profile.Msg.OnUploadProfileImageResponse resp ->
+                            case resp of
+                                Ok _ ->
+                                    checkSessionCmd model.context
+
+                                Err _ ->
+                                    Cmd.none
+
+                        _ ->
+                            Cmd.none
+
+                ( childModel, cmd ) =
+                    Profile.Update.update model.context msg_ model.profile
+            in
+            { model | profile = childModel } ! [ Cmd.map ProfileMsg cmd, loadSession ]
 
         Token msg_ ->
             let
@@ -150,10 +228,10 @@ update msg model =
                     case userlogin.user of
                         Just _ ->
                             if userlogin.isNewUser then
-                                [ newUrl "#tokens" ]
+                                [ newUrl "#" ]
 
                             else
-                                [ newUrl "#tokens" ]
+                                [ newUrl "#" ]
 
                         _ ->
                             [ Cmd.map UserLoginMsg userloginCmd ]

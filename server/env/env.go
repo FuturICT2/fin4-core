@@ -27,7 +27,6 @@ func Load(baseDir string, isTesting bool) {
 	if err != nil {
 		logrus.Warn(fmt.Sprintf("Failed loading env file, error: %d", err.Error()))
 	}
-	log.Println("---------------- LOADDDDED")
 	envLoaded = true
 	//checkRequiredEnvs()
 }

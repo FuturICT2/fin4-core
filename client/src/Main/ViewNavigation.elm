@@ -8,6 +8,7 @@ import Main.Msg exposing (Msg(..))
 import Main.Routing
     exposing
         ( Route(..)
+        , exploreAssetsPath
         , homepagePath
         , newTokenPath
         , portfolioPath
@@ -18,25 +19,44 @@ import Material.Icon as Icon
 
 render : Model -> Html Msg
 render model =
+    let
+        userId =
+            case model.context.user of
+                Just user ->
+                    user.id
+
+                Nothing ->
+                    0
+    in
     div [ bhStyle ]
         [ div []
             [ a
-                [ href tokensPath
+                [ href homepagePath
                 , bhNavItemStyle
-                , activeRouteStyle (model.context.route == TokensRoute)
-                , style [ ( "width", "33%" ) ]
+                , activeRouteStyle (model.context.route == HomepageRoute)
+                , style [ ( "width", "25%" ) ]
                 ]
-                [ Icon.view "group_work"
+                [ Icon.view "timeline"
                     [ Icon.size36
                     ]
                 ]
             , a
-                [ href newTokenPath
+                [ href exploreAssetsPath
                 , bhNavItemStyle
-                , activeRouteStyle (model.context.route == CreateTokenRoute)
-                , style [ ( "width", "33%" ) ]
+                , activeRouteStyle (model.context.route == ExploreAssetsRoute)
+                , style [ ( "width", "25%" ) ]
                 ]
-                [ Icon.view "add_circle_outline"
+                [ Icon.view "list"
+                    [ Icon.size36
+                    ]
+                ]
+            , a
+                [ href (Main.Routing.profilePath userId)
+                , bhNavItemStyle
+                , activeRouteStyle (model.context.route == ProfileRoute userId)
+                , style [ ( "width", "25%" ) ]
+                ]
+                [ Icon.view "account_box"
                     [ Icon.size36
                     ]
                 ]
@@ -44,18 +64,14 @@ render model =
                 [ href portfolioPath
                 , bhNavItemStyle
                 , activeRouteStyle (model.context.route == PortfolioRoute)
-                , style [ ( "width", "34%" ) ]
+                , style [ ( "width", "25%" ) ]
                 ]
-                [ Icon.view "account_box"
+                [ Icon.view "account_balance_wallet"
                     [ Icon.size36
                     ]
                 ]
             ]
         ]
-
-
-
--- Common
 
 
 activeRouteStyle : Bool -> Attribute a

@@ -31,7 +31,7 @@ func (db *Service) getTokenMiners(tokenID datatype.ID) ([]datatype.Miner, error)
 	for rows.Next() {
 		entry := datatype.Miner{}
 		err = rows.Scan(
-			&entry.UserID,
+			&entry.ID,
 			&entry.UserName,
 		)
 		if err != nil {
@@ -53,7 +53,7 @@ func (db *Service) getTokenMiners(tokenID datatype.ID) ([]datatype.Miner, error)
 	one, _ := decimaldt.NewFromString("1.0")
 	// TODO make more clean using SQL
 	for _, miner := range result {
-		key := int(miner.UserID)
+		key := int(miner.ID)
 		m := minersMap[key]
 		if m.UserName == "" {
 			miner.Mined = miner.Mined.Add(one)

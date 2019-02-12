@@ -1,8 +1,6 @@
 package ethereum
 
 import (
-	"errors"
-	"log"
 	"math/big"
 
 	"github.com/FuturICT2/fin4-core/server/env"
@@ -28,12 +26,11 @@ type Ethereum struct {
 // MustNewEthereum create new Ethereum interface, panic if no connection
 func MustNewEthereum() *Ethereum {
 	conn, err := ethclient.Dial("https://rinkeby.infura.io/")
-	//conn, err := ethclient.Dial(env.MustGetenv("SIM_ETH_HOST"))
 
 	if err != nil {
 		logrus.Fatal("Failed to connect to the Ethereum client: %v", err)
-		log.Println("Failed to connect to the Ethereum client: %v")
-	}
+		return nil
+  }
 	// server key
 	rawKey := env.MustGetenv("ETH_KEY_RAW")
 	rawKeyECDSA, err := crypto.HexToECDSA(rawKey)
@@ -54,7 +51,7 @@ func MustNewEthereum() *Ethereum {
 	gAlloc := map[common.Address]core.GenesisAccount{
 		auth.From: {Balance: big.NewInt(10000000000)},
 	}
-	sim := backends.NewSimulatedBackend(gAlloc, 21000)
+	sim := backends.NewSimulatedBackend(gAlloc, 40000)
 	return &Ethereum{
 		rpc:      conn,
 		sim:      sim,
@@ -66,7 +63,6 @@ func MustNewEthereum() *Ethereum {
 // CreateNewAddress returns best blocknumber in the blockchain
 func (b *Ethereum) CreateNewAddress() (string, error) {
 	acc, err := b.keystore.NewAccount("demo1")
-	log.Println("---------------- LOADDDDED")
 	return acc.Address.String(), err
 }
 
@@ -87,15 +83,12 @@ func (b *Ethereum) DeployMintable(
 		minter,
 	)
 	if err != nil {
-		logrus.WithFields(logrus.Fields{
-			"error": err.Error(),
-		}).Error("ethereum:DeployMintable:e1")
-		return address, nil, errors.New("Error deploying token contract to Ethereum")
+		return address, nil, err
 	}
 	return address, tx, nil
 }
 
-// DeployMintable deployes new Mintable token to Ethereum from server account
+// Mint mints a new currency units to the passed token and toAddress
 func (b *Ethereum) Mint(
 	tokenAddress common.Address,
 	toAddress common.Address,

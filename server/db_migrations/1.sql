@@ -7,7 +7,7 @@ CREATE TABLE `gorp_migrations` (
   `id` varchar(255) NOT NULL,
   `applied_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
@@ -24,7 +24,7 @@ CREATE TABLE `user` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
   UNIQUE KEY `email_UNIQUE` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=10001 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10001 DEFAULT CHARSET=utf8mb4;
 
 
 
@@ -36,18 +36,18 @@ CREATE TABLE `user_balance` (
   `reserved` decimal(30,8) NOT NULL DEFAULT '0.00000000',
   PRIMARY KEY (`userId`,`tokenId`),
   CONSTRAINT `userID_FKK` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS `user_change_email_confirm`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user_change_email_confirm` (
   `userId` int(10) unsigned NOT NULL,
   `email` varchar(255) NOT NULL,
   `token` varchar(255) NOT NULL,
   `createdAt` datetime NOT NULL,
   PRIMARY KEY (`userId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS `user_password_reset`;
 
@@ -59,7 +59,7 @@ CREATE TABLE `user_password_reset` (
   PRIMARY KEY (`id`),
   KEY `userId` (`userId`),
   CONSTRAINT `userId` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
 DROP TABLE IF EXISTS `token`;
@@ -77,14 +77,14 @@ CREATE TABLE `token` (
   UNIQUE KEY `id_UNIQUE` (`id`),
   UNIQUE KEY `name_UNIQUE` (`name`),
   UNIQUE KEY `symbol_UNIQUE` (`symbol`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS `token_like`;
 CREATE TABLE `token_like` (
   `userId` int(10) NOT NULL,
   `tokenId` int(10) NOT NULL,
   PRIMARY KEY (`userId`,`tokenId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS `claim`;
 CREATE TABLE `claim` (

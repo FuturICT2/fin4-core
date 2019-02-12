@@ -55,7 +55,7 @@ renderAfterSessionLoaded model =
 
             False ->
                 text ""
-        , div [ bodyStyle ] [ ViewBody.render model ]
+        , div [ bodyStyle model.context.window.isMobile ] [ ViewBody.render model ]
         ]
 
 
@@ -91,10 +91,18 @@ containerStyle isMobile =
                 ]
 
 
-bodyStyle : Attribute a
-bodyStyle =
+bodyStyle : Bool -> Attribute a
+bodyStyle isMobile =
+    let
+        w =
+            case isMobile of
+                True ->
+                    "100%"
+
+                False ->
+                    "600px"
+    in
     style
-        [ ( "padding-left", "10px" )
-        , ( "padding-right", "15px" )
-        , ( "width", "100%" )
+        [ ( "width", w )
+        , ( "margin", "auto" )
         ]

@@ -3,6 +3,7 @@ package main
 import (
 	"strings"
 
+	"github.com/FuturICT2/fin4-core/server/assetservice"
 	"github.com/FuturICT2/fin4-core/server/datatype"
 	"github.com/FuturICT2/fin4-core/server/dbservice"
 	"github.com/FuturICT2/fin4-core/server/emailer"
@@ -11,6 +12,7 @@ import (
 	"github.com/FuturICT2/fin4-core/server/filestorage"
 	"github.com/FuturICT2/fin4-core/server/logger"
 	"github.com/FuturICT2/fin4-core/server/routes"
+	"github.com/FuturICT2/fin4-core/server/timelineservice"
 	"github.com/FuturICT2/fin4-core/server/tokenservice"
 	"github.com/FuturICT2/fin4-core/server/userservice"
 )
@@ -19,10 +21,7 @@ func main() {
 	environment := strings.ToLower(env.MustGetenv("ENVIRONMENT"))
 
 	//TODO this should be changed ASAP
-	//baseDir := "$GOPATH/src/github.com/FuturICT/fin4-core"
-	baseDir := "$GOPATH/fin4-core"
-
-	//env.Load(baseDir,true);
+	baseDir := "$GOPATH/src/github.com/FuturICT2/fin4-core"
 	env.Load(baseDir, false)
 
 	cfg := datatype.Config{
@@ -45,7 +44,8 @@ func main() {
 	db := dbservice.MustConnect(cfg.DataSourceName)
 	userService := userservice.NewService(db)
 	tokenService := tokenservice.NewService(db)
-
+	timelineService := timelineservice.NewService(db)
+	assetService := assetservice.NewService(db)
 	// connect with Amazon AWS (used in our live instance)
 	fs := filestorage.GetStorage(
 		env.Getenv("AWS_SES_KEY"),
@@ -54,11 +54,13 @@ func main() {
 	// connect with an instance of ethereum
 	ethereum := ethereum.MustNewEthereum()
 	sc := datatype.ServiceContainer{
-		Config:       cfg,
-		UserService:  userService,
-		TokenService: tokenService,
-		FileStorage:  fs,
-		Ethereum:     ethereum,
+		Config:          cfg,
+		AssetService:    assetService,
+		TimelineService: timelineService,
+		UserService:     userService,
+		TokenService:    tokenService,
+		FileStorage:     fs,
+		Ethereum:        ethereum,
 	}
 	// start listening to api calls
 	routes.SetupRouting(sc).Run(":" + cfg.ServerPort)

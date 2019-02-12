@@ -35,7 +35,7 @@ render ctx model =
             , text ")"
             ]
         , hr [] []
-        , header [] [ text "Your tokens" ]
+        , header [] [ text "Your balances" ]
         , case model.error of
             Just _ ->
                 Error.renderMaybeError model.error
@@ -75,13 +75,13 @@ renderRow model balance =
             , ( "text-decoration", "none" )
             , ( "border-radius", "8px" )
             , ( "margin-bottom", "15px" )
+            , ( "text-align", "left" )
             ]
         , href <| tokenPath balance.tokenId
         ]
         [ div
             [ style
                 [ ( "padding", "15px" )
-                , ( "text-align", "center" )
                 , ( "width", "60px" )
                 , ( "height", "60px" )
                 , ( "border", "1px solid #ddd" )
@@ -121,6 +121,7 @@ renderRow model balance =
             , div []
                 [ text "You have "
                 , renderDecimalWithPrecision balance.balance 2
+                , text <| " " ++ balance.tokenSymbol
                 ]
             ]
         ]
