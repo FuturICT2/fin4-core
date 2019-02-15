@@ -30,7 +30,7 @@ func MustNewEthereum() *Ethereum {
 	if err != nil {
 		logrus.Fatal("Failed to connect to the Ethereum client: %v", err)
 		return nil
-	}
+  }
 	// server key
 	rawKey := env.MustGetenv("ETH_KEY_RAW")
 	rawKeyECDSA, err := crypto.HexToECDSA(rawKey)
