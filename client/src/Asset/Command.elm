@@ -57,7 +57,7 @@ verifyBlockCmd : Context -> Bool -> Int -> Cmd Msg
 verifyBlockCmd ctx isAccepted blockId =
     postWithCsrf ctx
         VerifyBlockResponse
-        ("/asset-block/" ++ toString blockId ++ "/verify")
+        ("/asset-blocks/" ++ toString blockId ++ "/verify")
         (JE.object
             [ ( "isAccepted", JE.bool isAccepted )
             ]

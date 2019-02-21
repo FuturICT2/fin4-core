@@ -10,8 +10,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-//GetAsset handle get asset route
-func GetAsset(sc datatype.ServiceContainer) gin.HandlerFunc {
+//FindAsset handle find asset route, returns asset data to the user
+func FindAsset(sc datatype.ServiceContainer) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		user := auth.MustGetUser(c)
 		//TODO this need to be imporoved, should be GET ASSET, should use tm.FindAsset only

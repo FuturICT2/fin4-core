@@ -1,17 +1,14 @@
 module Portfolio.View exposing (render)
 
-import Common.Decimal exposing (renderDecimal)
 import Common.Error as Error
-import Common.Styles exposing (padding, textLeft, textRight, toMdlCss)
 import Html exposing (..)
 import Html.Attributes exposing (href, src, style)
 import Html.Events exposing (onClick)
 import Identicon exposing (identicon)
 import Main.Context exposing (Context)
 import Main.Msg exposing (Msg(..))
-import Main.Routing exposing (tokenPath)
+import Main.Routing exposing (assetPath)
 import Material.Options as Options
-import Material.Table as Table
 import Material.Typography as Typo
 import Model.Portfolio exposing (Portfolio, Position)
 import Portfolio.Model exposing (Model)
@@ -77,7 +74,7 @@ renderRow model balance =
             , ( "margin-bottom", "15px" )
             , ( "text-align", "left" )
             ]
-        , href <| tokenPath balance.tokenId
+        , href <| assetPath balance.tokenId
         ]
         [ div
             [ style

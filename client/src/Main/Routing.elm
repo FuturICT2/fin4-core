@@ -7,15 +7,11 @@ module Main.Routing exposing
     , homepagePath
     , loginPath
     , matchers
-    , newTokenPath
     , parseLocation
-    , personPath
     , portfolioPath
     , profilePath
     , signupPath
     , termsPath
-    , tokenPath
-    , tokensPath
     )
 
 import Navigation exposing (Location)
@@ -26,11 +22,7 @@ type Route
     = NotFoundRoute
     | HomepageRoute
     | ExploreAssetsRoute
-    | TokenRoute Int
-    | PersonRoute Int
     | PortfolioRoute
-    | TokensRoute
-    | CreateTokenRoute
     | UserLoginRoute
     | UserForgotRoute
     | UserForgotResetPassRoute Int String
@@ -46,11 +38,7 @@ matchers =
     oneOf
         [ map HomepageRoute top
         , map ExploreAssetsRoute (s "explore-assets")
-        , map TokenRoute (s "token" </> int)
-        , map PersonRoute (s "person" </> int)
         , map PortfolioRoute (s "portfolio")
-        , map TokensRoute (s "tokens")
-        , map CreateTokenRoute (s "new")
         , map UserLoginRoute (s "login")
         , map UserSignupRoute (s "signup")
         , map UserFastSignupRoute (s "fsignup")
@@ -92,29 +80,9 @@ profilePath userId =
     "#profile/" ++ toString userId
 
 
-tokensPath : String
-tokensPath =
-    "#tokens"
-
-
-tokenPath : Int -> String
-tokenPath id =
-    "#token/" ++ toString id
-
-
-personPath : Int -> String
-personPath id =
-    "#person/" ++ toString id
-
-
 trendingPath : String
 trendingPath =
     "#tokens"
-
-
-newTokenPath : String
-newTokenPath =
-    "#new"
 
 
 portfolioPath : String
