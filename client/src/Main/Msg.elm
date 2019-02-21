@@ -5,7 +5,6 @@ import Common.Json exposing (EmptyResponse)
 import CreateAsset.Msg
 import CreateToken.Msg
 import ExploreAssets.Msg
-import Homepage.Homepage
 import Homepage.Msg
 import Http
 import Main.User exposing (User)
