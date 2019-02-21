@@ -39,7 +39,7 @@ loadAssetCmd : Context -> Int -> Cmd Msg
 loadAssetCmd ctx assetId =
     get ctx
         OnAssetLoadResponse
-        ("/v2/assets/" ++ toString assetId)
+        ("/assets/" ++ toString assetId)
         []
         assetDecoder
 
@@ -48,7 +48,7 @@ submitBlockCmd : Context -> Int -> String -> List Image -> Cmd Msg
 submitBlockCmd ctx assetId blockText imgs =
     postWithCsrf ctx
         SubmitBlockResponse
-        "/v2/asset-blocks"
+        "/asset-blocks"
         (encodeBlockSubmition assetId blockText imgs)
         emptyResponseDecoder
 
@@ -57,7 +57,7 @@ verifyBlockCmd : Context -> Bool -> Int -> Cmd Msg
 verifyBlockCmd ctx isAccepted blockId =
     postWithCsrf ctx
         VerifyBlockResponse
-        ("/v2/asset-block/" ++ toString blockId ++ "/verify")
+        ("/asset-block/" ++ toString blockId ++ "/verify")
         (JE.object
             [ ( "isAccepted", JE.bool isAccepted )
             ]

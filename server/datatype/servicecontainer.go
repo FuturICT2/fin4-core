@@ -7,7 +7,6 @@ type ServiceContainer struct {
 	Config          Config
 	AssetService    AssetService
 	TimelineService TimelineService
-	TokenService    TokenService
 	UserService     UserService
 	FileStorage     FileStorage
 	Ethereum        *ethereum.Ethereum
