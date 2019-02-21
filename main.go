@@ -13,7 +13,6 @@ import (
 	"github.com/FuturICT2/fin4-core/server/logger"
 	"github.com/FuturICT2/fin4-core/server/routes"
 	"github.com/FuturICT2/fin4-core/server/timelineservice"
-	"github.com/FuturICT2/fin4-core/server/tokenservice"
 	"github.com/FuturICT2/fin4-core/server/userservice"
 )
 
@@ -43,7 +42,6 @@ func main() {
 	// connect to database
 	db := dbservice.MustConnect(cfg.DataSourceName)
 	userService := userservice.NewService(db)
-	tokenService := tokenservice.NewService(db)
 	timelineService := timelineservice.NewService(db)
 	assetService := assetservice.NewService(db)
 	// connect with Amazon AWS (used in our live instance)
@@ -58,7 +56,6 @@ func main() {
 		AssetService:    assetService,
 		TimelineService: timelineService,
 		UserService:     userService,
-		TokenService:    tokenService,
 		FileStorage:     fs,
 		Ethereum:        ethereum,
 	}

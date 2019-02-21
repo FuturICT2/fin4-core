@@ -41,7 +41,7 @@ toggleFavoriteCmd : Context -> Int -> Cmd Msg
 toggleFavoriteCmd ctx blockId =
     postWithCsrf ctx
         OnToggleFavoriteResponse
-        ("/v2/asset-block/" ++ toString blockId ++ "/toggle-favorite")
+        ("/asset-block/" ++ toString blockId ++ "/toggle-favorite")
         (JE.object [])
         (JP.decode {})
 
@@ -52,13 +52,13 @@ loadTimelineCmd ctx page timelineType =
         apiPath =
             case timelineType of
                 HomepageTimeline ->
-                    "/v2/timeline"
+                    "/timeline"
 
                 UserTimeline userId ->
-                    "/v2/timeline/user/" ++ toString userId
+                    "/timeline/user/" ++ toString userId
 
                 AssetTimeline assetId ->
-                    "/v2/timeline/asset/" ++ toString assetId
+                    "/timeline/asset/" ++ toString assetId
     in
     get ctx
         OnLoadTimelineResponse
@@ -71,7 +71,7 @@ verifyBlockCmd : Context -> Bool -> Int -> Cmd Msg
 verifyBlockCmd ctx isAccepted blockId =
     postWithCsrf ctx
         VerifyBlockResponse
-        ("/v2/asset-block/" ++ toString blockId ++ "/verify")
+        ("/asset-block/" ++ toString blockId ++ "/verify")
         (JE.object
             [ ( "isAccepted", JE.bool isAccepted )
             ]

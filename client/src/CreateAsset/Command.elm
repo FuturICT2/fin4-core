@@ -12,7 +12,7 @@ createAssetCmd : Context -> Model -> Cmd Msg
 createAssetCmd ctx model =
     postWithCsrf ctx
         OnCreateAssetSuccess
-        "/v2/assets"
+        "/assets"
         (encodeCreateAsset model)
         assetDecoder
 

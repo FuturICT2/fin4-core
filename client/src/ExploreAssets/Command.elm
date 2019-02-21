@@ -27,7 +27,7 @@ commands ctx =
 loadAssetsCmd ctx page =
     get ctx
         OnLoadAssetsResponse
-        "/v2/assets"
+        "/assets"
         [ ( "page", toString page ) ]
         assetListDecoder
 
@@ -35,7 +35,7 @@ loadAssetsCmd ctx page =
 loadFavoritesCmd ctx =
     get ctx
         OnLoadFavoritesResponse
-        "/v2/assets-favorites"
+        "/assets-favorites"
         []
         assetListDecoder
 
@@ -43,7 +43,7 @@ loadFavoritesCmd ctx =
 toggleFavoriteCmd ctx assetId =
     postWithCsrf ctx
         OnToggleFavoriteResponse
-        ("/v2/assets/" ++ toString assetId ++ "/toggle-favorite")
+        ("/assets/" ++ toString assetId ++ "/toggle-favorite")
         (JE.object
             [ ( "assetId", JE.int assetId )
             ]

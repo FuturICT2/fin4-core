@@ -10,13 +10,13 @@ import (
 func InjectHandlers(sc datatype.ServiceContainer, rg *gin.RouterGroup) {
 	authenticator := routermiddleware.SessionMustAuth()
 	// Assets APIs
-	rg.GET("/v2/assets/:assetId", GetAsset(sc))
-	rg.GET("/v2/assets", GetAssets(sc))
-	rg.POST("/v2/assets", authenticator, CreateAsset(sc))
-	rg.POST("/v2/assets/:assetId/toggle-favorite", authenticator, ToggleFavoriteAsset(sc))
+	rg.GET("/assets/:assetId", GetAsset(sc))
+	rg.GET("/assets", GetAssets(sc))
+	rg.POST("/assets", authenticator, CreateAsset(sc))
+	rg.POST("/assets/:assetId/toggle-favorite", authenticator, ToggleFavoriteAsset(sc))
 
 	// Claims APIs
-	rg.POST("/v2/asset-blocks", authenticator, CreateAssetBlock(sc))
-	rg.POST("/v2/asset-block/:blockId/verify", authenticator, VerifyAssetBlock(sc))
-	rg.POST("/v2/asset-block/:blockId/toggle-favorite", authenticator, ToggleFavoriteBlock(sc))
+	rg.POST("/asset-blocks", authenticator, CreateAssetBlock(sc))
+	rg.POST("/asset-block/:blockId/verify", authenticator, VerifyAssetBlock(sc))
+	rg.POST("/asset-block/:blockId/toggle-favorite", authenticator, ToggleFavoriteBlock(sc))
 }
