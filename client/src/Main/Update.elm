@@ -2,11 +2,9 @@ module Main.Update exposing (mountRoute, update)
 
 import Asset.Command
 import Asset.Model
-import Asset.Msg
 import Asset.Update
+import CreateAsset.Model
 import CreateAsset.Update
-import CreateToken.Model
-import CreateToken.Update
 import Debug
 import ExploreAssets.Command
 import ExploreAssets.Update
@@ -21,51 +19,23 @@ import Main.Routing
         ( Route(..)
         , loginPath
         , parseLocation
-        , tokensPath
         )
 import Material
 import Navigation exposing (newUrl)
-import Person.Command
-import Person.Model
-import Person.Update
 import Portfolio.Command
-import Portfolio.Model
 import Portfolio.Update
 import Profile.Command
 import Profile.Model
 import Profile.Msg
 import Profile.Update
-import Token.Command
-import Token.Model
-import Token.Update
-import Tokens.Command
-import Tokens.Model
-import Tokens.Update
 import UserLogin.Update
 
 
 mountRoute : Model -> ( Model, Cmd Msg )
 mountRoute model =
     case model.context.route of
-        TokenRoute tokenId ->
-            let
-                token =
-                    Token.Model.init
-            in
-            { model | token = token } ! [ Cmd.map Token <| Token.Command.commands model.context tokenId ]
-
-        PersonRoute personId ->
-            let
-                person =
-                    Person.Model.init
-            in
-            { model | person = person } ! [ Cmd.map Person <| Person.Command.commands model.context personId ]
-
         PortfolioRoute ->
             model ! [ Cmd.map Portfolio <| Portfolio.Command.commands model.context ]
-
-        TokensRoute ->
-            model ! [ Cmd.map Tokens <| Tokens.Command.commands model.context ]
 
         AssetRoute _ ->
             { model | asset = Asset.Model.init }
@@ -110,7 +80,7 @@ update msg model =
                             | route = parseLocation location
                         }
                     , showMobileNav = False
-                    , createToken = CreateToken.Model.init
+                    , createAsset = CreateAsset.Model.init
                 }
 
         OnCheckSessionResponse resp ->
@@ -173,40 +143,12 @@ update msg model =
             in
             { model | profile = childModel } ! [ Cmd.map ProfileMsg cmd, loadSession ]
 
-        Token msg_ ->
-            let
-                ( childModel, cmd ) =
-                    Token.Update.update model.context msg_ model.token
-            in
-            { model | token = childModel } ! [ Cmd.map Token cmd ]
-
-        Person msg_ ->
-            let
-                ( childModel, cmd ) =
-                    Person.Update.update model.context msg_ model.person
-            in
-            { model | person = childModel } ! [ Cmd.map Person cmd ]
-
         Portfolio msg_ ->
             let
                 ( childModel, cmd ) =
                     Portfolio.Update.update model.context msg_ model.portfolio
             in
             { model | portfolio = childModel } ! [ Cmd.map Portfolio cmd ]
-
-        Tokens msg_ ->
-            let
-                ( childModel, cmd ) =
-                    Tokens.Update.update model.context msg_ model.tokens
-            in
-            { model | tokens = childModel } ! [ Cmd.map Tokens cmd ]
-
-        CreateToken msg_ ->
-            let
-                ( childModel, cmd ) =
-                    CreateToken.Update.update model.context msg_ model.createToken
-            in
-            { model | createToken = childModel } ! [ Cmd.map CreateToken cmd ]
 
         UserLoginMsg msg_ ->
             let

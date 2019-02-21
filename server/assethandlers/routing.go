@@ -10,13 +10,18 @@ import (
 func InjectHandlers(sc datatype.ServiceContainer, rg *gin.RouterGroup) {
 	authenticator := routermiddleware.SessionMustAuth()
 	// Assets APIs
-	rg.GET("/assets/:assetId", GetAsset(sc))
-	rg.GET("/assets", GetAssets(sc))
+	// Find listed assets
+	rg.GET("/assets", FindAssets(sc))
+	// Create new asset
 	rg.POST("/assets", authenticator, CreateAsset(sc))
+	// Find asset by its ID
+	rg.GET("/assets/:assetId", FindAsset(sc))
+	// Toggle user favorite asset
 	rg.POST("/assets/:assetId/toggle-favorite", authenticator, ToggleFavoriteAsset(sc))
 
-	// Claims APIs
+	// Oracle APIs
+	// Create new block in an asset
 	rg.POST("/asset-blocks", authenticator, CreateAssetBlock(sc))
-	rg.POST("/asset-block/:blockId/verify", authenticator, VerifyAssetBlock(sc))
-	rg.POST("/asset-block/:blockId/toggle-favorite", authenticator, ToggleFavoriteBlock(sc))
+	rg.POST("/asset-blocks/:blockId/verify", authenticator, VerifyAssetBlock(sc))
+	rg.POST("/asset-blocks/:blockId/toggle-favorite", authenticator, ToggleFavoriteBlock(sc))
 }

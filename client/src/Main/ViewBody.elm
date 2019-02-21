@@ -2,7 +2,6 @@ module Main.ViewBody exposing (render)
 
 import Asset.View
 import CreateAsset.View
-import CreateToken.View
 import ExploreAssets.View
 import Homepage.View
 import Html exposing (..)
@@ -10,11 +9,8 @@ import Main.Model exposing (Model)
 import Main.Msg exposing (Msg(..))
 import Main.NotFound
 import Main.Routing exposing (Route(..))
-import Person.View
 import Portfolio.View
 import Profile.View
-import Token.View
-import Tokens.View
 import UserLogin.ViewFastSignup
 import UserLogin.ViewForgot
 import UserLogin.ViewForgotResetPass
@@ -48,29 +44,9 @@ render model =
                 Html.map ProfileMsg <|
                     Profile.View.render model.context model.profile profileId
 
-        TokenRoute tokenId ->
-            ifAuth model <|
-                Html.map Main.Msg.Token <|
-                    Token.View.render model.context model.token tokenId
-
-        PersonRoute personId ->
-            ifAuth model <|
-                Html.map Main.Msg.Person <|
-                    Person.View.render model.context model.person personId
-
         PortfolioRoute ->
             ifAuth model <|
                 Portfolio.View.render model.context model.portfolio
-
-        TokensRoute ->
-            ifAuth model <|
-                Html.map Main.Msg.Tokens <|
-                    Tokens.View.render model.context model.tokens
-
-        CreateTokenRoute ->
-            ifAuth model <|
-                Html.map Main.Msg.CreateToken <|
-                    CreateToken.View.render model.context model.createToken
 
         UserLoginRoute ->
             ifNotAuth model <| renderLogin model

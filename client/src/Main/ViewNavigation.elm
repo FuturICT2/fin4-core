@@ -2,7 +2,6 @@ module Main.ViewNavigation exposing (render)
 
 import Html exposing (..)
 import Html.Attributes exposing (attribute, href, style)
-import Html.Events exposing (onClick)
 import Main.Model exposing (Model)
 import Main.Msg exposing (Msg(..))
 import Main.Routing
@@ -10,9 +9,7 @@ import Main.Routing
         ( Route(..)
         , exploreAssetsPath
         , homepagePath
-        , newTokenPath
         , portfolioPath
-        , tokensPath
         )
 import Material.Icon as Icon
 
