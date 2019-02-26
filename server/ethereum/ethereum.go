@@ -25,7 +25,7 @@ type Ethereum struct {
 
 // MustNewEthereum create new Ethereum interface, panic if no connection
 func MustNewEthereum() *Ethereum {
-	conn, err := ethclient.Dial("HTTP://127.0.0.1:7545") //("https://rinkeby.infura.io/")
+	conn, err := ethclient.Dial("https://rinkeby.infura.io/")
 
 	if err != nil {
 		logrus.Fatal("Failed to connect to the Ethereum client: %v", err)
