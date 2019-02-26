@@ -37,4 +37,5 @@ type AssetService interface {
 		decimaldt.Decimal,
 		error,
 	)
+	UpdateOraclePingTime(user *User) error
 }

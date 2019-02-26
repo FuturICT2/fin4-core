@@ -13,6 +13,7 @@ type TimelineEntry struct {
 	AssetSymbol                string
 	OracleID                   ID
 	OracleName                 string
+	OracleType                 int
 	Text                       string
 	EthereumTransactionAddress string
 	Status                     int

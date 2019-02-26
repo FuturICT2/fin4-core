@@ -60,7 +60,7 @@ renderAsset ctx model asset =
                     , Lists.subtitle []
                         [ text <| "Supply= " ++ toString asset.totalSupply
                         , text <| " | Contributors: " ++ toString asset.minersCount
-                        , text <| " | Moderator: "
+                        , text <| " | Oracle: "
                         , a [ href (profilePath asset.creatorId) ] [ text asset.creatorName ]
                         ]
                     ]

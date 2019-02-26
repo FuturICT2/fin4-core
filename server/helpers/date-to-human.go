@@ -7,7 +7,7 @@ import (
 
 // DateToHuman converts a date to human readable time
 func DateToHuman(d time.Time) string {
-	year, month, day, hour, min, _ := diff(d, time.Now())
+	year, month, day, hour, min, _ := Diff(d, time.Now())
 	dHumand := "few seconds ago"
 	if year == 1 {
 		dHumand = "A year ago"
@@ -33,7 +33,7 @@ func DateToHuman(d time.Time) string {
 	return dHumand
 }
 
-func diff(a, b time.Time) (year, month, day, hour, min, sec int) {
+func Diff(a, b time.Time) (year, month, day, hour, min, sec int) {
 	if a.Location() != b.Location() {
 		b = b.In(a.Location())
 	}

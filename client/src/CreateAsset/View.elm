@@ -1,7 +1,7 @@
 module CreateAsset.View exposing (render)
 
 import Common.Error exposing (renderHttpError)
-import Common.Styles exposing (marginTop, paddingBottom, paddingTop, textCenter)
+import Common.Styles exposing (marginTop, paddingBottom, paddingTop, textCenter, toMdlCss)
 import CreateAsset.Model exposing (Model)
 import CreateAsset.Msg exposing (Msg(..))
 import CreateAsset.Types exposing (..)
@@ -14,6 +14,7 @@ import Main.Routing exposing (assetPath, exploreAssetsPath)
 import Material.Button as Button
 import Material.Options as Options
 import Material.Spinner
+import Material.Toggles as Toggles
 import Material.Typography as Typography
 
 
@@ -95,6 +96,14 @@ renderForm ctx model =
                 ]
                 []
             ]
+        , Toggles.checkbox Mdl
+            [ 0 ]
+            model.mdl
+            [ Options.onToggle ToggleOracleType
+            , Toggles.ripple
+            , Toggles.value model.isSensor
+            ]
+            [ text "Check this if the oracle is an IoT sensor" ]
         , renderHttpError model.createAssetError
         , div [ style [ ( "text-align", "center" ) ] ]
             [ Button.render Mdl
@@ -104,6 +113,7 @@ renderForm ctx model =
                 , Button.colored
                 , Options.onClick PostAsset
                 , Options.disabled model.isCreatingAsset
+                , toMdlCss (marginTop 15)
                 ]
                 [ case model.isCreatingAsset of
                     True ->
@@ -112,16 +122,6 @@ renderForm ctx model =
 
                     False ->
                         text "Confirm"
-                ]
-            ]
-        , div [ informationHelpStyle ]
-            [ Options.styled p
-                [ Typography.body1 ]
-                [ text """Once you create a topic, a token will
-                      be created for that topic with 0 currency supply. The feedback from people on
-                      this topic initiates and generates the cryptocurrency
-                      supply. Therefore, the more content and posts are added to
-                      the topic, the more cryptocurrency is mined "socially"."""
                 ]
             ]
         ]

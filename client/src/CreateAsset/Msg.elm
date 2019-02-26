@@ -14,3 +14,4 @@ type Msg
     | SetSymbol String
     | SetDescription String
     | SetActiveView ActiveView
+    | ToggleOracleType

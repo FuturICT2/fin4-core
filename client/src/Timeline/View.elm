@@ -24,6 +24,7 @@ import Material.Button as Button
 import Material.Icon as Icon
 import Material.List as Lists
 import Material.Options as Options exposing (css)
+import Material.Spinner
 import Material.Typography as Typography
 import Timeline.Model exposing (Model, TimelineEntry, TimelineType(..))
 import Timeline.Msg exposing (Msg(..))
@@ -158,7 +159,7 @@ renderEntry ctx model entry =
                         Nothing ->
                             span [] []
                     ]
-        , case entry.status == 1 of
+        , case entry.status == 1 || entry.oracleType == 1 of
             True ->
                 span [] []
 
@@ -168,33 +169,17 @@ renderEntry ctx model entry =
                         [ Typography.caption ]
                         [ text "This  post needs to be approved by "
                         , a [ href (profilePath entry.oracleId) ] [ text entry.oracleName ]
-                        , text ", the moderator of the topic"
+                        , text ", the oracle of the topic"
                         ]
                     ]
         , case showVerifyBtn of
             True ->
-                div [ paddingLeft 10 ]
-                    [ Button.render Mdl
-                        [ 1, -2 ]
-                        model.mdl
-                        [ Button.raised
-                        , Button.ripple
-                        , Button.colored
-                        , Options.onClick (VerifyBlock True entry.blockId)
-                        ]
-                        [ text "accept post"
-                        ]
-                    , text " "
-                    , Button.render Mdl
-                        [ 2, -2 ]
-                        model.mdl
-                        [ Button.raised
-                        , Button.ripple
-                        , Options.onClick (VerifyBlock False entry.blockId)
-                        ]
-                        [ text "drop"
-                        ]
-                    ]
+                case entry.oracleType == 0 of
+                    True ->
+                        renderOracleBtns ctx model entry
+
+                    False ->
+                        renderOracleStatus ctx model entry
 
             False ->
                 div [ toggleFavoriteStyle, onClick (ToggleFavorite entry.blockId) ]
@@ -225,6 +210,54 @@ renderEntry ctx model entry =
                         ]
                         [ img [ txIconStyle, src "static/images/ethereum.png" ] [] ]
                     ]
+        ]
+
+
+renderOracleStatus : Context -> Model -> TimelineEntry -> Html Msg
+renderOracleStatus ctx model entry =
+    div [ padding 10 ]
+        [ case entry.status == 1 of
+            True ->
+                div []
+                    [ Options.styled span
+                        [ Typography.caption, toMdlCss (paddingLeft 10), css "color" "green" ]
+                        [ text "issued" ]
+                    ]
+
+            False ->
+                div []
+                    [ Material.Spinner.spinner
+                        [ Material.Spinner.active True, Options.css "width" "15px", Options.css "height" "15px" ]
+                    , Options.styled span
+                        [ Typography.caption, toMdlCss (paddingLeft 10) ]
+                        [ text <| "waiting for " ++ entry.oracleName ++ " approval" ]
+                    ]
+        ]
+
+
+renderOracleBtns : Context -> Model -> TimelineEntry -> Html Msg
+renderOracleBtns ctx model entry =
+    div [ paddingLeft 10 ]
+        [ Button.render Mdl
+            [ 1, -2 ]
+            model.mdl
+            [ Button.raised
+            , Button.ripple
+            , Button.colored
+            , Options.onClick (VerifyBlock True entry.blockId)
+            ]
+            [ text "accept post"
+            ]
+        , text " "
+        , Button.render Mdl
+            [ 2, -2 ]
+            model.mdl
+            [ Button.raised
+            , Button.ripple
+            , Options.onClick (VerifyBlock False entry.blockId)
+            ]
+            [ text "drop"
+            ]
         ]
 
 

@@ -1,12 +1,21 @@
 package assethandlers
 
 import (
+	"time"
+
 	"github.com/FuturICT2/fin4-core/server/datatype"
+	"github.com/FuturICT2/fin4-core/server/helpers"
 )
 
 func toAssetsResponse(entries []datatype.Asset) []interface{} {
 	res := []interface{}{}
 	for _, entry := range entries {
+		_, _, _, _, min, sec := helpers.Diff(entry.LastOraclePing, time.Now())
+		if min < 1 && sec > 10 {
+			entry.IsConnected = false
+		} else {
+			entry.IsConnected = true
+		}
 		res = append(res, struct {
 			ID                         datatype.ID
 			Symbol                     string
@@ -20,6 +29,9 @@ func toAssetsResponse(entries []datatype.Asset) []interface{} {
 			DidUserLike                bool
 			EthereumAddress            string
 			EthereumTransactionAddress string
+			LastOraclePingHuman        string
+			IsConnected                bool
+			OracleType                 int
 		}{
 			ID:                         entry.ID,
 			Symbol:                     entry.Symbol,
@@ -33,6 +45,9 @@ func toAssetsResponse(entries []datatype.Asset) []interface{} {
 			DidUserLike:                entry.DidUserLike,
 			EthereumAddress:            entry.EthereumAddress,
 			EthereumTransactionAddress: entry.EthereumTransactionAddress,
+			LastOraclePingHuman:        entry.LastOraclePingHuman,
+			IsConnected:                entry.IsConnected,
+			OracleType:                 entry.OracleType,
 		})
 	}
 	return res

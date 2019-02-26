@@ -11,6 +11,7 @@ type alias Model =
     , name : String
     , symbol : String
     , purpose : String
+    , isSensor : Bool
     , isCreatingAsset : Bool
     , createAssetError : Maybe Http.Error
     , createdAssetId : Int
@@ -26,6 +27,7 @@ init =
     , name = ""
     , symbol = ""
     , purpose = ""
+    , isSensor = False
     , isCreatingAsset = False
     , createAssetError = Nothing
     , createdAssetId = 0

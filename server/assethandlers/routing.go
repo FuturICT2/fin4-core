@@ -24,4 +24,7 @@ func InjectHandlers(sc datatype.ServiceContainer, rg *gin.RouterGroup) {
 	rg.POST("/asset-blocks", authenticator, CreateAssetBlock(sc))
 	rg.POST("/asset-blocks/:blockId/verify", authenticator, VerifyAssetBlock(sc))
 	rg.POST("/asset-blocks/:blockId/toggle-favorite", authenticator, ToggleFavoriteBlock(sc))
+	rg.POST("/asset-block/sensor-verify", authenticator, VerifyAssetBlock(sc))
+
+	rg.GET("/oracle-ping", OraclePing(sc))
 }

@@ -67,12 +67,29 @@ renderAsset ctx model asset =
                                     ++ toString asset.totalSupply
                                     ++ " "
                                     ++ asset.symbol
-                            , text " | Moderator: "
+                            , text " | Oracle: "
                             , a
                                 [ href (profilePath asset.creatorId) ]
                                 [ text asset.creatorName ]
                             ]
                         ]
+                    , case asset.oracleType == 1 of
+                        True ->
+                            div [ connectivityContainerStyle asset.isConnected ]
+                                [ Icon.view "wifi_tethering" [ Icon.size24, toMdlCss (connectivityStyle asset.isConnected) ]
+                                , Options.styled span
+                                    [ Typography.caption ]
+                                    [ case asset.isConnected of
+                                        True ->
+                                            text "connection alive"
+
+                                        False ->
+                                            text "connection lost"
+                                    ]
+                                ]
+
+                        False ->
+                            span [] []
                     ]
                 , div [ txLinkStyle ]
                     [ a
@@ -135,7 +152,7 @@ renderBlocksTab ctx model asset =
         [ renderBlockForm ctx model asset
         , Options.styled p
             [ Typography.caption, toMdlCss textLeft, toMdlCss (paddingLeft 10) ]
-            [ text <| "When the moderator ("
+            [ text <| "When the oracle ("
             , a [ href (profilePath asset.creatorId) ]
                 [ text asset.creatorName ]
             , text <|
@@ -517,4 +534,40 @@ txIconStyle =
         [ ( "display", "inline-block" )
         , ( "width", "30px" )
         , ( "hight", "30px" )
+        ]
+
+
+connectivityContainerStyle isConnected =
+    let
+        c =
+            case isConnected of
+                True ->
+                    "green"
+
+                False ->
+                    "black"
+    in
+    style
+        [ ( "color", c )
+        , ( "margin-top", "5px" )
+        , ( "position", "relative" )
+        , ( "padding-left", "26px" )
+        ]
+
+
+connectivityStyle isConnected =
+    let
+        c =
+            case isConnected of
+                True ->
+                    "green"
+
+                False ->
+                    "grey"
+    in
+    style
+        [ ( "color", c )
+        , ( "position", "absolute" )
+        , ( "top", "-2px" )
+        , ( "left", "0" )
         ]
