@@ -27,6 +27,5 @@ func InjectHandlers(sc datatype.ServiceContainer, rg *gin.RouterGroup) {
 	// a hack api to demonstrate sensor verification
 	// @TODO extend the APIs to enable sensors or app registrations and application specific APIs
 	rg.POST("/asset-block/sensor-verify", SensorVerifyBlock(sc))
-
-	rg.GET("/oracle-ping", OraclePing(sc))
+	rg.POST("/oracle-ping", OraclePing(sc))
 }

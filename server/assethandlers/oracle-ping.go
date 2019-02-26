@@ -3,7 +3,6 @@ package assethandlers
 import (
 	"net/http"
 
-	"github.com/FuturICT2/fin4-core/server/auth"
 	"github.com/FuturICT2/fin4-core/server/datatype"
 	"github.com/gin-gonic/gin"
 )
@@ -11,8 +10,11 @@ import (
 // OraclePing updates last ping for the oracle
 func OraclePing(sc datatype.ServiceContainer) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		user := auth.MustGetUser(c)
-		err := sc.AssetService.UpdateOraclePingTime(user)
+		body := struct {
+			AccessToken string `json:"accessToken"`
+		}{}
+		c.BindJSON(&body)
+		err := sc.AssetService.UpdateOraclePingTime(body.AccessToken)
 		if err != nil {
 			c.String(http.StatusServiceUnavailable, err.Error())
 			return
