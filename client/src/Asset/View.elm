@@ -84,7 +84,7 @@ renderAsset ctx model asset =
                                             text "connection alive"
 
                                         False ->
-                                            text "connection lost"
+                                            text "sensor isn't connected"
                                     ]
                                 ]
 
@@ -130,19 +130,39 @@ renderTabs ctx model asset =
         , Tabs.onSelectTab SelectTab
         , Tabs.activeTab model.tab
         ]
-        [ Tabs.label opts
-            [ text <| "Timeline "
-            ]
-        , Tabs.label opts
-            [ text <| "Contributors "
-            ]
-        ]
+        (case asset.isUserOracle && asset.oracleType == 1 of
+            True ->
+                [ Tabs.label opts
+                    [ text <| "Timeline "
+                    ]
+                , Tabs.label opts
+                    [ text <| "Contributors "
+                    ]
+                , Tabs.label opts
+                    [ text <| "sensor secret"
+                    ]
+                ]
+
+            False ->
+                [ Tabs.label opts
+                    [ text <| "Timeline "
+                    ]
+                , Tabs.label opts
+                    [ text <| "Contributors "
+                    ]
+                ]
+        )
         [ case model.tab of
             0 ->
                 renderBlocksTab ctx model asset
 
-            _ ->
+            1 ->
                 renderMiners ctx model asset
+
+            _ ->
+                div [ padding 15 ]
+                    [ text asset.accessToken
+                    ]
         ]
 
 

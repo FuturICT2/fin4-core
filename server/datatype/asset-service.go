@@ -14,6 +14,7 @@ type AssetService interface {
 		name string,
 		symbol string,
 		description string,
+		isSensor bool,
 		ethereumAddress string,
 		ethereumTransactionAddress string,
 	) (*Asset, error)
@@ -29,6 +30,12 @@ type AssetService interface {
 	) (*Block, error)
 	GetAssetBlocks(assetID ID) ([]Block, error)
 	VerifyAssetBlock(sc *ServiceContainer, user *User, blockID ID, status int) error
+	SensorVerifyBlock(
+		sc *ServiceContainer,
+		sensor *User,
+		status int,
+		accessToken string,
+	) error
 	GetAssetMiners(assetID ID) ([]Miner, error)
 	IsOracle(userID ID, assetID ID) bool
 	GetAssetBlockImages(blockID ID) ([]string, error)

@@ -14,9 +14,10 @@ func CreateAsset(sc datatype.ServiceContainer) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		user := auth.MustGetUser(c)
 		body := struct {
-			Name    string `json:"name"`
-			Purpose string `json:"purpose"`
-			Symbol  string `json:"symbol"`
+			Name     string `json:"name"`
+			Purpose  string `json:"purpose"`
+			Symbol   string `json:"symbol"`
+			IsSensor bool   `json:"isSensor"`
 		}{}
 		c.BindJSON(&body)
 		add, tx, err := sc.Ethereum.DeployMintable(
@@ -35,6 +36,7 @@ func CreateAsset(sc datatype.ServiceContainer) gin.HandlerFunc {
 			body.Name,
 			body.Symbol,
 			body.Purpose,
+			body.IsSensor,
 			add.Hex(),
 			tx.Hash().Hex(),
 		)

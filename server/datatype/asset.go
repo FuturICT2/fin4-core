@@ -29,4 +29,5 @@ type Asset struct {
 	LastOraclePing             time.Time
 	LastOraclePingHuman        string
 	IsConnected                bool
+	AccessToken                string
 }

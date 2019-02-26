@@ -25,6 +25,7 @@ func (db *Service) FindAll(user *datatype.User) ([]datatype.Asset, error) {
 			asset.ethereumTransactionAddress,
 			asset.createdAt,
 			asset.lastOraclePing,
+			asset.accessToken,
 			IF(favorites.assetId, TRUE, FALSE)
 		FROM asset
 		LEFT JOIN user ON asset.creatorId=user.id
@@ -53,6 +54,7 @@ func (db *Service) FindAll(user *datatype.User) ([]datatype.Asset, error) {
 			&c.EthereumTransactionAddress,
 			&c.CreatedAt,
 			&c.LastOraclePing,
+			&c.AccessToken,
 			&c.DidUserLike,
 		)
 		if err != nil {

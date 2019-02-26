@@ -70,6 +70,7 @@ func FindAsset(sc datatype.ServiceContainer) gin.HandlerFunc {
 			EthereumTransactionAddress string
 			LastOraclePingHuman        string
 			IsConnected                bool
+			AccessToken                string
 		}{
 			asset.ID,
 			asset.Name,
@@ -89,6 +90,7 @@ func FindAsset(sc datatype.ServiceContainer) gin.HandlerFunc {
 			asset.EthereumTransactionAddress,
 			asset.LastOraclePingHuman,
 			asset.IsConnected,
+			asset.AccessToken,
 		})
 	}
 }

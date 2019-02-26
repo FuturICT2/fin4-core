@@ -23,4 +23,5 @@ encodeCreateAsset model =
         [ ( "name", JE.string model.name )
         , ( "symbol", JE.string model.symbol )
         , ( "purpose", JE.string model.purpose )
+        , ( "isSensor", JE.bool model.isSensor )
         ]

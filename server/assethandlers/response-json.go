@@ -32,6 +32,8 @@ func toAssetsResponse(entries []datatype.Asset) []interface{} {
 			LastOraclePingHuman        string
 			IsConnected                bool
 			OracleType                 int
+			IsUserOracle               bool
+			AccessToken                string
 		}{
 			ID:                         entry.ID,
 			Symbol:                     entry.Symbol,
@@ -48,6 +50,7 @@ func toAssetsResponse(entries []datatype.Asset) []interface{} {
 			LastOraclePingHuman:        entry.LastOraclePingHuman,
 			IsConnected:                entry.IsConnected,
 			OracleType:                 entry.OracleType,
+			AccessToken:                entry.AccessToken,
 		})
 	}
 	return res

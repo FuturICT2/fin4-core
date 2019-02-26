@@ -45,6 +45,8 @@ type alias Asset =
     , lastOraclePingHuman : String
     , isConnected : Bool
     , oracleType : Int
+    , accessToken : String
+    , isUserOracle : Bool
     }
 
 
@@ -100,6 +102,8 @@ assetDecoder =
         |> JP.required "LastOraclePingHuman" JD.string
         |> JP.required "IsConnected" JD.bool
         |> JP.required "OracleType" JD.int
+        |> JP.required "AccessToken" JD.string
+        |> JP.optional "IsUserOracle" JD.bool False
 
 
 assetListDecoder : JD.Decoder (List Asset)

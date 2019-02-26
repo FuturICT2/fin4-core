@@ -26,7 +26,8 @@ func (db *Service) FindByID(id datatype.ID) (*datatype.Asset, error) {
 			asset.ethereumAddress,
 			asset.ethereumTransactionAddress,
 			asset.createdAt,
-			asset.lastOraclePing
+			asset.lastOraclePing,
+			asset.accessToken
 		FROM
 			asset asset
 		LEFT JOIN user user ON asset.creatorId=user.id
@@ -47,6 +48,7 @@ func (db *Service) FindByID(id datatype.ID) (*datatype.Asset, error) {
 		&c.EthereumTransactionAddress,
 		&c.CreatedAt,
 		&c.LastOraclePing,
+		&c.AccessToken,
 	)
 	if err == sql.ErrNoRows {
 		return nil, nil
