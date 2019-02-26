@@ -4,8 +4,8 @@ import (
 	"errors"
 	"time"
 
+	"github.com/FuturICT2/fin4-core/server/apperrors"
 	"github.com/FuturICT2/fin4-core/server/datatype"
-	"github.com/kjda/exchange/server/apperrors"
 )
 
 // UpdateOraclePingTime updates last ping from oracle
