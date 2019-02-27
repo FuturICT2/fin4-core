@@ -32,7 +32,6 @@ type AssetService interface {
 	VerifyAssetBlock(sc *ServiceContainer, user *User, blockID ID, status int) error
 	SensorVerifyBlock(
 		sc *ServiceContainer,
-		sensor *User,
 		status int,
 		accessToken string,
 	) error

@@ -11,7 +11,6 @@ import (
 // SensorVerifyBlock sensor claim verification
 func (db *Service) SensorVerifyBlock(
 	sc *datatype.ServiceContainer,
-	sensor *datatype.User,
 	status int,
 	accessToken string,
 ) error {
@@ -20,6 +19,7 @@ func (db *Service) SensorVerifyBlock(
 	var assetID datatype.ID
 	var doerID datatype.ID
 	var blockID datatype.ID
+	var creatorID datatype.ID
 	err := db.QueryRow(`
     SELECT
       b.id,
@@ -27,11 +27,10 @@ func (db *Service) SensorVerifyBlock(
       b.userId
     FROM asset_block b
     LEFT JOIN asset ta ON ta.id=b.assetId
-    WHERE ta.creatorId=? AND b.status = ? AND asset.accessToken = ?`,
-		sensor.ID,
+    WHERE b.status = ? AND asset.accessToken = ?`,
 		datatype.BlockUnverified,
 		accessToken,
-	).Scan(&blockID, &assetID, &doerID)
+	).Scan(&blockID, &assetID, &doerID, &creatorID)
 	if err == sql.ErrNoRows {
 		return errors.New("Not authorized")
 	}
@@ -43,5 +42,6 @@ func (db *Service) SensorVerifyBlock(
 	if status == datatype.BlockAccepted {
 		return db.acceptAssetBlock(sc, blockID, assetID, doerID)
 	}
-	return db.rejectAssetBlock(sensor, blockID)
+	u, _ := sc.UserService.FindByID(creatorID)
+	return db.rejectAssetBlock(u, blockID)
 }

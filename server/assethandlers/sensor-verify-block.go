@@ -3,7 +3,6 @@ package assethandlers
 import (
 	"net/http"
 
-	"github.com/FuturICT2/fin4-core/server/auth"
 	"github.com/FuturICT2/fin4-core/server/datatype"
 	"github.com/gin-gonic/gin"
 )
@@ -11,7 +10,6 @@ import (
 // SensorVerifyBlock for f2forum demo sensor hack API
 func SensorVerifyBlock(sc datatype.ServiceContainer) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		user := auth.MustGetUser(c)
 		body := struct {
 			IsAccepted  bool   `json:"isAccepted"`
 			AccessToken string `json:"accessToken"`
@@ -23,7 +21,6 @@ func SensorVerifyBlock(sc datatype.ServiceContainer) gin.HandlerFunc {
 		}
 		err := sc.AssetService.SensorVerifyBlock(
 			&sc,
-			user,
 			status,
 			body.AccessToken,
 		)
