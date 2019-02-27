@@ -1,6 +1,7 @@
 package userhandlers
 
 import (
+	"math/rand"
 	"net/http"
 
 	"github.com/FuturICT2/fin4-core/server/auth"
@@ -23,7 +24,7 @@ func Login(sc datatype.ServiceContainer) gin.HandlerFunc {
 				return
 			}
 			user, err := sc.UserService.Register(
-				"replace@finfour.net",
+				generateToken(20)+"@finfour.net",
 				body.Name,
 				ethereumAddress,
 				"dummypass",
@@ -39,4 +40,14 @@ func Login(sc datatype.ServiceContainer) gin.HandlerFunc {
 		auth.Login(c, user)
 		c.JSON(http.StatusOK, user)
 	}
+}
+
+const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+func generateToken(n int) string {
+	b := make([]byte, n)
+	for i := range b {
+		b[i] = letterBytes[rand.Intn(len(letterBytes))]
+	}
+	return string(b)
 }
