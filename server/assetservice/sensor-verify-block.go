@@ -24,10 +24,11 @@ func (db *Service) SensorVerifyBlock(
     SELECT
       b.id,
       b.assetId,
-      b.userId
+      b.userId,
+      ta.creatorId
     FROM asset_block b
     LEFT JOIN asset ta ON ta.id=b.assetId
-    WHERE b.status = ? AND asset.accessToken = ?`,
+    WHERE b.status = ? AND ta.accessToken = ?`,
 		datatype.BlockUnverified,
 		accessToken,
 	).Scan(&blockID, &assetID, &doerID, &creatorID)
