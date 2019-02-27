@@ -27,33 +27,34 @@ render model =
     in
     div [ bhStyle ]
         [ div []
-            [ a
-                [ href homepagePath
-                , bhNavItemStyle
-                , activeRouteStyle (model.context.route == HomepageRoute)
-                , style [ ( "width", "25%" ) ]
-                ]
-                [ Icon.view "timeline"
-                    [ Icon.size36
-                    ]
-                ]
-            , a
+            [ -- a
+              --     [ href homepagePath
+              --     , bhNavItemStyle
+              --     , activeRouteStyle (model.context.route == HomepageRoute)
+              --     , style [ ( "width", "25%" ) ]
+              --     ]
+              --     [ Icon.view "timeline"
+              --         [ Icon.size36
+              --         ]
+              --     ]
+              -- ,
+              a
                 [ href exploreAssetsPath
                 , bhNavItemStyle
                 , activeRouteStyle (model.context.route == ExploreAssetsRoute)
-                , style [ ( "width", "25%" ) ]
+                , style [ ( "width", "33%" ) ]
                 ]
-                [ Icon.view "list"
+                [ Icon.view "group_work"
                     [ Icon.size36
                     ]
                 ]
             , a
-                [ href (Main.Routing.profilePath userId)
+                [ href "#create-asset"
                 , bhNavItemStyle
-                , activeRouteStyle (model.context.route == ProfileRoute userId)
-                , style [ ( "width", "25%" ) ]
+                , activeRouteStyle (model.context.route == CreateAssetRoute)
+                , style [ ( "width", "33%" ) ]
                 ]
-                [ Icon.view "account_box"
+                [ Icon.view "add_circle"
                     [ Icon.size36
                     ]
                 ]
@@ -61,7 +62,7 @@ render model =
                 [ href portfolioPath
                 , bhNavItemStyle
                 , activeRouteStyle (model.context.route == PortfolioRoute)
-                , style [ ( "width", "25%" ) ]
+                , style [ ( "width", "34%" ) ]
                 ]
                 [ Icon.view "account_balance_wallet"
                     [ Icon.size36

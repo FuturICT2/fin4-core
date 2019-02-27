@@ -169,17 +169,24 @@ renderTabs ctx model asset =
 renderBlocksTab : Context -> Model -> Asset -> Html Msg
 renderBlocksTab ctx model asset =
     div []
-        [ renderBlockForm ctx model asset
-        , Options.styled p
-            [ Typography.caption, toMdlCss textLeft, toMdlCss (paddingLeft 10) ]
-            [ text <| "When the oracle ("
-            , a [ href (profilePath asset.creatorId) ]
-                [ text asset.creatorName ]
-            , text <|
-                ") accepts your post 1"
-                    ++ asset.symbol
-                    ++ " will be mined to your balance"
-            ]
+        [ case asset.oracleType == 1 && not asset.isConnected of
+            True ->
+                span [] []
+
+            False ->
+                div []
+                    [ renderBlockForm ctx model asset
+                    , Options.styled p
+                        [ Typography.caption, toMdlCss textLeft, toMdlCss (paddingLeft 10) ]
+                        [ text <| "When the oracle ("
+                        , a [ href (profilePath asset.creatorId) ]
+                            [ text asset.creatorName ]
+                        , text <|
+                            ") accepts your post 1"
+                                ++ asset.symbol
+                                ++ " will be mined to your balance"
+                        ]
+                    ]
         , renderBlocksList ctx model asset
         ]
 

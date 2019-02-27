@@ -27,19 +27,7 @@ render ctx model =
             False ->
                 div [ entriesListStyle ]
                     [ header [ textCenter ]
-                        [ text "Topics"
-                        ]
-                    , div [ textCenter ]
-                        [ Button.render Mdl
-                            [ 1 ]
-                            model.mdl
-                            [ Button.raised
-                            , Button.ripple
-                            , Button.colored
-                            , Button.link "#create-asset"
-                            ]
-                            [ text "Create new topic"
-                            ]
+                        [ text "Tokens"
                         ]
                     , div [] <| List.map (renderAsset ctx model) model.assets
                     ]

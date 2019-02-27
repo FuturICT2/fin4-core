@@ -183,18 +183,18 @@ renderEntry ctx model entry =
 
             False ->
                 div [ toggleFavoriteStyle, onClick (ToggleFavorite entry.blockId) ]
-                    [ case entry.didUserLike of
-                        True ->
-                            Icon.view "favorite"
-                                [ Icon.size24
-                                , toMdlCss <| color "red"
-                                ]
-
-                        False ->
-                            Icon.view "favorite_border"
-                                [ Icon.size24
-                                ]
-                    , span [] [ text <| toString entry.favoritesCount ]
+                    [-- case entry.didUserLike of
+                     --     True ->
+                     --         Icon.view "favorite"
+                     --             [ Icon.size24
+                     --             , toMdlCss <| color "red"
+                     --             ]
+                     --
+                     --     False ->
+                     --         Icon.view "favorite_border"
+                     --             [ Icon.size24
+                     --             ]
+                     -- , span [] [ text <| toString entry.favoritesCount ]
                     ]
         , case entry.ethereumTransactionAddress == "" of
             True ->
