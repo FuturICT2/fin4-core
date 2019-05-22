@@ -53,67 +53,70 @@ In the following Section we explain how the web app and server can be set up.
 We assume a fresh Ubuntu 18.10 system for the following.
 
 ## Dependencies
-- Golang 1.10 (https://golang.org/doc/install): install via package manager
+- **Golang** 1.10 (https://golang.org/doc/install): install via package manager
 
 - configure env variables:
 ```bash
-export GOROOT=/usr/local/go -> try whereis go, and then see where the root is installed
-export GOPATH=$HOME/Projects/goprojects -> folder where fin-4 will be installed in
+export GOROOT=/usr/local/go #try whereis go to see where the root is installed
+export GOPATH=$HOME/Projects/goprojects #folder where fin-4 will be installed in
 export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
 export GOBIN=$GOPATH/bin
 ```
-Best is to store this in ~/.bashrc, so that this automatically set whenever you start a new terminal session.
+Best is to store this in `~/.bashrc`, so that this automatically set whenever you start a new terminal session.
 
-- Ganache-cli (https://github.com/trufflesuite/ganache-cli): npm install -g ganache-cli
--- gin is a simple command line utility for live-reloading Go web applications.
-- gin (https://github.com/codegangsta/gin): go get github.com/codegangsta/gin
-- Elmlang 0.18.0 (you must not use a newer version): npm install -g elm@elm0.18.0
-- MySql server: apt-get insall mysql-server
+- **Ganache-cli** (https://github.com/trufflesuite/ganache-cli): `npm install -g ganache-cli`
+
+- **gin** (https://github.com/codegangsta/gin) is a simple command line utility for live-reloading Go web applications: `go get github.com/codegangsta/gin`
+
+- **Elmlang** 0.18.0 (you must not use a newer version): `npm install -g elm@elm0.18.0`
+
+- **MySQL server**: `apt-get install mysql-server`
 
 ## Set up
 ```bash
 $ git clone https://github.com/FuturICT2/fin4-core.git
 $ cd fin4-core
 $ go get
-$ npm install: install server dependencies
-$ elm package install: install elm web app dependencies
+$ npm install #install server dependencies
+$ elm package install #install elm web app dependencies
 ```
 ## Setting up database:
-sudo apt-get install mysql-server
-sudo mysql_secure_installation
-set the root password
-sudo mysql -u root -p
-<enter password>
+`sudo mysql_secure_installation`  
+*set the root password*  
+`sudo mysql -u root -p`  
+*enter password*
 
-Inside mysql, create a new database called fin4.
+Inside MySQL, create a new database called fin4.
 ```SQL
 CREATE DATABASE fin4 default charset utf8;
 ```
 Assign a user full access right to the fin4 database (or leave it with root).
 
 ## Env variables
- Copy .env_sample file to .env.
- Then, modify the following entries:
+ Copy the `.env_sample` file to `.env`:
 ```bash
-cp `fin4-core/.env_sample` `fin4-core/.env`
+cp fin4-core/.env_sample fin4-core/.env
 ```
-Open the .env file and add the following information:
+Open the `.env` file and add the following information:
 
-modify DATA_SOURCE_NAME by adding USERNAME, PASSWORD and DB_NAME. Assuming a root user for the fin4 database and the password "password1" the expression should look as follow:
+modify `DATA_SOURCE_NAME` by adding *USERNAME*, *PASSWORD* and *DB_NAME*. Assuming a root user for the fin4 database and the password "password1" (use the one you set above) the expression should look as follow:
 ```bash
 $ export DATA_SOURCE_NAME="root:password1@/fin4?charset=utf8mb4,utf8&parseTime=true"
 ```
+
 ## Running the development-server
 ```bash
 $ export .env # load the environment variables - Do not forget this whenever you open a new terminal
 $ ganache-cli # simulates the ethereum blockchain. Alternatively, you can use the Ganache application
 $ make server-dev # deploy the server
 ```
+
 ## Running the development-client (web front-end)
 ```bash
 $ make client-dev
 ```
-After the build, open https://localhost:8888/ inside of your favourite browser. 
+After the build, open https://localhost:8888/ in your favourite browser.
+
 ## Testing
 ```bash
 $ make test
