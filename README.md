@@ -91,6 +91,12 @@ CREATE DATABASE fin4 default charset utf8;
 ```
 Assign a user full access right to the fin4 database (or leave it with root).
 
+```SQL
+CREATE USER 'newuser'@'localhost' IDENTIFIED BY 'password1';
+GRANT ALL PRIVILEGES ON * . * TO 'newuser'@'localhost';
+FLUSH PRIVILEGES;
+```
+
 ## Env variables
  Copy .env_sample file to .env.
  Then, modify the following entries:
