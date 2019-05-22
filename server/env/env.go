@@ -18,7 +18,7 @@ func Load(baseDir string, isTesting bool) {
 	if isTesting {
 		envFile = "env-test"
 	} else {
-		envFile = "env-default"
+		envFile = ".env" //"env-default"
 	}
 
 	err := godotenv.Load(os.ExpandEnv(
