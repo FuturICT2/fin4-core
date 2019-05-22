@@ -106,7 +106,7 @@ $ export DATA_SOURCE_NAME="root:password1@/fin4?charset=utf8mb4,utf8&parseTime=t
 
 ## Running the development-server
 ```bash
-$ export .env # load the environment variables - Do not forget this whenever you open a new terminal
+$ source .env # load the environment variables - Do not forget this whenever you open a new terminal
 $ ganache-cli # simulates the ethereum blockchain. Alternatively, you can use the Ganache application
 $ make server-dev # deploy the server
 ```
