@@ -118,6 +118,7 @@ $ make client-dev
 After the build, open https://localhost:8888/ in your favourite browser.
 
 ## Testing
+ requires `go get github.com/gorilla/websocket`
 ```bash
 $ make test
 $ make test-cover
