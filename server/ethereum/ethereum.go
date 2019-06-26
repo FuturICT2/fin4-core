@@ -30,7 +30,7 @@ func MustNewEthereum() *Ethereum {
 	if err != nil {
 		logrus.Fatal("Failed to connect to the Ethereum client: %v", err)
 		return nil
-  }
+	}
 	// server key
 	rawKey := env.MustGetenv("ETH_KEY_RAW")
 	rawKeyECDSA, err := crypto.HexToECDSA(rawKey)
@@ -64,6 +64,54 @@ func MustNewEthereum() *Ethereum {
 func (b *Ethereum) CreateNewAddress() (string, error) {
 	acc, err := b.keystore.NewAccount("demo1")
 	return acc.Address.String(), err
+}
+
+func (b *Ethereum) DeployAllPurpose(
+	name_ string,
+	symbol_ string,
+	decimals_ uint8,
+	minter common.Address,
+	isBurnable_ bool,
+	isTransferable_ bool,
+	isMintable_ bool,
+	cap uint64,
+) (common.Address, *types.Transaction, error) {
+	var address common.Address
+	var tx *types.Transaction
+	var err error
+
+	if cap > 0 {
+		address, tx, _, err = DeployAllPurposeCapped(
+			b.auth,
+			// change here to rpc and it will deploy to rpc
+			b.rpc,
+			name_,
+			symbol_,
+			decimals_,
+			minter,
+			isBurnable_,
+			new(big.Int).SetUint64(cap),
+			isTransferable_,
+			isMintable_,
+		)
+	} else {
+		address, tx, _, err = DeployAllPurpose(
+			b.auth,
+			// change here to rpc and it will deploy to rpc
+			b.rpc,
+			name_,
+			symbol_,
+			decimals_,
+			minter,
+			isBurnable_,
+			isTransferable_,
+			isMintable_,
+		)
+	}
+	if err != nil {
+		return address, nil, err
+	}
+	return address, tx, nil
 }
 
 // DeployMintable deployes new Mintable token to Ethereum from server account

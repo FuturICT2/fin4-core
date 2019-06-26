@@ -14,6 +14,8 @@ func InjectHandlers(sc datatype.ServiceContainer, rg *gin.RouterGroup) {
 	rg.GET("/assets", FindAssets(sc))
 	// Create new asset
 	rg.POST("/assets", authenticator, CreateAsset(sc))
+	// Create new AllPurpose asset
+	rg.POST("/ap-assets", authenticator, CreateAllPurposeAsset(sc))
 	// Find asset by its ID
 	rg.GET("/assets/:assetId", FindAsset(sc))
 	// Toggle user favorite asset

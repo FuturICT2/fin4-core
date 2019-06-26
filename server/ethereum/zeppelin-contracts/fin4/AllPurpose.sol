@@ -8,44 +8,31 @@ import "../token/ERC20/ERC20Pausable.sol";
 
 /**
  * @title AllPurpose
- * @dev Very simple ERC20 Token example, where all tokens are pre-assigned to the creator.
- * Note they can later distribute these tokens as they wish using `transfer` and other
- * `ERC20` functions.
  */
 contract AllPurpose is ERC20Mintable, ERC20Burnable, ERC20Pausable {
 
   string public  name;
   string public  symbol;
-  uint8  public  decimals;
+  uint8 public  decimals;
+
   bool   public  isBurnable;
   bool   public  isTransferable;
   bool   public  isMintable;
 
   bool   private constructing = true;
+  uint256 public  INITIAL_SUPPLY = 10;
 
-  uint256 public  INITIAL_SUPPLY = 5;
 
-    /**
-   * @dev Burns a specific amount of tokens.
-   * @param value The amount of token to be burned.
-   */
   function burn(uint256 value) public {
-      if (isBurnable == true){
-        super.burn(value);
-      }
+      require(isBurnable, "Coin not burnable");
+      super.burn(value);
   }
 
-// TODO: untested!
-  /**
-   * @dev Burns a specific amount of tokens.
-   * @param value The amount of token to be burned.
-   */
   function burnFrom(address from, uint256 value) public {
-      if (isBurnable == true){
-        super.burnFrom(from, value);
-      }
+      require(isBurnable, "Coin not burnable");
+      super.burnFrom(from, value);
   }
-// TODO: Make sure super modifier works
+  
   function mint(
     address to,
     uint256 value
@@ -53,26 +40,19 @@ contract AllPurpose is ERC20Mintable, ERC20Burnable, ERC20Pausable {
     public
     returns (bool)
   {
-    if (isMintable == true){
-      emit Transfer(address(0), to, value);
-      return super.mint(to, value);
-    }
+    require(isMintable, "Coin not mintable");
+    return super.mint(to, value);
   }
 
   function pause() public{
-    if (constructing){
-      super.pause();
-    }
+    require(constructing, "this function can only be run on creation");
+    super.pause();
   }
 
-  // see whether capped takes care of itself. Maybe since
-  // it's contructor won't accept 0, it will just not start
-  // those functions
+  function unpause() public{
+    require(constructing, "this function can only be run on creation");
+  }
 
-
-  /**
-   * @dev Constructor that gives msg.sender all of existing tokens.
-   */
   constructor(
     string name_,
     string symbol_,
@@ -89,19 +69,17 @@ contract AllPurpose is ERC20Mintable, ERC20Burnable, ERC20Pausable {
     isBurnable = isBurnable_;
     isTransferable = isTransferable_;
     isMintable = isMintable_;
-    if(isTransferable){
+    if(!isTransferable_){
       pause();
     }
+    _addMinter(minter);
     _mint(msg.sender, INITIAL_SUPPLY);
     constructing = false;
-    _addMinter(minter);
   }
 }
 
 contract AllPurposeCapped is ERC20Capped, AllPurpose {
-  /**
-   * @dev Constructor that gives msg.sender all of existing tokens.
-   */
+
   constructor(
     string name_,
     string symbol_,
