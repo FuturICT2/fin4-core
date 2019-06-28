@@ -66,6 +66,8 @@ func (b *Ethereum) CreateNewAddress() (string, error) {
 	return acc.Address.String(), err
 }
 
+// DeployAllPurpose deploys new AllPurpose (or AllPurposeCapped)
+// token to Ethereum from server account
 func (b *Ethereum) DeployAllPurpose(
 	name_ string,
 	symbol_ string,
@@ -80,6 +82,7 @@ func (b *Ethereum) DeployAllPurpose(
 	var tx *types.Transaction
 	var err error
 
+	// If the cap is > 0, a cap exists, and an AllPurposeCapped is built
 	if cap > 0 {
 		address, tx, _, err = DeployAllPurposeCapped(
 			b.auth,
@@ -94,6 +97,7 @@ func (b *Ethereum) DeployAllPurpose(
 			isTransferable_,
 			isMintable_,
 		)
+	// If the cap = 0, a cap does not exist, and an AllPurpose is built
 	} else {
 		address, tx, _, err = DeployAllPurpose(
 			b.auth,
