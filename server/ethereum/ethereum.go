@@ -25,7 +25,13 @@ type Ethereum struct {
 
 // MustNewEthereum create new Ethereum interface, panic if no connection
 func MustNewEthereum() *Ethereum {
-	conn, err := ethclient.Dial("https://rinkeby.infura.io/")
+	// Allows a custom RPC stored in .env to be used.
+	// If SIM_ETH_HOST not found, Rinkeby test net is used.
+	server := env.Getenv("SIM_ETH_HOST")
+	if server == "" {
+		server = "https://rinkeby.infura.io/"
+	}
+	conn, err := ethclient.Dial(server)
 
 	if err != nil {
 		logrus.Fatal("Failed to connect to the Ethereum client: %v", err)
@@ -97,7 +103,7 @@ func (b *Ethereum) DeployAllPurpose(
 			isTransferable_,
 			isMintable_,
 		)
-	// If the cap = 0, a cap does not exist, and an AllPurpose is built
+		// If the cap = 0, a cap does not exist, and an AllPurpose is built
 	} else {
 		address, tx, _, err = DeployAllPurpose(
 			b.auth,
