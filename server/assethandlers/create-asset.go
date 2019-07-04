@@ -44,6 +44,7 @@ func CreateAllPurposeAsset(sc datatype.ServiceContainer) gin.HandlerFunc {
 			body.Name,
 			body.Symbol,
 			body.Purpose,
+			false, // tokens created via app will not (yet) be sensors
 			add.Hex(),
 			tx.Hash().Hex(),
 		)
