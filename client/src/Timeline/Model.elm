@@ -31,6 +31,7 @@ type alias TimelineEntry =
     , assetSymbol : String
     , oracleId : Int
     , oracleName : String
+    , oracleType : Int
     , text : String
     , status : Int
     , ethereumTransactionAddress : String
@@ -93,6 +94,7 @@ timelineEntryDecoder =
         |> JP.required "AssetSymbol" JD.string
         |> JP.required "OracleID" JD.int
         |> JP.required "OracleName" JD.string
+        |> JP.required "OracleType" JD.int
         |> JP.required "Text" JD.string
         |> JP.required "Status" JD.int
         |> JP.required "EthereumTransactionAddress" JD.string

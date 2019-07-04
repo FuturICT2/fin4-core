@@ -1,6 +1,7 @@
 package userservice
 
 import (
+	"errors"
 	"strings"
 
 	"github.com/FuturICT2/fin4-core/server/datatype"
@@ -18,6 +19,10 @@ func (db *Service) Register(
 	var err error
 	email = sanitizeEmail(email)
 	password = strings.TrimSpace(password)
+	u, err := db.FindByEmail(name)
+	if u != nil {
+		return nil, errors.New("Nickname registered")
+	}
 	if err = db.Validate(email, password); err != nil {
 		return nil, err
 	}

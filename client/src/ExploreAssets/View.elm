@@ -27,19 +27,7 @@ render ctx model =
             False ->
                 div [ entriesListStyle ]
                     [ header [ textCenter ]
-                        [ text "Topics"
-                        ]
-                    , div [ textCenter ]
-                        [ Button.render Mdl
-                            [ 1 ]
-                            model.mdl
-                            [ Button.raised
-                            , Button.ripple
-                            , Button.colored
-                            , Button.link "#create-asset"
-                            ]
-                            [ text "Create new topic"
-                            ]
+                        [ text "Tokens"
                         ]
                     , div [] <| List.map (renderAsset ctx model) model.assets
                     ]
@@ -60,7 +48,7 @@ renderAsset ctx model asset =
                     , Lists.subtitle []
                         [ text <| "Supply= " ++ toString asset.totalSupply
                         , text <| " | Contributors: " ++ toString asset.minersCount
-                        , text <| " | Moderator: "
+                        , text <| " | Oracle: "
                         , a [ href (profilePath asset.creatorId) ] [ text asset.creatorName ]
                         ]
                     ]

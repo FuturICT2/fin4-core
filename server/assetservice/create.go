@@ -2,6 +2,7 @@ package assetservice
 
 import (
 	"errors"
+	"math/rand"
 	"strings"
 	"time"
 
@@ -16,6 +17,7 @@ func (db *Service) Create(
 	name string,
 	symbol string,
 	description string,
+	isSensor bool,
 	ethereumAddress string,
 	ethereumTransactionAddress string,
 ) (*datatype.Asset, error) {
@@ -51,6 +53,8 @@ func (db *Service) Create(
 					description = ?,
 					supply = 0,
 					creatorId = ?,
+					oracleType = ?,
+					accessToken = ?,
 					minersCounter = 0,
 					favoritesCounter = 0,
 					ethereumAddress = ?,
@@ -61,6 +65,8 @@ func (db *Service) Create(
 		symbol,
 		description,
 		userID,
+		isSensor,
+		generateToken(32),
 		ethereumAddress,
 		ethereumTransactionAddress,
 		time.Now(),
@@ -80,4 +86,14 @@ func (db *Service) Create(
 		return nil, datatype.ErrServerError
 	}
 	return asset, nil
+}
+
+const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+func generateToken(n int) string {
+	b := make([]byte, n)
+	for i := range b {
+		b[i] = letterBytes[rand.Intn(len(letterBytes))]
+	}
+	return string(b)
 }

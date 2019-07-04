@@ -9,7 +9,7 @@ import (
 //FindByEmail finds a user by email
 func (db *Service) FindByEmail(email string) (*datatype.User, error) {
 	row := db.QueryRow(
-		fmt.Sprintf("SELECT %s FROM user WHERE email=?", getUserCols()),
+		fmt.Sprintf("SELECT %s FROM user WHERE name=?", getUserCols()),
 		email,
 	)
 

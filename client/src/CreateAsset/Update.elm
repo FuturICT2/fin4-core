@@ -50,5 +50,8 @@ update ctx msg model =
         SetDescription value ->
             { model | purpose = value } ! []
 
+        ToggleOracleType ->
+            { model | isSensor = not model.isSensor } ! []
+
         Mdl msg_ ->
             Material.update Mdl msg_ model

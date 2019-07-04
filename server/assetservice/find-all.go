@@ -17,12 +17,15 @@ func (db *Service) FindAll(user *datatype.User) ([]datatype.Asset, error) {
 			asset.description,
 			asset.supply,
 			asset.creatorId,
+			asset.oracleType,
 			user.name,
 			asset.minersCounter,
 			asset.favoritesCounter,
 			asset.ethereumAddress,
 			asset.ethereumTransactionAddress,
 			asset.createdAt,
+			asset.lastOraclePing,
+			asset.accessToken,
 			IF(favorites.assetId, TRUE, FALSE)
 		FROM asset
 		LEFT JOIN user ON asset.creatorId=user.id
@@ -43,12 +46,15 @@ func (db *Service) FindAll(user *datatype.User) ([]datatype.Asset, error) {
 			&c.Description,
 			&c.Supply,
 			&c.CreatorID,
+			&c.OracleType,
 			&c.CreatorName,
 			&c.MinersCounter,
 			&c.FavoritesCounter,
 			&c.EthereumAddress,
 			&c.EthereumTransactionAddress,
 			&c.CreatedAt,
+			&c.LastOraclePing,
+			&c.AccessToken,
 			&c.DidUserLike,
 		)
 		if err != nil {
@@ -56,6 +62,7 @@ func (db *Service) FindAll(user *datatype.User) ([]datatype.Asset, error) {
 			return nil, err
 		}
 		c.CreatedAtHuman = helpers.DateToHuman(c.CreatedAt)
+		c.LastOraclePingHuman = helpers.DateToHuman(c.LastOraclePing)
 		result = append(result, c)
 	}
 	if err := rows.Err(); err != nil {

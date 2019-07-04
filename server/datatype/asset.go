@@ -2,6 +2,13 @@ package datatype
 
 import "time"
 
+const (
+	// OraclePerson person oracle type
+	OraclePerson = 0
+	// OracleSensor sensor oracle type
+	OracleSensor = 1
+)
+
 // Asset asset data type
 type Asset struct {
 	ID                         ID
@@ -10,6 +17,7 @@ type Asset struct {
 	Description                string
 	Supply                     int64
 	CreatorID                  ID
+	OracleType                 int
 	CreatorName                string
 	MinersCounter              int
 	FavoritesCounter           int
@@ -18,4 +26,8 @@ type Asset struct {
 	DidUserLike                bool
 	CreatedAt                  time.Time
 	CreatedAtHuman             string
+	LastOraclePing             time.Time
+	LastOraclePingHuman        string
+	IsConnected                bool
+	AccessToken                string
 }

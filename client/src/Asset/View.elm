@@ -67,12 +67,29 @@ renderAsset ctx model asset =
                                     ++ toString asset.totalSupply
                                     ++ " "
                                     ++ asset.symbol
-                            , text " | Moderator: "
+                            , text " | Oracle: "
                             , a
                                 [ href (profilePath asset.creatorId) ]
                                 [ text asset.creatorName ]
                             ]
                         ]
+                    , case asset.oracleType == 1 of
+                        True ->
+                            div [ connectivityContainerStyle asset.isConnected ]
+                                [ Icon.view "wifi_tethering" [ Icon.size24, toMdlCss (connectivityStyle asset.isConnected) ]
+                                , Options.styled span
+                                    [ Typography.caption ]
+                                    [ case asset.isConnected of
+                                        True ->
+                                            text "connection alive"
+
+                                        False ->
+                                            text "sensor isn't connected"
+                                    ]
+                                ]
+
+                        False ->
+                            span [] []
                     ]
                 , div [ txLinkStyle ]
                     [ a
@@ -113,36 +130,63 @@ renderTabs ctx model asset =
         , Tabs.onSelectTab SelectTab
         , Tabs.activeTab model.tab
         ]
-        [ Tabs.label opts
-            [ text <| "Timeline "
-            ]
-        , Tabs.label opts
-            [ text <| "Contributors "
-            ]
-        ]
+        (case asset.isUserOracle && asset.oracleType == 1 of
+            True ->
+                [ Tabs.label opts
+                    [ text <| "Timeline "
+                    ]
+                , Tabs.label opts
+                    [ text <| "Contributors "
+                    ]
+                , Tabs.label opts
+                    [ text <| "sensor secret"
+                    ]
+                ]
+
+            False ->
+                [ Tabs.label opts
+                    [ text <| "Timeline "
+                    ]
+                , Tabs.label opts
+                    [ text <| "Contributors "
+                    ]
+                ]
+        )
         [ case model.tab of
             0 ->
                 renderBlocksTab ctx model asset
 
-            _ ->
+            1 ->
                 renderMiners ctx model asset
+
+            _ ->
+                div [ padding 15 ]
+                    [ text asset.accessToken
+                    ]
         ]
 
 
 renderBlocksTab : Context -> Model -> Asset -> Html Msg
 renderBlocksTab ctx model asset =
     div []
-        [ renderBlockForm ctx model asset
-        , Options.styled p
-            [ Typography.caption, toMdlCss textLeft, toMdlCss (paddingLeft 10) ]
-            [ text <| "When the moderator ("
-            , a [ href (profilePath asset.creatorId) ]
-                [ text asset.creatorName ]
-            , text <|
-                ") accepts your post 1"
-                    ++ asset.symbol
-                    ++ " will be mined to your balance"
-            ]
+        [ case asset.oracleType == 1 && not asset.isConnected of
+            True ->
+                span [] []
+
+            False ->
+                div []
+                    [ renderBlockForm ctx model asset
+                    , Options.styled p
+                        [ Typography.caption, toMdlCss textLeft, toMdlCss (paddingLeft 10) ]
+                        [ text <| "When the oracle ("
+                        , a [ href (profilePath asset.creatorId) ]
+                            [ text asset.creatorName ]
+                        , text <|
+                            ") accepts your post 1"
+                                ++ asset.symbol
+                                ++ " will be mined to your balance"
+                        ]
+                    ]
         , renderBlocksList ctx model asset
         ]
 
@@ -517,4 +561,40 @@ txIconStyle =
         [ ( "display", "inline-block" )
         , ( "width", "30px" )
         , ( "hight", "30px" )
+        ]
+
+
+connectivityContainerStyle isConnected =
+    let
+        c =
+            case isConnected of
+                True ->
+                    "green"
+
+                False ->
+                    "black"
+    in
+    style
+        [ ( "color", c )
+        , ( "margin-top", "5px" )
+        , ( "position", "relative" )
+        , ( "padding-left", "26px" )
+        ]
+
+
+connectivityStyle isConnected =
+    let
+        c =
+            case isConnected of
+                True ->
+                    "green"
+
+                False ->
+                    "grey"
+    in
+    style
+        [ ( "color", c )
+        , ( "position", "absolute" )
+        , ( "top", "-2px" )
+        , ( "left", "0" )
         ]

@@ -22,7 +22,7 @@ render : Model -> Html Msg
 render model =
     case model.context.route of
         HomepageRoute ->
-            Html.map HomepageMsg <| Homepage.View.render model.context model.homepage
+            ifNotAuth model <| renderLogin model
 
         ExploreAssetsRoute ->
             ifAuth model <|

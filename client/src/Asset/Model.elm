@@ -42,6 +42,11 @@ type alias Asset =
     , miners : List Miner
     , ethereumAddress : String
     , ethereumTransactionAddress : String
+    , lastOraclePingHuman : String
+    , isConnected : Bool
+    , oracleType : Int
+    , accessToken : String
+    , isUserOracle : Bool
     }
 
 
@@ -94,6 +99,11 @@ assetDecoder =
         |> JP.optional "Miners" (JD.list minerDecoder) []
         |> JP.required "EthereumAddress" JD.string
         |> JP.required "EthereumTransactionAddress" JD.string
+        |> JP.required "LastOraclePingHuman" JD.string
+        |> JP.required "IsConnected" JD.bool
+        |> JP.required "OracleType" JD.int
+        |> JP.required "AccessToken" JD.string
+        |> JP.optional "IsUserOracle" JD.bool False
 
 
 assetListDecoder : JD.Decoder (List Asset)

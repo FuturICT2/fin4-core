@@ -1,9 +1,9 @@
 package userservice
 
 import (
-	"github.com/asaskevich/govalidator"
 	"github.com/FuturICT2/fin4-core/server/datatype"
 	"github.com/FuturICT2/fin4-core/server/dbservice"
+	"github.com/asaskevich/govalidator"
 )
 
 //Service defines service type
@@ -22,9 +22,9 @@ func (db *Service) Validate(email string, password string) error {
 	if !govalidator.IsEmail(email) {
 		return datatype.ErrEmailInvalid
 	}
-	if db.IsEmailRegistered(email) {
-		return datatype.ErrEmailExists
-	}
+	// if db.IsEmailRegistered(email) {
+	// 	return datatype.ErrEmailExists
+	// }
 	if err := validatePassword(password, email); err != nil {
 		return err
 	}

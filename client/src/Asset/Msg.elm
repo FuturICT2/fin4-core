@@ -21,3 +21,4 @@ type Msg
     | ImageRead ImagePortData
     | DeleteImage Int
     | TimelineMsg Timeline.Msg.Msg
+    | TickerTimout
