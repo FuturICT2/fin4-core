@@ -47,7 +47,13 @@ contract AllPurpose is ERC20Mintable, ERC20Burnable, ERC20Pausable {
       require(isBurnable, "Coin not burnable");
       super.burnFrom(from, value);
   }
-  
+
+  /**
+   * @dev Function to mint tokens
+   * @param to The address that will receive the minted tokens.
+   * @param value The amount of tokens to mint.
+   * @return A boolean that indicates if the operation was successful.
+   */
   function mint(
     address to,
     uint256 value
