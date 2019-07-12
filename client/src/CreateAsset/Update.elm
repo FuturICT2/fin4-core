@@ -52,6 +52,15 @@ update ctx msg model =
 
         ToggleOracleType ->
             { model | isSensor = not model.isSensor } ! []
-
+        
+        ToggleIsBurnable ->
+            { model | isBurnable = not model.isBurnable } ! []
+        
+        ToggleIsTransferable ->
+            { model | isTransferable = not model.isTransferable } ! []
+        
+        ToggleIsMintable ->
+            { model | isMintable = not model.isMintable } ! []
+        
         Mdl msg_ ->
             Material.update Mdl msg_ model

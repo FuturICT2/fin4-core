@@ -15,3 +15,6 @@ type Msg
     | SetDescription String
     | SetActiveView ActiveView
     | ToggleOracleType
+    | ToggleIsMintable
+    | ToggleIsBurnable
+    | ToggleIsTransferable

@@ -12,6 +12,9 @@ type alias Model =
     , symbol : String
     , purpose : String
     , isSensor : Bool
+    , isMintable : Bool
+    , isTransferable : Bool
+    , isBurnable : Bool
     , isCreatingAsset : Bool
     , createAssetError : Maybe Http.Error
     , createdAssetId : Int
@@ -28,6 +31,9 @@ init =
     , symbol = ""
     , purpose = ""
     , isSensor = False
+    , isMintable = False
+    , isTransferable = False
+    , isBurnable = False
     , isCreatingAsset = False
     , createAssetError = Nothing
     , createdAssetId = 0

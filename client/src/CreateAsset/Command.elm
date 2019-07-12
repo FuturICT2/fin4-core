@@ -24,4 +24,8 @@ encodeCreateAsset model =
         , ( "symbol", JE.string model.symbol )
         , ( "purpose", JE.string model.purpose )
         , ( "isSensor", JE.bool model.isSensor )
+        , ( "isMintable", JE.bool model.isMintable )
+        , ( "isTransferable", JE.bool model.isTransferable )
+        , ( "isBurnable", JE.bool model.isBurnable )
+
         ]

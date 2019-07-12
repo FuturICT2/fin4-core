@@ -56,15 +56,18 @@ func CreateAllPurposeAsset(sc datatype.ServiceContainer) gin.HandlerFunc {
 	}
 }
 
-// CreateAsset create a new mintable, burnable, transferable, uncapped asset
+// CreateAsset create a new uncapped asset
 func CreateAsset(sc datatype.ServiceContainer) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		user := auth.MustGetUser(c)
 		body := struct {
-			Name     string `json:"name"`
-			Purpose  string `json:"purpose"`
-			Symbol   string `json:"symbol"`
-			IsSensor bool   `json:"isSensor"`
+			Name           string `json:"name"`
+			Purpose        string `json:"purpose"`
+			Symbol         string `json:"symbol"`
+			IsSensor       bool   `json:"isSensor"`
+			IsBurnable     bool   `json:"isBurnable"`
+			IsTransferable bool   `json:"isTransferable"`
+			IsMintable     bool   `json:"isMintable"`
 		}{}
 		c.BindJSON(&body)
 		add, tx, err := sc.Ethereum.DeployAllPurpose(
@@ -72,9 +75,9 @@ func CreateAsset(sc datatype.ServiceContainer) gin.HandlerFunc {
 			body.Symbol,
 			8,
 			common.HexToAddress(user.EthereumAddress),
-			true,
-			true,
-			true,
+			body.IsBurnable,
+			body.IsTransferable,
+			body.IsMintable,
 			0,
 		)
 		if err != nil {

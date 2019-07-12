@@ -100,10 +100,30 @@ renderForm ctx model =
             [ 0 ]
             model.mdl
             [ Options.onToggle ToggleOracleType
-            , Toggles.ripple
             , Toggles.value model.isSensor
             ]
             [ text "Check this if the oracle is an IoT sensor" ]
+        , Toggles.checkbox Mdl
+            [ 0 ]
+            model.mdl
+            [ Options.onToggle ToggleIsMintable
+            , Toggles.value model.isMintable
+            ]
+            [ text "Check this if the token can be minted" ]
+        , Toggles.checkbox Mdl
+            [ 0 ]
+            model.mdl
+            [ Options.onToggle ToggleIsBurnable
+            , Toggles.value model.isBurnable
+            ]
+            [ text "Check this if the token can be burnt" ]
+        , Toggles.checkbox Mdl
+            [ 0 ]
+            model.mdl
+            [ Options.onToggle ToggleIsTransferable
+            , Toggles.value model.isTransferable
+            ]
+            [ text "Check this if the token can be transferred" ]
         , renderHttpError model.createAssetError
         , div [ style [ ( "text-align", "center" ) ] ]
             [ Button.render Mdl
