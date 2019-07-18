@@ -64,6 +64,8 @@ func CreateAsset(sc datatype.ServiceContainer) gin.HandlerFunc {
 			Name           string `json:"name"`
 			Purpose        string `json:"purpose"`
 			Symbol         string `json:"symbol"`
+			Decimals       uint8  `json:"decimals"`
+			Cap            uint64 `json:"cap"`
 			IsSensor       bool   `json:"isSensor"`
 			IsBurnable     bool   `json:"isBurnable"`
 			IsTransferable bool   `json:"isTransferable"`
@@ -73,12 +75,12 @@ func CreateAsset(sc datatype.ServiceContainer) gin.HandlerFunc {
 		add, tx, err := sc.Ethereum.DeployAllPurpose(
 			body.Name,
 			body.Symbol,
-			8,
+			body.decimals,
 			common.HexToAddress(user.EthereumAddress),
 			body.IsBurnable,
 			body.IsTransferable,
 			body.IsMintable,
-			0,
+			body.cap,
 		)
 		if err != nil {
 			c.String(http.StatusServiceUnavailable, err.Error())

@@ -10,6 +10,8 @@ type alias Model =
     , step : ActiveView
     , name : String
     , symbol : String
+    , cap : String
+    , decimals : String
     , purpose : String
     , isSensor : Bool
     , isMintable : Bool
@@ -29,6 +31,8 @@ init =
     , step = FormView
     , name = ""
     , symbol = ""
+    , cap = ""
+    , decimals = ""
     , purpose = ""
     , isSensor = False
     , isMintable = False

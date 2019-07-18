@@ -49,6 +49,12 @@ update ctx msg model =
 
         SetDescription value ->
             { model | purpose = value } ! []
+        
+        SetCap value ->
+            { model | cap = value } ! []
+
+        SetDecimals value ->
+            { model | decimals = value } ! []
 
         ToggleOracleType ->
             { model | isSensor = not model.isSensor } ! []

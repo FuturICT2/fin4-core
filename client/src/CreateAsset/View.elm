@@ -96,6 +96,26 @@ renderForm ctx model =
                 ]
                 []
             ]
+        , div []
+            [ p [ hintStle ] [ text "Cap (Leave blank if no cap is wanted)" ]
+            , input
+                [ inputStyle
+                , placeholder "e.g 100"
+                , value model.cap
+                , onInput SetCap
+                ]
+                []
+            ]
+        , div []
+            [ p [ hintStle ] [ text "Decimals" ]
+            , input
+                [ inputStyle
+                , placeholder "e.g 8"
+                , value model.decimals
+                , onInput SetDecimals
+                ]
+                []
+            ]
         , Toggles.checkbox Mdl
             [ 0 ]
             model.mdl
