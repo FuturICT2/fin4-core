@@ -20,7 +20,8 @@ beforeEach(async () => {
     address,    // minter
     false,      // isBurnable
     true,      // isTransferable
-    true);      // isMintable
+    true,     // isMintable
+    initialSupply);      // initialSupply
   apBurn = await AllPurpose.new(
     "YESCoin", 
     "YES", 
@@ -28,7 +29,8 @@ beforeEach(async () => {
     address,
     true,
     true,
-    false);
+    false,
+    initialSupply);
   apNoTransfer = await AllPurpose.new(
     "YESCoin", 
     "YES", 
@@ -36,7 +38,8 @@ beforeEach(async () => {
     address,
     false,
     false,
-    false);
+    false,
+    initialSupply);
   apCapped = await AllPurposeCapped.new(
     "YESCoin",    // name
     "YES",        // symbol
@@ -45,7 +48,8 @@ beforeEach(async () => {
     false,        // isBurnable
     cap,          // cap
     true,        // isTransferable
-    true);        // isMintable
+    true,        // isMintable
+    initialSupply);
   })
 
 contract("AllPurpose: Unmintable, unburnable, transferable, uncapped", accounts => {
@@ -112,9 +116,6 @@ contract("AllPurpose: unmintable, BURNABLE, transferable, uncapped", accounts =>
   it("should burn", () => 
     AllPurpose.at(apBurn.address)  
       .then(async instance => {
-        const bInit = await instance
-                              .balanceOf(accounts[0])
-                              .then(result => result.toNumber());
         const bAfter = await instance
                               .burn("1")
                               .then(() => instance

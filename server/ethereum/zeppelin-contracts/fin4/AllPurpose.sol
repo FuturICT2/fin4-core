@@ -25,7 +25,6 @@ contract AllPurpose is ERC20Mintable, ERC20Burnable, ERC20Pausable {
   bool   public  isMintable;
 
   bool   private constructing = true;
-  uint256 public  INITIAL_SUPPLY = 10;
 
   /**
    * @dev Burns a specific amount of tokens.
@@ -95,7 +94,8 @@ contract AllPurpose is ERC20Mintable, ERC20Burnable, ERC20Pausable {
     address minter,
     bool isBurnable_,
     bool isTransferable_,
-    bool isMintable_)
+    bool isMintable_,
+    uint initialSupply)
       public
   {
     name = name_;
@@ -108,7 +108,7 @@ contract AllPurpose is ERC20Mintable, ERC20Burnable, ERC20Pausable {
       pause();
     }
     _addMinter(minter);
-    _mint(msg.sender, INITIAL_SUPPLY);
+    _mint(msg.sender, initialSupply);
     // To indicate construction is over, and block pause() and unpause()
     // from being used
     constructing = false;
@@ -130,7 +130,8 @@ contract AllPurposeCapped is ERC20Capped, AllPurpose {
     bool isBurnable_,
     uint cap_,
     bool isTransferable_,
-    bool isMintable_)
+    bool isMintable_,
+    uint initialSupply)
       public
       // ERC2Capped constructor
       ERC20Capped(cap_)
@@ -142,7 +143,8 @@ contract AllPurposeCapped is ERC20Capped, AllPurpose {
           minter,
           isBurnable_,
           isTransferable_,
-          isMintable_)
+          isMintable_,
+          initialSupply)
   {
   }
 }

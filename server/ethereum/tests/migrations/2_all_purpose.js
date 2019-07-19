@@ -10,7 +10,8 @@ module.exports = function(deployer) {
     "0x2EABfB9BfBB12cB16e5f1E521fDBFf79AdA15a6f",
     false, 
     true, 
-    false);
+    false,
+    10);
   deployer.deploy(AllPurposeCapped,
     "YESCoin",
     "YES",
@@ -19,5 +20,6 @@ module.exports = function(deployer) {
     false,
     "25",
     true,
-    true);
+    true,
+    10);
 };

@@ -102,6 +102,7 @@ func (b *Ethereum) DeployAllPurpose(
 			new(big.Int).SetUint64(cap),
 			isTransferable_,
 			isMintable_,
+			big.NewInt(0),
 		)
 		// If the cap = 0, a cap does not exist, and an AllPurpose is built
 	} else {
@@ -116,6 +117,7 @@ func (b *Ethereum) DeployAllPurpose(
 			isBurnable_,
 			isTransferable_,
 			isMintable_,
+			big.NewInt(0),
 		)
 	}
 	if err != nil {

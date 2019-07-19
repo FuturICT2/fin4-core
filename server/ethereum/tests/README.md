@@ -24,4 +24,8 @@ truffle test
 - More can be read about the truffle tests on [truffle's js testing documentation](https://www.trufflesuite.com/docs/truffle/testing/writing-tests-in-javascript).
 
 ## Known errors
-- Strange behaviour: Try deleting your `./build` folder, and compiling and deploying your contracts again. 
+- If you encounter wierd problems like "wrong number of parameters" when the right number was used, try deleting your `./build` folder, and compiling and deploying your contracts again. 
+```
+rm -rf ./build
+npm run truffle migrate --reset --compile-all
+``` 

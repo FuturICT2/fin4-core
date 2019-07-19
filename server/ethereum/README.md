@@ -4,8 +4,9 @@
 
 To generate the bindings for ERC20.sol, one would write the following:
 ```sh
-solc --bin --abi -o ./compiled --overwrite --allow-paths . ./zeppelin-contracts/token/ERC20/ERC20.sol
-abigen --abi compiled/ERC20.abi --pkg ethereum --type ERC20 --out ERC20.go --bin compiled/ERC20.bin
+solc --bin --abi -o ./compiled --overwrite --allow-paths . ./zeppelin-contracts/fin4/AllPurpose.sol
+abigen --abi compiled/AllPurpose.abi --pkg ethereum --type AllPurpose --out AllPurpose.go --bin compiled/AllPurpose.bin
+abigen --abi compiled/AllPurposeCapped.abi --pkg ethereum --type AllPurposeCapped --out AllPurposeCapped.go --bin compiled/AllPurposeCapped.bin
 ```
 
 ## Where to find the contracts
