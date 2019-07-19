@@ -75,12 +75,12 @@ func CreateAsset(sc datatype.ServiceContainer) gin.HandlerFunc {
 		add, tx, err := sc.Ethereum.DeployAllPurpose(
 			body.Name,
 			body.Symbol,
-			body.decimals,
+			body.Decimals,
 			common.HexToAddress(user.EthereumAddress),
 			body.IsBurnable,
 			body.IsTransferable,
 			body.IsMintable,
-			body.cap,
+			body.Cap,
 		)
 		if err != nil {
 			c.String(http.StatusServiceUnavailable, err.Error())
