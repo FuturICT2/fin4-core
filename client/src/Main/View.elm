@@ -15,23 +15,24 @@ import Material.Options exposing (css)
 view : Model -> Html Msg
 view model =
     div [ mainStyle model.context.window.isMobile ]
-        [ div
-            [ style
-                [ ( "position", "relative" )
-                , ( "top", "0" )
-                , ( "left", "0" )
-                , ( "right", "0" )
-                , ( "text-align", "center" )
-                , ( "display", "inline-block" )
-                , ( "margin", "0 auto" )
-                , ( "color", "red" )
-                , ( "background", "white" )
-                , ( "padding", "2px 10px" )
-                ]
-            ]
-            [ text "Finfour.net demo is not https enabled yet. Don't use sensitive content or real passwords."
-            ]
-        , div [ style [ ( "padding-top", "30px" ) ] ]
+        [ -- div
+          --     [ style
+          --         [ ( "position", "relative" )
+          --         , ( "top", "0" )
+          --         , ( "left", "0" )
+          --         , ( "right", "0" )
+          --         , ( "text-align", "center" )
+          --         , ( "display", "inline-block" )
+          --         , ( "margin", "0 auto" )
+          --         , ( "color", "red" )
+          --         , ( "background", "white" )
+          --         , ( "padding", "2px 10px" )
+          --         ]
+          --     ]
+          --     [ text "Finfour.net demo is not https enabled yet. Don't use sensitive content or real passwords."
+          --     ]
+          -- ,
+          div [ style [] ]
             [ case model.context.sessionDidLoad of
                 False ->
                     renderBeforeSessionLoaded

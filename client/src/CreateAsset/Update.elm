@@ -49,6 +49,24 @@ update ctx msg model =
 
         SetDescription value ->
             { model | purpose = value } ! []
+        
+        SetCap value ->
+            { model | cap = value } ! []
 
+        SetDecimals value ->
+            { model | decimals = value } ! []
+
+        ToggleOracleType ->
+            { model | isSensor = not model.isSensor } ! []
+        
+        ToggleIsBurnable ->
+            { model | isBurnable = not model.isBurnable } ! []
+        
+        ToggleIsTransferable ->
+            { model | isTransferable = not model.isTransferable } ! []
+        
+        ToggleIsMintable ->
+            { model | isMintable = not model.isMintable } ! []
+        
         Mdl msg_ ->
             Material.update Mdl msg_ model

@@ -56,6 +56,7 @@ func FindAsset(sc datatype.ServiceContainer) gin.HandlerFunc {
 			Name                       string
 			Symbol                     string
 			CreatorID                  datatype.ID
+			OracleType                 int
 			CreatorName                string
 			Description                string
 			Supply                     int64
@@ -67,11 +68,15 @@ func FindAsset(sc datatype.ServiceContainer) gin.HandlerFunc {
 			Miners                     []datatype.Miner
 			EthereumAddress            string
 			EthereumTransactionAddress string
+			LastOraclePingHuman        string
+			IsConnected                bool
+			AccessToken                string
 		}{
 			asset.ID,
 			asset.Name,
 			asset.Symbol,
 			asset.CreatorID,
+			asset.OracleType,
 			asset.CreatorName,
 			asset.Description,
 			asset.Supply,
@@ -83,6 +88,9 @@ func FindAsset(sc datatype.ServiceContainer) gin.HandlerFunc {
 			miners,
 			asset.EthereumAddress,
 			asset.EthereumTransactionAddress,
+			asset.LastOraclePingHuman,
+			asset.IsConnected,
+			asset.AccessToken,
 		})
 	}
 }

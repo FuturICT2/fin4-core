@@ -1,5 +1,3 @@
-
-
 # Fin4 Server
 This repo contains all files of the finance 4.0 server.
 
@@ -21,7 +19,7 @@ The following methods currently exist
 
 | http Method       | URL           | Body  | Purpose |
 | ------------- |:-------------:| :-----| ------|
-| GET | /api/status | - | Returns the status of the server.| 
+| GET | /api/status | - | Returns the status of the server.|
 | POST      | /wapi/register | "name":String,<br />"email":String, <br />"password":String,<br /> "agreeToTerms":boolean,<br />"isFastSignup":boolean | Registers a user in the fin4 system.|
 |POST      | /wapi/login      |   "name":String,<br />"email":String, <br />"password":String, | Logs a user in. The returned session cookie needs to be used for all /wapi/... methods, except for the register method.|
 | GET |  /wapi/session     |  -   | Gets the current session.|

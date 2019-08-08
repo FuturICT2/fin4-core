@@ -42,8 +42,7 @@ loginCmd ctx model =
 encodeLogin : Model -> JE.Value
 encodeLogin model =
     JE.object
-        [ ( "email", JE.string model.email )
-        , ( "password", JE.string model.password )
+        [ ( "name", JE.string model.email )
         ]
 
 

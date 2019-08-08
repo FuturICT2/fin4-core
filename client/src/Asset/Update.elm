@@ -30,7 +30,8 @@ update ctx msg model =
                 Ok data ->
                     { model
                         | data = Just data
-                        , timeline = Timeline.Model.init (AssetTimeline data.id)
+
+                        -- , timeline = Timeline.Model.init (AssetTimeline data.id)
                     }
                         ! [ Cmd.map TimelineMsg <| Timeline.Command.commands ctx (AssetTimeline data.id) ]
 
@@ -106,6 +107,9 @@ update ctx msg model =
                     Timeline.Update.update ctx msg_ model.timeline
             in
             { model | timeline = childModel } ! [ Cmd.map TimelineMsg cmd ]
+
+        TickerTimout ->
+            model ! [ loadAssetCmd ctx (getAssetId model) ]
 
         Mdl msg_ ->
             Material.update Mdl msg_ model

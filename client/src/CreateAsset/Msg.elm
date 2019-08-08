@@ -12,5 +12,11 @@ type Msg
     | OnCreateAssetSuccess (Result Http.Error Asset)
     | SetName String
     | SetSymbol String
+    | SetCap String
+    | SetDecimals String
     | SetDescription String
     | SetActiveView ActiveView
+    | ToggleOracleType
+    | ToggleIsMintable
+    | ToggleIsBurnable
+    | ToggleIsTransferable

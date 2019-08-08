@@ -21,3 +21,7 @@ public
 compiled
 keystore
 env-default
+
+# VScode IDE files
+.vscode/settings.json
+.vscode/launch.json

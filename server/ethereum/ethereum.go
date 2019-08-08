@@ -25,12 +25,18 @@ type Ethereum struct {
 
 // MustNewEthereum create new Ethereum interface, panic if no connection
 func MustNewEthereum() *Ethereum {
-	conn, err := ethclient.Dial("https://rinkeby.infura.io/")
+	// Allows a custom RPC stored in .env to be used.
+	// If SIM_ETH_HOST not found, Rinkeby test net is used.
+	server := env.Getenv("SIM_ETH_HOST")
+	if server == "" {
+		server = "https://rinkeby.infura.io/"
+	}
+	conn, err := ethclient.Dial(server)
 
 	if err != nil {
 		logrus.Fatal("Failed to connect to the Ethereum client: %v", err)
 		return nil
-  }
+	}
 	// server key
 	rawKey := env.MustGetenv("ETH_KEY_RAW")
 	rawKeyECDSA, err := crypto.HexToECDSA(rawKey)
@@ -64,6 +70,60 @@ func MustNewEthereum() *Ethereum {
 func (b *Ethereum) CreateNewAddress() (string, error) {
 	acc, err := b.keystore.NewAccount("demo1")
 	return acc.Address.String(), err
+}
+
+// DeployAllPurpose deploys new AllPurpose (or AllPurposeCapped)
+// token to Ethereum from server account
+func (b *Ethereum) DeployAllPurpose(
+	name_ string,
+	symbol_ string,
+	decimals_ uint8,
+	minter common.Address,
+	isBurnable_ bool,
+	isTransferable_ bool,
+	isMintable_ bool,
+	cap uint64,
+) (common.Address, *types.Transaction, error) {
+	var address common.Address
+	var tx *types.Transaction
+	var err error
+
+	// If the cap is > 0, a cap exists, and an AllPurposeCapped is built
+	if cap > 0 {
+		address, tx, _, err = DeployAllPurposeCapped(
+			b.auth,
+			// change here to rpc and it will deploy to rpc
+			b.rpc,
+			name_,
+			symbol_,
+			decimals_,
+			minter,
+			isBurnable_,
+			new(big.Int).SetUint64(cap),
+			isTransferable_,
+			isMintable_,
+			big.NewInt(0),
+		)
+		// If the cap = 0, a cap does not exist, and an AllPurpose is built
+	} else {
+		address, tx, _, err = DeployAllPurpose(
+			b.auth,
+			// change here to rpc and it will deploy to rpc
+			b.rpc,
+			name_,
+			symbol_,
+			decimals_,
+			minter,
+			isBurnable_,
+			isTransferable_,
+			isMintable_,
+			big.NewInt(0),
+		)
+	}
+	if err != nil {
+		return address, nil, err
+	}
+	return address, tx, nil
 }
 
 // DeployMintable deployes new Mintable token to Ethereum from server account

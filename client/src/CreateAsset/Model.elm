@@ -10,7 +10,13 @@ type alias Model =
     , step : ActiveView
     , name : String
     , symbol : String
+    , cap : String
+    , decimals : String
     , purpose : String
+    , isSensor : Bool
+    , isMintable : Bool
+    , isTransferable : Bool
+    , isBurnable : Bool
     , isCreatingAsset : Bool
     , createAssetError : Maybe Http.Error
     , createdAssetId : Int
@@ -25,7 +31,13 @@ init =
     , step = FormView
     , name = ""
     , symbol = ""
+    , cap = ""
+    , decimals = ""
     , purpose = ""
+    , isSensor = False
+    , isMintable = False
+    , isTransferable = False
+    , isBurnable = False
     , isCreatingAsset = False
     , createAssetError = Nothing
     , createdAssetId = 0

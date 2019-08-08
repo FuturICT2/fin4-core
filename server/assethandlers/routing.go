@@ -14,6 +14,8 @@ func InjectHandlers(sc datatype.ServiceContainer, rg *gin.RouterGroup) {
 	rg.GET("/assets", FindAssets(sc))
 	// Create new asset
 	rg.POST("/assets", authenticator, CreateAsset(sc))
+	// Create new AllPurpose asset
+	rg.POST("/ap-assets", authenticator, CreateAllPurposeAsset(sc))
 	// Find asset by its ID
 	rg.GET("/assets/:assetId", FindAsset(sc))
 	// Toggle user favorite asset
@@ -24,4 +26,8 @@ func InjectHandlers(sc datatype.ServiceContainer, rg *gin.RouterGroup) {
 	rg.POST("/asset-blocks", authenticator, CreateAssetBlock(sc))
 	rg.POST("/asset-blocks/:blockId/verify", authenticator, VerifyAssetBlock(sc))
 	rg.POST("/asset-blocks/:blockId/toggle-favorite", authenticator, ToggleFavoriteBlock(sc))
+	// a hack api to demonstrate sensor verification
+	// @TODO extend the APIs to enable sensors or app registrations and application specific APIs
+	rg.POST("/asset-block/sensor-verify", SensorVerifyBlock(sc))
+	rg.POST("/oracle-ping", OraclePing(sc))
 }
