@@ -1,5 +1,8 @@
-[![CircleCI](https://circleci.com/gh/FuturICT2/fin4-core/tree/master.svg?style=svg&circle-token=fe8beee27987a1dd0a05f68f1fdef4ca17051a14)](https://circleci.com/gh/FuturICT2/fin4-core/tree/master)
+⚠️ *This repository is no longer active. Together with other strands of work it is further pursued here: [FIN4XPLORER](https://github.com/FuturICT2/FIN4XPLORER)*
 
+<hr>
+
+[![CircleCI](https://circleci.com/gh/FuturICT2/fin4-core/tree/master.svg?style=svg&circle-token=fe8beee27987a1dd0a05f68f1fdef4ca17051a14)](https://circleci.com/gh/FuturICT2/fin4-core/tree/master)
 
 # Finance 4.0
 Finance 4.0 aims for a multi-dimensional incentive system to motivate sustainable behavior. Communities can creat cryptographic tokens to incentivize certain behavior, e.g. collecting waste, avoiding C02, helping others, etc. Users can obtain these tokens by proving that they performed such actions. The number of different token types is unlimited, leading over time to a multi-dimensional system of different incentives -- smart coordination through "sustainable money". In the same spirit, the system uses tokens for democratic governance. 
