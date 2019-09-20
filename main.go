@@ -20,7 +20,7 @@ func main() {
 	environment := strings.ToLower(env.MustGetenv("ENVIRONMENT"))
 
 	//TODO this should be changed ASAP
-	baseDir := "$GOPATH/src/github.com/FuturICT2/fin4-core"
+	baseDir := "$GOPATH/fin4-core"
 	env.Load(baseDir, false)
 
 	cfg := datatype.Config{
